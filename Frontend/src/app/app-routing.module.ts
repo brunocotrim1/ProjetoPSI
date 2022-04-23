@@ -9,7 +9,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MainMenuComponent } from './mainmenu/mainmenu.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: '/mainmenu', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent,canActivate: [AuthenticationGuard] },
   { path: 'login', component: LoginComponent},
   { path: 'mainmenu', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
