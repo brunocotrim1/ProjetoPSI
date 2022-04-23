@@ -1,6 +1,5 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -13,11 +12,13 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { AuthenticationService } from './services/authentication.service';
 import { AppInitializer } from './appInitiazlier/AppInitializer';
+import { MainMenuComponent } from './mainmenu/mainmenu.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
+    MainMenuComponent,
   ],
   imports: [    
     BrowserAnimationsModule,

@@ -6,17 +6,20 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { MainMenuComponent } from './mainmenu/mainmenu.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent,canActivate: [AuthenticationGuard] },
-  { path: 'login', component: LoginComponent }
+  { path: 'login', component: LoginComponent},
+  { path: 'mainmenu', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
 ];
 
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],
   exports: [ RouterModule ]
 })
+
 export class AppRoutingModule {}
 
 
