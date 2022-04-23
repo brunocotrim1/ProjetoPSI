@@ -56,7 +56,6 @@ export class AuthenticationService {
 
       }));
   }
-
   removeUser() {
     localStorage.removeItem("user");
   }

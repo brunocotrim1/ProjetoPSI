@@ -25,15 +25,13 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService
   ) {
-    // redirect to home if already logged in
-    // if (this.authenticationService.userValue) {
-    //   this.router.navigate(['/']);
-    // }
   }
 
   ngOnInit() {
-    // get return url from route parameters or default to '/'
     this.returnUrl = "/dashboard";
+    if(this.authenticationService.loadUser()){
+      this.router.navigate([ this.returnUrl]);
+    }
   }
 
   // convenience getter for easy access to form fields
