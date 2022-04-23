@@ -11,11 +11,13 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { MainMenuComponent } from './mainmenu/mainmenu.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
+    MainMenuComponent,
   ],
   imports: [    
     BrowserAnimationsModule,
