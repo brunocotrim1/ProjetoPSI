@@ -1,4 +1,72 @@
-<div class="card">
+<div
+  class="view"
+  style="
+    width: 100%;
+    height: 100%;
+  "
+>
+  <img src="../../assets/images/backgroundImage.png" style="width: 100%; height: auto;"/>
+  <div class="flex-center full-bg-img mask rgba-black-light login-container">
+    <form
+      class="text-center p-5 login-form"
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <p class="h4 mb-4" style="color: #ffffff; opacity: 87%">BeansCorp.</p>
+      <div class="form-group">
+        <input
+          type="text"
+          formControlName="username"
+          placeholder="Username"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['username'].errors }"
+        />
+        <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
+          <div *ngIf="f['username'].errors['required']">Username is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Password"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+        />
+        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+          <div *ngIf="f['password'].errors['required']">
+            Password is required
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-around"></div>
+      <!-- Sign in button -->
+      <button
+        mdbBtn
+        color="info"
+        block="true"
+        class="my-4 waves-dark"
+        type="submit"
+        mdbWavesEffect
+        style="
+          background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);
+        "
+      >
+        <span
+          *ngIf="loading"
+          class="spinner-border spinner-border-sm mr-1"
+        ></span>
+        Sign in
+      </button>
+      <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
+    </form>
+  </div>
+</div>
+<!-- Default form login -->
+
+<!-- Default form login -->
+
+<!-- <div class="card">
     <h4 class="card-header">Angular 9 JWT Auth with Refresh Tokens</h4>
     <div class="card-body">
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -17,4 +85,4 @@
             <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
         </form>
     </div>
-</div>
+</div> -->

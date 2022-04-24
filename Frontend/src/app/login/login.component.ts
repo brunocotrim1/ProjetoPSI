@@ -11,8 +11,8 @@ import { AuthenticationService } from '../services/authentication.service';
 })
 export class LoginComponent implements OnInit {
   loginForm = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
+    username: new FormControl('',Validators.required),
+    password: new FormControl('',Validators.required),
   });
   loading = false;
   submitted = false;

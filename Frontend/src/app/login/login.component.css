@@ -1,0 +1,27 @@
+
+.login-container{
+display: flex;
+height: 100vh;
+width: 100vw;
+align-items: center;
+justify-content: center;
+}
+
+
+.login-form{
+    background-color: #1d1d1d;
+    box-shadow: 25px;
+    border-radius: 25px;
+    width: 20vw;
+    align-items: center;
+    justify-content: center;
+}
+
+@media screen and (max-width: 500px) {
+    .login-form{
+        background-color: #1d1d1d;
+        box-shadow: 25px;
+        width:75%;
+    }
+
+  }

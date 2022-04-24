@@ -4,6 +4,7 @@ const router = express.Router();
 var mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+var crypto = require('crypto');
 const User = require("../models/User");
 const users = [
   {
@@ -18,7 +19,8 @@ async function init() {
   await User.deleteMany({})
   await User.create({
     username: "bruno",
-    password: "bruno",role:"admin",
+    password: SHA_256("bruno"), 
+    role: "admin",
   })
 }
 
@@ -30,21 +32,21 @@ module.exports = function (dbI) {
       res.json({ err: "Empty Request" });
       return;
     }
-    var user = await User.findOne({username: req.body.username});
+    var user = await User.findOne({ username: req.body.username });
     if (user == null) {
       res.status(401);
       res.json({ err: "Usuário não existe" })
       return;
     }
     user = user.toObject();
-    if (user.username != req.body.username || user.password != req.body.password) {
+    if (user.username != req.body.username || user.password != SHA_256(req.body.password)) {
       res.status(401);
       res.json({ err: "Usuário ou senha incorretos" })
       return;
     }
     delete user.password;
-    const accessToken = generateAccessToken({id:user._id,username: user.username,role:user.role});
-    const refreshToken = jwt.sign({id:user._id,username: user.username,role:user.role}, process.env.REFRESH_TOKEN_SECRET);
+    const accessToken = generateAccessToken({ id: user._id, username: user.username, role: user.role });
+    const refreshToken = jwt.sign({ id: user._id, username: user.username, role: user.role }, process.env.REFRESH_TOKEN_SECRET);
     var i = await User.updateOne(
       { _id: user._id },
       { $set: { refreshToken: refreshToken, accessToken: accessToken } }
@@ -54,7 +56,7 @@ module.exports = function (dbI) {
       return;
     })
 
-    res.json({ id: user._id, username: user.username, role:user.role,accessToken: accessToken, refresh_token: refreshToken });
+    res.json({ id: user._id, username: user.username, role: user.role, accessToken: accessToken, refresh_token: refreshToken });
   });
 
   router.post("/refresh_token", authenticateToken, async (req, res) => {
@@ -66,7 +68,7 @@ module.exports = function (dbI) {
     jwt.verify(exists, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
       if (err) return res.sendStatus(403);
       delete user.password;
-      const accessToken = generateAccessToken({id:user._id,username: user.username,role:user.role});
+      const accessToken = generateAccessToken({ id: user._id, username: user.username, role: user.role });
       console.log(accessToken)
       await User.updateOne(
         { _id: user._id },
@@ -85,7 +87,7 @@ module.exports = function (dbI) {
 
 
   router.post("/logout", authenticateToken, async (req, res) => {
-   await User.updateOne(
+    await User.updateOne(
       { username: req.user.username },
       { $unset: { refreshToken: 1, accessToken: 1 } }
     )
@@ -100,7 +102,7 @@ module.exports = function (dbI) {
         res.json({ err: "error" });
         return;
       });
-   //res.sendStatus(200)
+    //res.sendStatus(200)
   });
   return router;
 };
@@ -115,9 +117,15 @@ function authenticateToken(req, res, next) {
   if (token == null) return res.sendStatus(401);
   jwt.verify(token, process.env.accessToken_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
-    
+
     req.user = user;
     req.user.refreshToken = token;
     next();
   });
+}
+
+function SHA_256(password) {
+  var hash = crypto.createHash('sha256');
+  hash.update(password);
+  return hash.digest('hex');
 }
