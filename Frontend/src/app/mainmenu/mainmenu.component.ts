@@ -6,7 +6,7 @@ import { User } from '../User';
 @Component({
   selector: 'app-mainmenu',
   templateUrl: './mainmenu.component.html',
-  styleUrls: ['./mainmenu.component.css']
+  styleUrls: ['./mainmenu.component.scss']
 })
 
 export class MainMenuComponent implements OnInit {
