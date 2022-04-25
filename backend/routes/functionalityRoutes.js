@@ -10,19 +10,19 @@ const Task = require("../models/Task");
 const tasks = [
     {
         name: "Task 1",
-        userAssociated: "6266cdae0498d5ec0b7b7c4a",
+        userAssociated: "6266e43978bcd86e4b6eacfe",
         progress: 0,
         priority: "LOW",
     },
     {
         name: "Task 2",
-        userAssociated: "6266cdae0498d5ec0b7b7c4a",
+        userAssociated: "6266e43978bcd86e4b6eacfe",
         progress: 0,
         priority: "LOW",
     },
     {
         name: "Task 3",
-        userAssociated: "6266cdae0498d5ec0b7b7c4a",
+        userAssociated: "6266e43978bcd86e4b6eacfe",
         progress: 0,
         priority: "LOW",
     },
@@ -47,7 +47,21 @@ async function init() {
   init()
 
 module.exports = function (dbI) {
-
+    router.get("/tasks", authenticateToken, async (req, res) => {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            res.status(404);
+            res.json({ err: "User not found" });
+            return;
+        }
+        const tasks = await Task.find({ userAssociated: user._id });
+        if(!tasks || tasks.length == 3){
+            res.status(404);
+            res.json({ err: "No tasks found" });
+            return;
+        }
+        res.json(tasks);
+      });
     return router;
 };
 

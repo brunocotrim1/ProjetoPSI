@@ -10,27 +10,27 @@ const users = [
   {
       username: "bruno",
       password: SHA_256("bruno"),
-      role: "admin",
+      role: "ADMIN",
   },
   {
       username: "miguel",
       password:SHA_256("miguel"),
-      role: "admin",
+      role: "ADMIN",
   },
   {
       username: "joao",
       password: SHA_256("joao"),
-      role: "admin",
+      role: "ADMIN",
   },
   {
       username: "diogo",
       password: SHA_256("diogo"),
-      role: "admin",
+      role: "ADMIN",
   },
   {
       username: "miguelS",
       password: SHA_256("miguelS"),
-      role: "admin",
+      role: "ADMIN",
   },
 ];
 
@@ -94,10 +94,9 @@ module.exports = function (dbI) {
     jwt.verify(exists, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
       if (err) return res.sendStatus(403);
       delete user.password;
-      const accessToken = generateAccessToken({ id: user._id, username: user.username, role: user.role });
-      console.log(accessToken)
+      const accessToken = generateAccessToken({ id: user.id, username: user.username, role: user.role });
       await User.updateOne(
-        { _id: user._id },
+        { _id: user.id },
         { $set: { accessToken: accessToken } }
       ).catch(function (err) {
         res.status(401);
@@ -118,7 +117,6 @@ module.exports = function (dbI) {
       { $unset: { refreshToken: 1, accessToken: 1 } }
     )
       .then(function (response) {
-        console.log(response)
         if (response.matchedCount == 0)
           res.json({ err: "The given User does not exist" });
         else res.json(response);
@@ -143,8 +141,8 @@ function authenticateToken(req, res, next) {
   if (token == null) return res.sendStatus(401);
   jwt.verify(token, process.env.accessToken_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
-
-    req.user = user;
+   
+    req.user = user; 
     req.user.refreshToken = token;
     next();
   });

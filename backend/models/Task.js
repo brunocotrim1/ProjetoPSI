@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const TaskSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
     },
     userAssociated: {
         type: mongoose.Schema.Types.ObjectId,
