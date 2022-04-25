@@ -14,6 +14,8 @@ import { AuthenticationService } from './services/authentication.service';
 import { AppInitializer } from './appInitiazlier/AppInitializer';
 import { MainMenuComponent } from './mainmenu/mainmenu.component';
 import { ProfileComponent } from './profile/profile.component';
+import { CreateUserComponent } from './createuser/createuser.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,6 +23,7 @@ import { ProfileComponent } from './profile/profile.component';
     DashboardComponent,
     MainMenuComponent,
     ProfileComponent,
+    CreateUserComponent,
   ],
   imports: [    
     BrowserAnimationsModule,
