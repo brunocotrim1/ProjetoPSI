@@ -10,7 +10,7 @@
     <!-- Links -->
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link waves-light" mdbWavesEffect>Main Menu<span class="sr-only">(current)</span></a>
+        <a class="nav-link waves-light" href="/mainmenu" mdbWavesEffect>Main Menu<span class="sr-only">(current)</span></a>
       </li>
 
       <!-- Dropdown -->
@@ -37,7 +37,7 @@
           <button class="userrole" mdbBtn type="button" size="sm">{{userrole}} </button>
         </a>
         <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#">My account</a>
+          <a class="dropdown-item waves-light" *ngIf="currentComponent != 'profile'" mdbWavesEffect href="/profile">My account</a>
           <a class="dropdown-item waves-light" mdbWavesEffect  (click)="logout()">Log out</a>
         </div>
       </li>

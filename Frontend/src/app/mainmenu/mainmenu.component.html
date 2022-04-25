@@ -1,109 +1,341 @@
-<app-navigbar currentComponent="mainmenu" username={{user.username}} userrole={{user.role}}></app-navigbar>
+<app-navigbar
+  currentComponent="mainmenu"
+  username="{{ user.username }}"
+  userrole="{{ user.role }}"
+></app-navigbar>
 
 <!-- Intro Section -->
-<div class="d-flex view" style="width:100%; min-height: 1080px;">
-  <img src="../../assets/images/backgroundImage.png" alt="sample image" style="width:100%;">
-  <div class="d-flex flex-column flex-center mask rgba-black-light" style="padding-top:70px; padding-bottom:30px; padding-left: 10%; padding-right: 10%; justify-content:space-around;" >
-    <div class="enjoyapp text-center">
-      <div class="white-text">
-        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">Enjoy our app!</h2>
-        <hr class="hr-light wow" data-wow-delay="0.3s">
-        <h6 class="wow" data-wow-delay="0.3s">Use one of our many features</h6>
-      </div>
-    </div>
-    <div class="d-flex align-items-center content-height w-100">
-      <div class="row flex-center w-100 flex-row">
-          <button class="lftbut big" mdbBtn type="button" rounded="true" mdbWavesEffect>
-            <a href="/createuser">
-            <div class="media">
-              <img class="d-flex align-self-center mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp" alt="Generic placeholder image">
-              <div class="media-body">
-                <h5 class="mt-0 font-weight-bold">Create User<button class="userrole ml-2 mt-1" mdbBtn type="button" size="sm">admin feature </button></h5>
-                <p>This feature allows you, as an administrator, to create a new user of the platform. You are needed to fill a form which requires
-                  the user's name, user's password and user's role (default is a normal user). After completion of the form, a new user object is added
-                  to our database.
-                </p>
-                <p class="mb-0">To use the created user object, first login to our page using the information previously filled in the form.</p>
-              </div>
-            </div>
-          </a>
-          </button>
-      </div>
-      <div class="row flex-center w-100 flex-row">
-        <button class="rgtbut small" mdbBtn type="button" rounded="true" mdbWavesEffect>
-          <div class="media">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1 font-weight-bold">Beans 2</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-              vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-              congue felis in faucibus.
-            </div>
-            <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp" alt="Generic placeholder image">
+<div class="enjoyapp text-center">
+  <div class="white-text">
+    <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">
+      Enjoy our app!
+    </h2>
+    <hr class="hr-light wow" data-wow-delay="0.3s" />
+    <h6 class="wow" data-wow-delay="0.3s">Use one of our many features</h6>
+  </div>
+</div>
+<div class="d-flex align-items-center content-height w-100">
+  <div class="row flex-center w-100 flex-row">
+    <button
+      class="lftbut big"
+      mdbBtn
+      type="button"
+      rounded="true"
+      mdbWavesEffect
+    >
+      <a href="/createuser">
+        <div class="media">
+          <img
+            class="d-flex align-self-center mr-3"
+            src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
+            alt="Generic placeholder image"
+          />
+          <div class="media-body">
+            <h5 class="mt-0 font-weight-bold">
+              Create User<button
+                class="userrole ml-2 mt-1"
+                mdbBtn
+                type="button"
+                size="sm"
+              >
+                admin feature
+              </button>
+            </h5>
+            <p>
+              This feature allows you, as an administrator, to create a new user
+              of the platform. You are needed to fill a form which requires the
+              user's name, user's password and user's role (default is a normal
+              user). After completion of the form, a new user object is added to
+              our database.
+            </p>
+            <p class="mb-0">
+              To use the created user object, first login to our page using the
+              information previously filled in the form.
+            </p>
           </div>
-        </button>
+        </div>
+      </a>
+    </button>
+  </div>
+  <div class="row flex-center w-100 flex-row">
+    <button
+      class="rgtbut small"
+      mdbBtn
+      type="button"
+      rounded="true"
+      mdbWavesEffect
+    >
+      <div class="media">
+        <div class="media-body">
+          <h5 class="mt-0 mb-1 font-weight-bold">Beans 2</h5>
+          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+          scelerisque ante sollicitudin. Cras purus odio, vestibulum in
+          vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
+          vulputate fringilla. Donec lacinia congue felis in faucibus.
+        </div>
+        <img
+          class="d-flex align-self-center ml-3"
+          src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
+          alt="Generic placeholder image"
+        />
       </div>
-    </div>
-    <div class="d-flex align-items-center content-height w-100">
-      <div class="row flex-center w-100 flex-row">
-        <button class="lftbut small" mdbBtn type="button" rounded="true" mdbWavesEffect>
-          <div class="media">
-            <img class="d-flex align-self-center mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp" alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1 font-weight-bold">Media object</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-              vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-              congue felis in faucibus.
-            </div>
-          </div>
-        </button>
+    </button>
+  </div>
+</div>
+<div class="d-flex align-items-center content-height w-100">
+  <div class="row flex-center w-100 flex-row">
+    <button
+      class="lftbut small"
+      mdbBtn
+      type="button"
+      rounded="true"
+      mdbWavesEffect
+    >
+      <div class="media">
+        <img
+          class="d-flex align-self-center mr-3"
+          src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
+          alt="Generic placeholder image"
+        />
+        <div class="media-body">
+          <h5 class="mt-0 mb-1 font-weight-bold">Media object</h5>
+          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+          scelerisque ante sollicitudin. Cras purus odio, vestibulum in
+          vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
+          vulputate fringilla. Donec lacinia congue felis in faucibus.
+        </div>
       </div>
-      <div class="row flex-center w-100 flex-row">
-        <button class="rgtbut big" mdbBtn type="button" rounded="true" mdbWavesEffect>
-          <div class="media">
-            <div class="media-body">
-              <h5 class="mt-0 font-weight-bold">Center-aligned media</h5>
-              <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus
-                odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla.
-                Donec lacinia congue felis in faucibus.</p>
-              <p class="mb-0">Donec sed odio dui. Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus
-                et magnis dis parturient montes, nascetur ridiculus mus.</p>
-            </div>
-            <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp" alt="Generic placeholder image">
-          </div>
-        </button>
+    </button>
+  </div>
+  <div class="row flex-center w-100 flex-row">
+    <button
+      class="rgtbut big"
+      mdbBtn
+      type="button"
+      rounded="true"
+      mdbWavesEffect
+    >
+      <div class="media">
+        <div class="media-body">
+          <h5 class="mt-0 font-weight-bold">Center-aligned media</h5>
+          <p>
+            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+            scelerisque ante sollicitudin. Cras purus odio, vestibulum in
+            vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
+            vulputate fringilla. Donec lacinia congue felis in faucibus.
+          </p>
+          <p class="mb-0">
+            Donec sed odio dui. Nullam quis risus eget urna mollis ornare vel eu
+            leo. Cum sociis natoque penatibus et magnis dis parturient montes,
+            nascetur ridiculus mus.
+          </p>
+        </div>
+        <img
+          class="d-flex align-self-center ml-3"
+          src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
+          alt="Generic placeholder image"
+        />
       </div>
-    </div>
-    <div class="d-flex align-items-center content-height w-100">
-      <div class="row flex-center w-100 flex-row">
-        <button class="lftbut big" mdbBtn type="button" rounded="true" mdbWavesEffect>
-          <div class="media">
-            <img class="d-flex align-self-center mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp" alt="Generic placeholder image">
-            <div class="media-body">
-              <h5 class="mt-0 font-weight-bold">Create User<button class="userrole ml-2 mt-1" mdbBtn type="button" size="sm">admin feature </button></h5>
-              <p>This feature allows you, as an administrator, to create a new user of the platform. You are needed to fill a form which requires
-                the user's name, user's password and user's role (default is a normal user). After completion of the form, a new user object is added
-                to our database.
-              </p>
-              <p class="mb-0">To use the created user object, first login to our page using the information previously filled in the form.</p>
-            </div>
-          </div>
-        </button>
+    </button>
+  </div>
+</div>
+<div class="d-flex align-items-center content-height w-100">
+  <div class="row flex-center w-100 flex-row">
+    <button
+      class="lftbut big"
+      mdbBtn
+      type="button"
+      rounded="true"
+      mdbWavesEffect
+    >
+      <div class="media">
+        <img
+          class="d-flex align-self-center mr-3"
+          src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
+          alt="Generic placeholder image"
+        />
+        <div class="media-body">
+          <h5 class="mt-0 font-weight-bold">
+            Create User<button
+              class="userrole ml-2 mt-1"
+              mdbBtn
+              type="button"
+              size="sm"
+            >
+              admin feature
+            </button>
+          </h5>
+          <p>
+            This feature allows you, as an administrator, to create a new user
+            of the platform. You are needed to fill a form which requires the
+            user's name, user's password and user's role (default is a normal
+            user). After completion of the form, a new user object is added to
+            our database.
+          </p>
+          <p class="mb-0">
+            To use the created user object, first login to our page using the
+            information previously filled in the form.
+          </p>
+        </div>
       </div>
-      <div class="row flex-center w-100 flex-row">
-        <button class="rgtbut small" mdbBtn type="button" rounded="true" mdbWavesEffect>
-          <div class="media">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1 font-weight-bold">Beans 2</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-              vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-              congue felis in faucibus.
-            </div>
-            <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp" alt="Generic placeholder image">
-          </div>
-        </button>
+    </button>
+  </div>
+  <div class="row flex-center w-100 flex-row">
+    <button
+      class="rgtbut small"
+      mdbBtn
+      type="button"
+      rounded="true"
+      mdbWavesEffect
+    >
+      <div class="media">
+        <div class="media-body">
+          <h5 class="mt-0 mb-1 font-weight-bold">Beans 2</h5>
+          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+          scelerisque ante sollicitudin. Cras purus odio, vestibulum in
+          vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
+          vulputate fringilla. Donec lacinia congue felis in faucibus.
+        </div>
+        <img
+          class="d-flex align-self-center ml-3"
+          src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
+          alt="Generic placeholder image"
+        />
       </div>
-    </div>
+    </button>
+  </div>
+</div>
+<div class="d-flex align-items-center content-height w-100">
+  <div class="row flex-center w-100 flex-row">
+    <button
+      class="lftbut big"
+      mdbBtn
+      type="button"
+      rounded="true"
+      mdbWavesEffect
+    >
+      <div class="media">
+        <img
+          class="d-flex align-self-center mr-3"
+          src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
+          alt="Generic placeholder image"
+        />
+        <div class="media-body">
+          <h5 class="mt-0 font-weight-bold">
+            Create User<button
+              class="userrole ml-2 mt-1"
+              mdbBtn
+              type="button"
+              size="sm"
+            >
+              admin feature
+            </button>
+          </h5>
+          <p>
+            This feature allows you, as an administrator, to create a new user
+            of the platform. You are needed to fill a form which requires the
+            user's name, user's password and user's role (default is a normal
+            user). After completion of the form, a new user object is added to
+            our database.
+          </p>
+          <p class="mb-0">
+            To use the created user object, first login to our page using the
+            information previously filled in the form.
+          </p>
+        </div>
+      </div>
+    </button>
+  </div>
+  <div class="row flex-center w-100 flex-row">
+    <button
+      class="rgtbut small"
+      mdbBtn
+      type="button"
+      rounded="true"
+      mdbWavesEffect
+    >
+      <div class="media">
+        <div class="media-body">
+          <h5 class="mt-0 mb-1 font-weight-bold">Beans 2</h5>
+          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+          scelerisque ante sollicitudin. Cras purus odio, vestibulum in
+          vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
+          vulputate fringilla. Donec lacinia congue felis in faucibus.
+        </div>
+        <img
+          class="d-flex align-self-center ml-3"
+          src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
+          alt="Generic placeholder image"
+        />
+      </div>
+    </button>
+  </div>
+</div>
+<div class="d-flex align-items-center content-height w-100">
+  <div class="row flex-center w-100 flex-row">
+    <button
+      class="lftbut big"
+      mdbBtn
+      type="button"
+      rounded="true"
+      mdbWavesEffect
+    >
+      <div class="media">
+        <img
+          class="d-flex align-self-center mr-3"
+          src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
+          alt="Generic placeholder image"
+        />
+        <div class="media-body">
+          <h5 class="mt-0 font-weight-bold">
+            Create User<button
+              class="userrole ml-2 mt-1"
+              mdbBtn
+              type="button"
+              size="sm"
+            >
+              admin feature
+            </button>
+          </h5>
+          <p>
+            This feature allows you, as an administrator, to create a new user
+            of the platform. You are needed to fill a form which requires the
+            user's name, user's password and user's role (default is a normal
+            user). After completion of the form, a new user object is added to
+            our database.
+          </p>
+          <p class="mb-0">
+            To use the created user object, first login to our page using the
+            information previously filled in the form.
+          </p>
+        </div>
+      </div>
+    </button>
+  </div>
+  <div class="row flex-center w-100 flex-row">
+    <button
+      class="rgtbut small"
+      mdbBtn
+      type="button"
+      rounded="true"
+      mdbWavesEffect
+    >
+      <div class="media">
+        <div class="media-body">
+          <h5 class="mt-0 mb-1 font-weight-bold">Beans 2</h5>
+          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+          scelerisque ante sollicitudin. Cras purus odio, vestibulum in
+          vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
+          vulputate fringilla. Donec lacinia congue felis in faucibus.
+        </div>
+        <img
+          class="d-flex align-self-center ml-3"
+          src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
+          alt="Generic placeholder image"
+        />
+      </div>
+    </button>
   </div>
 </div>
 
-<app-footer></app-footer>
+<app-footer style="width: 100%"></app-footer>
