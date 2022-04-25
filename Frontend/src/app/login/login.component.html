@@ -1,11 +1,8 @@
-<div
-  class="view"
-  style="
-    width: 100%;
-    height: 100%;
-  "
->
-  <img src="../../assets/images/backgroundImage.png" style="width: 100%; height: auto;"/>
+<div class="view" style="width: 100%; height: 100%">
+  <img
+    src="../../assets/images/backgroundImage.png"
+    style="width: 100%; height: 100%"
+  />
   <div class="flex-center full-bg-img mask rgba-black-light login-container">
     <form
       class="text-center p-5 login-form"
@@ -15,19 +12,25 @@
       <p class="h4 mb-4" style="color: #ffffff; opacity: 87%">BeansCorp.</p>
       <div class="form-group">
         <input
+          name="username"
           type="text"
           formControlName="username"
           placeholder="Username"
+          autocomplete="username"
           class="form-control"
           [ngClass]="{ 'is-invalid': submitted && f['username'].errors }"
         />
         <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
-          <div *ngIf="f['username'].errors['required']">Username is required</div>
+          <div *ngIf="f['username'].errors['required']">
+            Username is required
+          </div>
         </div>
       </div>
       <div class="form-group">
         <input
+          name="password"
           type="password"
+          autocomplete="password"
           formControlName="password"
           placeholder="Password"
           class="form-control"
