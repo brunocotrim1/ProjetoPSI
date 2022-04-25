@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MainMenuComponent } from './mainmenu/mainmenu.component';
+import { CriarEquipasComponent } from './criar-equipas/criar-equipas.component'
 import { ProfileComponent } from './profile/profile.component';
 import { CreateUserComponent } from './createuser/createuser.component';
 
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent,canActivate: [AuthenticationGuard] },
   { path: 'login', component: LoginComponent},
   { path: 'mainmenu', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
+  { path: 'criar-equipas', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
   { path: 'profile', component: ProfileComponent,canActivate: [AuthenticationGuard]},
   { path: 'createuser', component: CreateUserComponent, canActivate: [AuthenticationGuard]  },
 ];

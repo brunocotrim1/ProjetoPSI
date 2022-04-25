@@ -13,6 +13,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { AuthenticationService } from './services/authentication.service';
 import { AppInitializer } from './appInitiazlier/AppInitializer';
 import { MainMenuComponent } from './mainmenu/mainmenu.component';
+import { CriarEquipasComponent } from './criar-equipas/criar-equipas.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateUserComponent } from './createuser/createuser.component';
 
@@ -22,6 +23,7 @@ import { CreateUserComponent } from './createuser/createuser.component';
     LoginComponent,
     DashboardComponent,
     MainMenuComponent,
+    CriarEquipasComponent,
     ProfileComponent,
     CreateUserComponent,
   ],
