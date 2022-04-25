@@ -15,6 +15,8 @@ import { AppInitializer } from './appInitiazlier/AppInitializer';
 import { MainMenuComponent } from './mainmenu/mainmenu.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateUserComponent } from './createuser/createuser.component';
+import { NavigbarComponent } from './navbar/navigbar.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { CreateUserComponent } from './createuser/createuser.component';
     MainMenuComponent,
     ProfileComponent,
     CreateUserComponent,
+    NavigbarComponent,
+    FooterComponent,
   ],
   imports: [    
     BrowserAnimationsModule,

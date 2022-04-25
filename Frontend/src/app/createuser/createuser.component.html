@@ -1,143 +1,77 @@
-<!--Navbar-->
-<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark elegant-color-dark fixed-top" [containerInside]="false">
-
-  <!-- Navbar brand -->
-  <mdb-navbar-brand><a class="navbar-brand" href="/mainmenu">BeansCorp.</a></mdb-navbar-brand>
-
-  <!-- Collapsible content -->
-  <links>
-
-    <!-- Links -->
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link waves-light" mdbWavesEffect>Main Menu > Create User<span class="sr-only">(current)</span></a>
-      </li>
-
-      <!-- Dropdown -->
-      <li class="nav-item dropdown" dropdown>
-        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-          Features<span class="caret"></span></a>
-        <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
-          <a *ngIf="user.role == 'admin'" class="dropdown-item waves-light" mdbWavesEffect href="#">Main Menu</a>
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#">Another action</a>
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#">Something else here</a>
-          <div class="divider dropdown-divider"></div>
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#">Separated link</a>
-        </div>
-      </li>
-
-    </ul>
-    <!-- Links -->
-    <ul class="navbar-nav ml-auto">
-
-      <!-- Dropdown -->
-      <li class="nav-item dropdown" dropdown>
-        <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-          <mdb-icon fas icon="user"></mdb-icon> {{user.username}}
-          <button class="userrole" mdbBtn type="button" size="sm">{{user.role}} </button>
-        </a>
-        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#">My account</a>
-          <a class="dropdown-item waves-light" mdbWavesEffect  (click)="logout()">Log out</a>
-        </div>
-      </li>
-
-    </ul>
-  </links>
-  <!-- Collapsible content -->
-
-</mdb-navbar>
-<!--/.Navbar-->
+<app-navigbar currentComponent="createuser" username={{user.username}} userrole={{user.role}}></app-navigbar>
 
 <div class="d-flex view" style="width:100%; min-height: 100%;">
   <img src="../../assets/images/backgroundImage.png" alt="sample image" style="width:100%;">
-  <div class="d-flex flex-column flex-center mask rgba-black-light" style="padding-top:70px; padding-bottom:30px; padding-left: 10%; padding-right: 10%; justify-content:space-around;" >
+  <div class="d-flex flex-column flex-center mask rgba-black-light" style="padding-top:70px; padding-bottom:30px; padding-left: 10%; padding-right: 10%; " >
+    <div class="enjoyapp text-center">
+      <div class="white-text">
+        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">Create a new user</h2>
+        <hr class="hr-light wow" data-wow-delay="0.3s">
+      </div>
+    </div>
+    <button class="lftbut" mdbBtn type="button" rounded="true">
+      <form
+      class="text-center p-5 login-form"
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <p class="h4 mb-4" style="color: #ffffff; opacity: 87%">Fill in the form</p>
+      <div class="form-group">
+        <input
+          name="username"
+          type="text"
+          formControlName="username"
+          placeholder="Username"
+          autocomplete="username"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['username'].errors }"
+        />
+        <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
+          <div *ngIf="f['username'].errors['required']">
+            Username is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input
+          name="password"
+          type="password"
+          autocomplete="password"
+          formControlName="password"
+          placeholder="Password"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+        />
+        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+          <div *ngIf="f['password'].errors['required']">
+            Password is required
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-around"></div>
+      <!-- Sign in button -->
+      <button
+        mdbBtn
+        color="info"
+        block="true"
+        class="my-4 waves-dark"
+        type="submit"
+        mdbWavesEffect
+        style="
+          background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);
+        "
+      >
+        <span
+          *ngIf="loading"
+          class="spinner-border spinner-border-sm mr-1"
+        ></span>
+        Create user
+      </button>
+      <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
+      
+      </form>
+    </button>
   </div>
 </div>
 
-<!-- Footer -->
-<footer class="page-footer font-small elegant-color pt-4">
-
-  <!-- Footer Links -->
-  <div class="container-fluid text-center text-md-left">
-
-    <!-- Grid row -->
-    <div class="row">
-
-      <!-- Grid column -->
-      <div class="col-md-6 mt-md-2 mt-3">
-
-        <!-- Content -->
-        <h5 class="text-uppercase">Welcome to our page!</h5>
-        <p>For any help regarding the usage of our page, consult one of us using one of the following links:</p>
-
-      </div>
-      <!-- Grid column -->
-
-      <hr class="clearfix w-100 d-md-none pb-3">
-
-      <!-- Grid column -->
-      <div class="col-md-2 mb-md-0 mb-2">
-
-          <!-- Links -->
-          <h5 class="text-uppercase">Links</h5>
-
-          <ul class="list-unstyled">
-            <li>
-              <a href="#!">Link 1</a>
-            </li>
-            <li>
-              <a href="#!">Link 2</a>
-            </li>
-          </ul>
-
-        </div>
-        <!-- Grid column -->
-
-        <!-- Grid column -->
-        <div class="col-md-2 mb-md-0 mb-2">
-
-          <!-- Links -->
-          <h5 class="text-uppercase">Links</h5>
-
-          <ul class="list-unstyled">
-            <li>
-              <a href="#!">Link 1</a>
-            </li>
-            <li>
-              <a href="#!">Link 2</a>
-            </li>
-          </ul>
-
-        </div>
-        <div class="col-md-2 mb-md-0 mb-2">
-
-          <!-- Links -->
-          <h5 class="text-uppercase">Links</h5>
-
-          <ul class="list-unstyled">
-            <li>
-              <a href="#!">Link 3</a>
-            </li>
-            <li>
-              <a href="#!">Link 4</a>
-            </li>
-          </ul>
-
-        </div>
-        <!-- Grid column -->
-
-    </div>
-    <!-- Grid row -->
-
-  </div>
-  <!-- Footer Links -->
-
-  <!-- Copyright -->
-  <div class="footer-copyright text-center py-3 elegant-color-dark">2022 ProjetoPSI
-    <a href="https://beanscorp.com">BeansCorp.</a>
-  </div>
-  <!-- Copyright -->
-
-</footer>
-<!-- Footer -->
+<app-footer></app-footer>

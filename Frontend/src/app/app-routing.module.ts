@@ -9,6 +9,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MainMenuComponent } from './mainmenu/mainmenu.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateUserComponent } from './createuser/createuser.component';
+import { NavbarComponent } from 'angular-bootstrap-md';
 
 const routes: Routes = [
   { path: '', redirectTo: '/mainmenu', pathMatch: 'full' },
@@ -16,7 +17,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'mainmenu', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
   { path: 'profile', component: ProfileComponent,canActivate: [AuthenticationGuard]},
-  { path: 'createuser', component: CreateUserComponent, canActivate: [AuthenticationGuard]  },
+  { path: 'createuser', component: CreateUserComponent, canActivate: [AuthenticationGuard]  }
 ];
 
 @NgModule({
