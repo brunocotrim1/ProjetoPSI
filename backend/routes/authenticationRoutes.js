@@ -8,20 +8,46 @@ var crypto = require('crypto');
 const User = require("../models/User");
 const users = [
   {
-    username: "bruno",
-    password: "bruno",
+      username: "bruno",
+      password: SHA_256("bruno"),
+      role: "admin",
+  },
+  {
+      username: "miguel",
+      password:SHA_256("miguel"),
+      role: "admin",
+  },
+  {
+      username: "joao",
+      password: SHA_256("joao"),
+      role: "admin",
+  },
+  {
+      username: "diogo",
+      password: SHA_256("diogo"),
+      role: "admin",
+  },
+  {
+      username: "miguelS",
+      password: SHA_256("miguelS"),
+      role: "admin",
   },
 ];
 
 
 async function init() {
-  await User.collection.drop();
-  await User.deleteMany({})
-  await User.create({
-    username: "bruno",
-    password: SHA_256("bruno"), 
-    role: "admin",
-  })
+  // await User.collection.drop();
+  // await User.deleteMany({})
+
+  for (let i = 0; i < users.length; i++) {
+      const user = new User(users[i]);
+      await user.save().catch(function (err) {});
+  }
+  //   await User.create({
+  //     username: "bruno",
+  //     password: SHA_256("bruno"), 
+  //     role: "admin",
+  //   })
 }
 
 init()
@@ -35,7 +61,7 @@ module.exports = function (dbI) {
     var user = await User.findOne({ username: req.body.username });
     if (user == null) {
       res.status(401);
-      res.json({ err: "Usuário não existe" })
+      res.json({ err: "Usuário ou senha incorretos"  })
       return;
     }
     user = user.toObject();
