@@ -13,12 +13,15 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { AuthenticationService } from './services/authentication.service';
 import { AppInitializer } from './appInitiazlier/AppInitializer';
 import { MainMenuComponent } from './mainmenu/mainmenu.component';
+import { CreateUserComponent } from './createuser/createuser.component';
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
     MainMenuComponent,
+    CreateUserComponent,
   ],
   imports: [    
     BrowserAnimationsModule,
