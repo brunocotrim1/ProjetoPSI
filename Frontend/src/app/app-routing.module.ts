@@ -7,12 +7,14 @@ import { LoginComponent } from './login/login.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MainMenuComponent } from './mainmenu/mainmenu.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/mainmenu', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent,canActivate: [AuthenticationGuard] },
   { path: 'login', component: LoginComponent},
   { path: 'mainmenu', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
+  { path: 'profile', component: ProfileComponent,canActivate: [AuthenticationGuard]},
 ];
 
 @NgModule({
