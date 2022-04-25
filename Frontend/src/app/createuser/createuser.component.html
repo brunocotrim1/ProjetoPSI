@@ -1,6 +1,6 @@
 <app-navigbar currentComponent="createuser" username={{user.username}} userrole={{user.role}}></app-navigbar>
 
-<div class="d-flex view" style="width:100%; min-height: 100%;">
+<div class="d-flex view" style="width:100%; ">
   <img src="../../assets/images/backgroundImage.png" alt="sample image" style="width:100%;">
   <div class="d-flex flex-column flex-center mask rgba-black-light" style="padding-top:70px; padding-bottom:30px; padding-left: 10%; padding-right: 10%; " >
     <div class="enjoyapp text-center">
@@ -15,7 +15,7 @@
       [formGroup]="loginForm"
       (ngSubmit)="onSubmit()"
     >
-      <p class="h4 mb-4" style="color: #ffffff; opacity: 87%">Fill in the form</p>
+      <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Fill in the form</h4>
       <div class="form-group">
         <input
           name="username"
@@ -32,6 +32,19 @@
           </div>
         </div>
       </div>
+      <div class="d-flex flex-center form-group" style="justify-content: space-between;">
+        <li class="d-flex flex-center flex-row nav-item dropdown" dropdown style="list-style-type: none;">
+          <mdb-icon fas icon="scroll" size="lg">
+          </mdb-icon>
+          <a dropdownToggle type="button" class="nav-link dropdown-toggle waves-light">
+            <input disabled style="background-color: white;">
+          </a>
+          <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
+            <a class="dropdown-item waves-light" mdbWavesEffect >User</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect >Admin</a>
+          </div>
+        </li>
+      </div>
       <div class="form-group">
         <input
           name="password"
@@ -45,6 +58,22 @@
         <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
           <div *ngIf="f['password'].errors['required']">
             Password is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input
+          name="confirm password"
+          type="password"
+          formControlName="confirm_password"
+          placeholder="Confirm Password"
+          autocomplete="password"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['confirm_password'].errors }"
+        />
+        <div *ngIf="submitted && f['confirm_password'].errors" class="invalid-feedback">
+          <div *ngIf="f['confirm_password'].errors['required']">
+            Confirming password is required
           </div>
         </div>
       </div>
@@ -68,9 +97,9 @@
         Create user
       </button>
       <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
-      
       </form>
     </button>
+    <div *ngIf="returnmessage" class="alert alert-danger mt-3 mb-0">{{ returnmessage }}</div>
   </div>
 </div>
 
