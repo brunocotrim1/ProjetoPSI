@@ -4,22 +4,50 @@ const router = express.Router();
 var mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+var crypto = require('crypto');
 const User = require("../models/User");
 const users = [
   {
-    username: "bruno",
-    password: "bruno",
+      username: "bruno",
+      password: SHA_256("bruno"),
+      role: "ADMIN",
+  },
+  {
+      username: "miguel",
+      password:SHA_256("miguel"),
+      role: "ADMIN",
+  },
+  {
+      username: "joao",
+      password: SHA_256("joao"),
+      role: "ADMIN",
+  },
+  {
+      username: "diogo",
+      password: SHA_256("diogo"),
+      role: "ADMIN",
+  },
+  {
+      username: "miguelS",
+      password: SHA_256("miguelS"),
+      role: "ADMIN",
   },
 ];
 
 
 async function init() {
-  await User.collection.drop();
-  await User.deleteMany({})
-  await User.create({
-    username: "bruno",
-    password: "bruno",role:"admin",
-  })
+  // await User.collection.drop();
+  // await User.deleteMany({})
+
+  for (let i = 0; i < users.length; i++) {
+      const user = new User(users[i]);
+      await user.save().catch(function (err) {});
+  }
+  //   await User.create({
+  //     username: "bruno",
+  //     password: SHA_256("bruno"), 
+  //     role: "admin",
+  //   })
 }
 
 init()
@@ -30,21 +58,21 @@ module.exports = function (dbI) {
       res.json({ err: "Empty Request" });
       return;
     }
-    var user = await User.findOne({username: req.body.username});
+    var user = await User.findOne({ username: req.body.username });
     if (user == null) {
       res.status(401);
-      res.json({ err: "Usuário não existe" })
+      res.json({ err: "Usuário ou senha incorretos"  })
       return;
     }
     user = user.toObject();
-    if (user.username != req.body.username || user.password != req.body.password) {
+    if (user.username != req.body.username || user.password != SHA_256(req.body.password)) {
       res.status(401);
       res.json({ err: "Usuário ou senha incorretos" })
       return;
     }
     delete user.password;
-    const accessToken = generateAccessToken({id:user._id,username: user.username,role:user.role});
-    const refreshToken = jwt.sign({id:user._id,username: user.username,role:user.role}, process.env.REFRESH_TOKEN_SECRET);
+    const accessToken = generateAccessToken({ id: user._id, username: user.username, role: user.role });
+    const refreshToken = jwt.sign({ id: user._id, username: user.username, role: user.role }, process.env.REFRESH_TOKEN_SECRET);
     var i = await User.updateOne(
       { _id: user._id },
       { $set: { refreshToken: refreshToken, accessToken: accessToken } }
@@ -54,7 +82,7 @@ module.exports = function (dbI) {
       return;
     })
 
-    res.json({ id: user._id, username: user.username, role:user.role,accessToken: accessToken, refresh_token: refreshToken });
+    res.json({ id: user._id, username: user.username, role: user.role, accessToken: accessToken, refresh_token: refreshToken });
   });
 
   router.post("/refresh_token", authenticateToken, async (req, res) => {
@@ -66,10 +94,9 @@ module.exports = function (dbI) {
     jwt.verify(exists, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
       if (err) return res.sendStatus(403);
       delete user.password;
-      const accessToken = generateAccessToken({id:user._id,username: user.username,role:user.role});
-      console.log(accessToken)
+      const accessToken = generateAccessToken({ id: user.id, username: user.username, role: user.role });
       await User.updateOne(
-        { _id: user._id },
+        { _id: user.id },
         { $set: { accessToken: accessToken } }
       ).catch(function (err) {
         res.status(401);
@@ -85,12 +112,11 @@ module.exports = function (dbI) {
 
 
   router.post("/logout", authenticateToken, async (req, res) => {
-   await User.updateOne(
+    await User.updateOne(
       { username: req.user.username },
       { $unset: { refreshToken: 1, accessToken: 1 } }
     )
       .then(function (response) {
-        console.log(response)
         if (response.matchedCount == 0)
           res.json({ err: "The given User does not exist" });
         else res.json(response);
@@ -100,7 +126,7 @@ module.exports = function (dbI) {
         res.json({ err: "error" });
         return;
       });
-   //res.sendStatus(200)
+    //res.sendStatus(200)
   });
   return router;
 };
@@ -115,9 +141,15 @@ function authenticateToken(req, res, next) {
   if (token == null) return res.sendStatus(401);
   jwt.verify(token, process.env.accessToken_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
-    
-    req.user = user;
+   
+    req.user = user; 
     req.user.refreshToken = token;
     next();
   });
+}
+
+function SHA_256(password) {
+  var hash = crypto.createHash('sha256');
+  hash.update(password);
+  return hash.digest('hex');
 }

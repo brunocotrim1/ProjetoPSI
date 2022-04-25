@@ -20,5 +20,7 @@ app.use(express.json());
 //app.use("/api", heroesRouter);
 const authRouter = require("./routes/authenticationRoutes")(db);
 app.use("/api/authentication", authRouter);
+const functionalityRouter = require("./routes/functionalityRoutes")(db);
+app.use("/api", functionalityRouter);
 app.listen(8080);
 
