@@ -4,16 +4,16 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from '../User';
 import { ProfileService } from './profile.service';
-
+import { Task } from '../Task';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  user: User | undefined;
+  user = {} as User;
   error:string | undefined;
-  tasks: Task[] | undefined;
+  tasks: Task[] = [];
   constructor(private profileService: ProfileService, private http: HttpClient, private router: Router) { }
   ngOnInit(): void {
     this.profileService.getTaskList().subscribe({
