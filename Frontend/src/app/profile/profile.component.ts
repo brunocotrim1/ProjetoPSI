@@ -12,14 +12,17 @@ import { ProfileService } from './profile.service';
 })
 export class ProfileComponent implements OnInit {
   user: User | undefined;
+  error:string | undefined;
+  tasks: Task[] | undefined;
   constructor(private profileService: ProfileService, private http: HttpClient, private router: Router) { }
   ngOnInit(): void {
     this.profileService.getTaskList().subscribe({
       next: (tasks) => {
-        console.log(tasks)
+        this.tasks = tasks;
+        console.log(this.tasks)
       },
       error: error => {
-        console.log(error);
+        this.error = error;
       }
     });
     this.user = this.profileService.getUser();

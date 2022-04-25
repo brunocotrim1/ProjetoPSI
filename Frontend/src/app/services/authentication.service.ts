@@ -49,7 +49,6 @@ export class AuthenticationService {
         const user = this.loadUser();
         if(user == null)
         return;
-        console.log(res);
         user.accessToken = res.accessToken;
         this.storeUser(user);
         this.startRefreshTokenTimer();
