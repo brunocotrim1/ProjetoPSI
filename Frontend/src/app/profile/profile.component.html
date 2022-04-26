@@ -17,61 +17,72 @@
     />
     <div class="row justify-content-center">
       <div class="col-md-7 col-lg-4 mb-5 mb-lg-0 wow fadeIn">
-        <div class="card border-0 shadow" style="border-radius: 20px;background: #6b6b6b;color: white;" >
+        <div
+          class="card border-0 shadow"
+          style="border-radius: 20px; background: #6b6b6b; color: white"
+        >
           <img
             src="https://www.bootdey.com/img/Content/avatar/avatar6.png"
             alt="..."
             style="border-radius: 20px"
           />
-          <div class="card-body p-1-9 p-xl-5" style="color: white;">
+          <div class="card-body p-1-9 p-xl-5" style="color: white">
             <div class="mb-4">
               <h3 class="h4 mb-0">{{ user.username }}</h3>
-              <span >ROLE: {{ user.role }}</span>
+              <span>ROLE: {{ user.role }}</span>
             </div>
           </div>
         </div>
       </div>
       <div class="col-lg-8">
-        <div class="ps-lg-1-6 ps-xl-5">
+        <div class="">
           <div class="mb-5 wow fadeIn">
             <mdb-navbar
               SideClass="navbar navbar-1 navbar-dark rounded-lg border"
               [containerInside]="false"
+              class="myNavbar"
             >
               <mdb-navbar-brand>
-                <a class="navbar-brand"> <h1 class="h1 mb-0" style="color: white;">My Tasks</h1></a>
+                <a class="navbar-brand">
+                  <h1 class="h1 mb-0" style="color: white">My Tasks</h1></a
+                >
+                
               </mdb-navbar-brand>
 
               <links>
                 <ul class="list-group">
-                  <li style="background: #6b6b6b;font-size: 1.5em;font-weight: bold;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;"
+                  <li
+                    style="
+                      background: #6b6b6b;
+                      font-size: 1.5em;
+                      font-weight: bold;
+                      font-family: 'Gill Sans', 'Gill Sans MT', Calibri,
+                        'Trebuchet MS', sans-serif;
+                    "
                     class="list-group-item"
                     *ngFor="let task of tasks; let i = index"
                   >
-                    {{ task.name }} <span
+                    {{ task.name }}
+                    <span
                       *ngIf="tasks[i].priority == 'LOW'"
                       style="color: #04aa6d"
                       >{{ task.priority }}</span
-                      
                     >
                     <span
                       *ngIf="tasks[i].priority == 'MEDIUM'"
                       style="color: #ffea00"
                       >{{ task.priority }}</span
-                      
                     >
                     <span
                       *ngIf="tasks[i].priority == 'HIGH'"
                       style="color: #fc8507"
                       >{{ task.priority }}</span
-                      
                     >
                     <span
-                    *ngIf="tasks[i].priority == 'CRITICAL'"
-                    style="color: #a40404e3"
-                    >{{ task.priority }}</span
-                    
-                  >
+                      *ngIf="tasks[i].priority == 'CRITICAL'"
+                      style="color: #a40404e3"
+                      >{{ task.priority }}</span
+                    >
                     <div class="progress">
                       <div
                         class="progress-bar"
@@ -90,21 +101,80 @@
               </links>
             </mdb-navbar>
           </div>
-
+      <div class="text-start  wow fadeIn">
+              <h2 class="mb-0" style="color: white; font-weight: bold">
+                Agenda
+              </h2>
           <div class="wow fadeIn">
-            <div class="text-start mb-1-6 wow fadeIn">
-              <h2 class="mb-0" style="color: white;font-weight: bold">Agenda</h2>
+      
             </div>
-            
-            <mwl-demo-utils-calendar-header [(view)]="view" [(viewDate)]="viewDate">
-            </mwl-demo-utils-calendar-header>
-            
-            <div [ngSwitch]="view">
+
+            <div class="calendar-header">
+              <div class="">
+                <div class="btn-group">
+                  <div
+                    class="btn btn-primary"
+                    mwlCalendarPreviousView
+                    [view]="view"
+                    [(viewDate)]="viewDate"
+                    (viewDateChange)="closeOpenMonthViewDay()"
+                  >
+                    Previous
+                  </div>
+                  <div
+                  class="btn btn-primary"
+                    mwlCalendarToday
+                    [(viewDate)]="viewDate"
+                  >
+                    Today
+                  </div>
+                  <div
+                    class="btn btn-primary"
+                    mwlCalendarNextView
+                    [view]="view"
+                    [(viewDate)]="viewDate"
+                    (viewDateChange)="closeOpenMonthViewDay()"
+                  >
+                    Next
+                  </div>
+                </div>
+              </div>
+              <div class="">
+                <h3 style="text-align: center;color: white;">{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
+              </div>
+              <div class="">
+                <div class="btn-group">
+                  <div
+                    class="btn btn-primary"
+                    (click)="setView(CalendarView.Month)"
+                    [class.active]="view === CalendarView.Month"
+                  >
+                    Month
+                  </div>
+                  <div
+                    class="btn btn-primary"
+                    (click)="setView(CalendarView.Week)"
+                    [class.active]="view === CalendarView.Week"
+                  >
+                    Week
+                  </div>
+                  <div
+                    class="btn btn-primary"
+                    (click)="setView(CalendarView.Day)"
+                    [class.active]="view === CalendarView.Day"
+                  >
+                    Day
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div [ngSwitch]="view" class="calendar">
               <mwl-calendar-month-view
                 *ngSwitchCase="'month'"
                 [viewDate]="viewDate"
                 [events]="events"
-                [activeDayIsOpen]="true"
+                [activeDayIsOpen]="activeDayIsOpen"
+                (dayClicked)="dayClicked($event.day)"
                 (eventClicked)="eventClicked($event)"
               >
               </mwl-calendar-month-view>
@@ -127,9 +197,9 @@
         </div>
       </div>
     </div>
+    
   </div>
-  <app-footer style="width: 100%"></app-footer>
-</div>
-
-<!-- 
+<app-footer style="width: 100%;"></app-footer>
+  <!-- 
 <app-footer></app-footer> -->
+</div>
