@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validator, ValidatorFn, Validators} from '@angular/forms';
 import { AuthenticationService } from '../services/authentication.service';
 import { User } from '../User';
 import { CreateuserService } from './createuser.service';
+import Validation from './validation';
 
 @Component({
   selector: 'app-createuser',
@@ -13,13 +13,18 @@ import { CreateuserService } from './createuser.service';
 
 export class CreateUserComponent implements OnInit {
 
-  loginForm = new FormGroup({
-    username: new FormControl('',Validators.required),
-    password: new FormControl('',Validators.required),
-    role: new FormControl('',Validators.required),
-    confirm_password: new FormControl('',Validators.required)
-  });
+  userForm = new FormGroup(
+    {
+    username: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-z0-9]+$/i)]),
+    role: new FormControl('', Validators.required),
+    confirm_password: new FormControl('', Validators.required)
+    }, {
+      validators: [Validation.match('password', 'confirm_password')]
+    }
+  );
 
+  defaultrole = "USER";
   loading = false;
   submitted = false;
   returnUrl!: string;
@@ -29,7 +34,7 @@ export class CreateUserComponent implements OnInit {
   user = {} as User;
 
   constructor(
-    private router: Router,
+    private formBuilder: FormBuilder,
     private createuserservice: CreateuserService,
     private authenticationService: AuthenticationService) { }
 
@@ -38,25 +43,33 @@ export class CreateUserComponent implements OnInit {
   }
 
   get f() { 
-    return this.loginForm.controls; 
+    return this.userForm.controls; 
   }
-  
+
   onSubmit() {
     this.submitted = true;
-    if (this.loginForm.invalid) {
+    if (this.userForm.invalid) {
       return;
     }
     this.loading = true;
+    console.log(this.f["username"].value)
+    console.log(this.f["password"].value)
+    console.log(this.f["role"].value)
     this.createuserservice.createUser(this.f["username"].value, this.f["password"].value, this.f["role"].value)
       .subscribe({
-        next: (msg) => {
-          this.returnmessage = msg.msg;
-          console.log(msg.msg);
+        next: () => {
+          this.returnmessage = "New user created!";
+          this.loading = false;
         },
         error: error => {
           this.error = error;
           this.loading = false;
         }
       });
+  }
+
+  onReset(): void {
+    this.submitted = false;
+    this.userForm.reset();
   }
 }

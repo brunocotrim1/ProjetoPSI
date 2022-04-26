@@ -1,33 +1,18 @@
-  <app-navigbar
-    currentComponent="profile"
-    username="{{ user.username }}"
-    userrole="{{ user.role }}"
-  ></app-navigbar>
-  <div class="mainContainer" >
+<app-navigbar currentComponent="profile" username="{{ user.username }}" userrole="{{ user.role }}"></app-navigbar>
 
+<div class="mainContainer">
   <div class="profileContainer">
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
-      integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA="
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/ti-icons@0.1.2/css/themify-icons.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
+      integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ti-icons@0.1.2/css/themify-icons.css" />
     <div class="row justify-content-center">
       <div class="col-md-7 col-lg-4 mb-5 mb-lg-0 wow fadeIn">
         <div class="card border-0 shadow" style="border-radius: 20px;">
-          <img
-            src="https://www.bootdey.com/img/Content/avatar/avatar6.png"
-            alt="..."
-            style="border-radius: 20px;"
-          />
+          <img src="https://www.bootdey.com/img/Content/avatar/avatar6.png" alt="..." style="border-radius: 20px;" />
           <div class="card-body p-1-9 p-xl-5">
             <div class="mb-4">
               <h3 class="h4 mb-0">{{user.username}}</h3>
-              <span  style="color: black;">ROLE: {{user.role}}</span>
+              <span style="color: black;">ROLE: {{user.role}}</span>
             </div>
 
 
@@ -37,23 +22,22 @@
       <div class="col-lg-8">
         <div class="ps-lg-1-6 ps-xl-5">
           <div class="mb-5 wow fadeIn">
-            <mdb-navbar
-            SideClass="navbar navbar-1 navbar-dark blue accent-4 rounded-lg"
-            [containerInside]="false"
-          >
-            <mdb-navbar-brand>
-              <a class="navbar-brand"> <h1 class="h1 mb-0">My Tasks</h1></a>
-            </mdb-navbar-brand>
-          
-            <links>
-              <ul class="list-group">
-                <li class="list-group-item" *ngFor="let task of tasks">
-                  {{ task.name }}
-                </li>
-              </ul>
-            </links>
-          </mdb-navbar>
-         
+            <mdb-navbar SideClass="navbar navbar-1 navbar-dark blue accent-4 rounded-lg" [containerInside]="false">
+              <mdb-navbar-brand>
+                <a class="navbar-brand">
+                  <h1 class="h1 mb-0">My Tasks</h1>
+                </a>
+              </mdb-navbar-brand>
+
+              <links>
+                <ul class="list-group">
+                  <li class="list-group-item" *ngFor="let task of tasks">
+                    {{ task.name }}
+                  </li>
+                </ul>
+              </links>
+            </mdb-navbar>
+
           </div>
 
           <div class="wow fadeIn">
@@ -75,14 +59,8 @@
                 </div>
               </div>
               <div class="custom-progress progress rounded-3 mb-4">
-                <div
-                  class="animated custom-bar progress-bar slideInLeft"
-                  style="width: 70%"
-                  aria-valuemax="100"
-                  aria-valuemin="0"
-                  aria-valuenow="10"
-                  role="progressbar"
-                ></div>
+                <div class="animated custom-bar progress-bar slideInLeft" style="width: 70%" aria-valuemax="100"
+                  aria-valuemin="0" aria-valuenow="10" role="progressbar"></div>
               </div>
               <div class="progress-text">
                 <div class="row">
@@ -91,14 +69,8 @@
                 </div>
               </div>
               <div class="custom-progress progress rounded-3 mb-4">
-                <div
-                  class="animated custom-bar progress-bar bg-secondary slideInLeft"
-                  style="width: 90%"
-                  aria-valuemax="100"
-                  aria-valuemin="0"
-                  aria-valuenow="70"
-                  role="progressbar"
-                ></div>
+                <div class="animated custom-bar progress-bar bg-secondary slideInLeft" style="width: 90%"
+                  aria-valuemax="100" aria-valuemin="0" aria-valuenow="70" role="progressbar"></div>
               </div>
               <div class="progress-text">
                 <div class="row">
@@ -107,14 +79,8 @@
                 </div>
               </div>
               <div class="custom-progress progress rounded-3">
-                <div
-                  class="animated custom-bar progress-bar bg-dark slideInLeft"
-                  style="width: 80%"
-                  aria-valuemax="100"
-                  aria-valuemin="0"
-                  aria-valuenow="70"
-                  role="progressbar"
-                ></div>
+                <div class="animated custom-bar progress-bar bg-dark slideInLeft" style="width: 80%" aria-valuemax="100"
+                  aria-valuemin="0" aria-valuenow="70" role="progressbar"></div>
               </div>
             </div>
           </div>

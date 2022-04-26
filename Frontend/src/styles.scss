@@ -4,7 +4,7 @@ html, body {
     overflow-y:auto;
 }
 body{
-  background-image: url("./assets/images/backgroundImage.png");
-  background-repeat: no-repeat;
+  background-image: linear-gradient(#1a1a1a80,
+  #141414), url("./assets/images/backgroundImage.png");
   background-size: cover;
 }
