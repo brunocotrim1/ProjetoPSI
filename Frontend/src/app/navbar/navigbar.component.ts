@@ -25,6 +25,7 @@ export class NavigbarComponent implements OnInit {
   constructor(private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
+
   }
   
   logout() {
