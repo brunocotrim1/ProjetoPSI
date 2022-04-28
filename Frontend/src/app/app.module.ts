@@ -20,6 +20,7 @@ import { NavigbarComponent } from './navbar/navigbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { TaskDetailComponent } from './task-detail/task-detail.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,6 +32,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
     CreateUserComponent,
     NavigbarComponent,
     FooterComponent,
+    TaskDetailComponent,
 
   ],
   imports: [
