@@ -7,44 +7,48 @@ require("dotenv").config();
 var crypto = require('crypto');
 const User = require("../models/User");
 const Task = require("../models/Task");
-const tasks = [
-    {
-        name: "Task 1",
-        userAssociated: "6266e43978bcd86e4b6eacfe",
-        progress: 0,
-        priority: "LOW",
-    },
-    {
-        name: "Task 2",
-        userAssociated: "6266e43978bcd86e4b6eacfe",
-        progress: 0,
-        priority: "LOW",
-    },
-    {
-        name: "Task 3",
-        userAssociated: "6266e43978bcd86e4b6eacfe",
-        progress: 0,
-        priority: "LOW",
-    },
-];
+const { translateAliases } = require("../models/User");
+
+
+Task.collection.drop();
+
 
 
 async function init() {
     // await User.collection.drop();
     // await User.deleteMany({})
-  
+    const testUser = await User.findOne({ username: "bruno" }); const tasks = [
+        {
+            name: "Task 1",
+            userAssociated: testUser.id,
+            progress: 33,
+            priority: "LOW",
+        },
+        {
+            name: "Task 2",
+            userAssociated: testUser.id,
+            progress: 15,
+            priority: "CRITICAL",
+        },
+        {
+            name: "Task 3",
+            userAssociated: testUser.id,
+            progress: 66,
+            priority: "MEDIUM",
+        },
+    ];
     for (let i = 0; i < tasks.length; i++) {
         const task = new Task(tasks[i]);
-        await task.save().catch(function (err) {});
+        await task.save().catch(function (err) { });
     }
     //   await User.create({
     //     username: "bruno",
     //     password: SHA_256("bruno"), 
     //     role: "admin",
     //   })
-  }
-  
-  init()
+}
+
+init()
 
 module.exports = function (dbI) {
     router.get("/tasks", authenticateToken, async (req, res) => {
@@ -55,13 +59,13 @@ module.exports = function (dbI) {
             return;
         }
         const tasks = await Task.find({ userAssociated: user._id });
-        if(!tasks || tasks.length == 0){
+        if (!tasks || tasks.length == 0) {
             res.status(404);
             res.json({ err: "No tasks found" });
             return;
         }
         res.json(tasks);
-      });
+    });
     return router;
 };
 
