@@ -16,7 +16,10 @@ import { MainMenuComponent } from './mainmenu/mainmenu.component';
 import { CriarEquipasComponent } from './criar-equipas/criar-equipas.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateUserComponent } from './createuser/createuser.component';
-
+import { NavigbarComponent } from './navbar/navigbar.component';
+import { FooterComponent } from './footer/footer.component';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,8 +29,11 @@ import { CreateUserComponent } from './createuser/createuser.component';
     CriarEquipasComponent,
     ProfileComponent,
     CreateUserComponent,
+    NavigbarComponent,
+    FooterComponent,
+
   ],
-  imports: [    
+  imports: [
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
@@ -43,11 +49,16 @@ import { CreateUserComponent } from './createuser/createuser.component';
     // }),
     BrowserModule,
     AppRoutingModule,
-  ],providers: [
+    BrowserAnimationsModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
+  ], providers: [
     { provide: APP_INITIALIZER, useFactory: AppInitializer, multi: true, deps: [AuthenticationService] },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

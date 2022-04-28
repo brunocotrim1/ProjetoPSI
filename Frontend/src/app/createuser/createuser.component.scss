@@ -14,6 +14,9 @@ a, h5 {
     border: 2px solid black;
     border-color: #04AA6D;
     border-radius: 20px;
+    z-index: 2;
+    box-shadow: 0 10px 100px rgba(0, 255, 98, 0.15);
+    transform: perspective(1px)
 }
 
 .lftbut{
@@ -36,19 +39,11 @@ a, h5 {
     z-index: 1;
 }
 
-.lftbut:hover, .rgtbut:hover{
-    z-index: 2;
-    box-shadow: 0 10px 100px rgba(0, 255, 98, 0.15);
-    transform: scale(1.05) perspective(1px)
-}
-
-footer {
-    width: 100%;
-    color: white;
-    text-align: center;
-  }
-
-.enjoyapp{
-    padding-left: 400px;
-    padding-right: 400px;
+.mainContainer {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width:100%;
+    height:100%;
+    justify-content: space-between;
 }

@@ -55,7 +55,7 @@ module.exports = function (dbI) {
             return;
         }
         const tasks = await Task.find({ userAssociated: user._id });
-        if(!tasks || tasks.length == 3){
+        if(!tasks || tasks.length == 0){
             res.status(404);
             res.json({ err: "No tasks found" });
             return;

@@ -20,11 +20,11 @@ export class ProfileService {
   getTaskList(): Observable<any> {
     return this.http.get<any>(`${this.apiURL}/tasks`, this.httpOptions);
   }
-  getUser(): User | undefined {
+  getUser(): User {
     const user = this.authenticationService.loadUser();
     if (user)
       return user
     else
-      return undefined
+      return {} as User
   }
 }
