@@ -66,6 +66,33 @@ module.exports = function (dbI) {
         }
         res.json(tasks);
     });
+    router.get("/usersByName/:term", authenticateToken, async (req, res) => {
+        const users = await User.find({});
+        const usersMap = users.map(function (user) {
+            user = user.toObject();
+            delete user.password;
+            delete user.refreshToken;
+            delete user.accessToken;
+            return user;
+        }).filter(function (user) {
+            return user.username.toLowerCase().includes(req.params.term.toLowerCase());
+        }
+        );
+        res.json(usersMap);
+    });
+
+    router.get("/task/:id", authenticateToken, async (req, res) => {
+        console.log(req.params.id)
+        console.log("aaaaaaaa")
+        const task = await Task.findById(req.params.id);
+        
+        if (!task) {
+            res.status(404);
+            res.json({ err: "Task not found" });
+            return;
+        }
+        res.json(task);
+    });
     return router;
 };
 
@@ -76,7 +103,6 @@ function authenticateToken(req, res, next) {
     if (token == null) return res.sendStatus(401);
     jwt.verify(token, process.env.accessToken_SECRET, (err, user) => {
         if (err) return res.sendStatus(403);
-
         req.user = user;
         req.user.refreshToken = token;
         next();

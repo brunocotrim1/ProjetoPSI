@@ -1,0 +1,116 @@
+.mainContainer {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height:100%;
+   justify-content: space-between;
+   margin-top: 100px;
+  }
+  
+  .detailContainer {
+    display: flex;
+    padding: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+      -45deg,
+      rgba(33, 33, 33, 1) 0%,
+      rgba(46, 46, 46, 1) 36%,
+      rgba(68, 68, 68, 1) 100%
+    );
+    margin-bottom: 50px;
+    margin-top: 100px;
+    border-radius: 20px;
+    padding: 20px;
+    z-index: 1;
+    box-shadow: 0 0.5px 100px rgba(0, 255, 98, 0.15);
+    border: 2px solid;
+    border-color: #04aa6d;
+    border-radius: 20px;
+  }
+  
+  .calendar-header{
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    margin: 0;
+    margin-top: 20px;
+  }
+  @media screen and (max-width: 500px) {
+    .profileContainer {
+      display: flex;
+      padding: 0;
+    }
+    .calendar{
+      padding: 0;
+    }
+    .mainContainer {
+      padding: 0;
+    }
+    .footer{
+      width: 100%;
+      padding: 0;
+    }
+    .myNavbar{
+      width: 20%;
+      padding: 0;
+    }
+  
+  }
+
+  /* HeroSearch private styles */
+
+label {
+  display: block;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  margin-bottom: .5rem;
+
+}
+input {
+  padding: .5rem;
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
+  display: block;
+}
+
+input:focus {
+  outline: #336699 auto 1px;
+}
+
+li {
+  list-style-type: none;
+}
+.search-result li a {
+  border-bottom: 1px solid gray;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  display: inline-block;
+  width: 100%;
+  max-width: 600px;
+  padding: .5rem;
+  box-sizing: border-box;
+  text-decoration: none;
+  color: black;
+}
+
+.search-result li a:hover {
+  background-color: #435A60;
+  color: white;
+}
+
+ul.search-result {
+  margin-top: 0;
+  padding-left: 0;
+}
+
+
+/*
+Copyright Google LLC. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at https://angular.io/license
+*/

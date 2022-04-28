@@ -55,6 +55,7 @@ export class ProfileComponent implements OnInit {
     this.profileService.getTaskList().subscribe({
       next: (tasks) => {
         this.tasks = tasks;
+        console.log(tasks)
         console.log(this.tasks)
       },
       error: error => {
@@ -65,8 +66,6 @@ export class ProfileComponent implements OnInit {
     if (this.user == undefined)
       this.router.navigate(["/"]);
   }
-
-
 
 
 
@@ -201,4 +200,5 @@ export class ProfileComponent implements OnInit {
     eventClicked({ event }: { event: CalendarEvent }): void {
     console.log('Event clicked', event);
   }
+
 }

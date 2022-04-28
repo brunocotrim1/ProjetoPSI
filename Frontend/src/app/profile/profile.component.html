@@ -61,6 +61,7 @@
                     "
                     class="list-group-item"
                     *ngFor="let task of tasks; let i = index"
+                    routerLink="/taskDetail/{{task._id}}"
                   >
                     {{ task.name }}
                     <span
@@ -95,6 +96,7 @@
                       >
                         {{ task.progress }}%
                       </div>
+                      
                     </div>
                   </li>
                 </ul>

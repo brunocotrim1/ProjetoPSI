@@ -1,4 +1,5 @@
 export interface Task {
+    _id:string;
     name: string;
     userAssociated: string;
     progress: number;

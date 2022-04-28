@@ -36,7 +36,11 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     NavigbarComponent,
     FooterComponent,
     TaskDetailComponent,
+<<<<<<< HEAD
     MultiselectDropdownComponent,
+=======
+    LinkprojectstoteamsComponent,
+>>>>>>> a0d674db86527645fbe5acb5ca7f75f1529d313c
 
   ],
   imports: [
