@@ -21,6 +21,9 @@ import { FooterComponent } from './footer/footer.component';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
+import { MultiselectDropdownComponent } from './multiselect-dropdown/multiselect-dropdown.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +36,7 @@ import { TaskDetailComponent } from './task-detail/task-detail.component';
     NavigbarComponent,
     FooterComponent,
     TaskDetailComponent,
+    MultiselectDropdownComponent,
 
   ],
   imports: [
@@ -52,6 +56,7 @@ import { TaskDetailComponent } from './task-detail/task-detail.component';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    NgMultiSelectDropDownModule.forRoot(),
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,

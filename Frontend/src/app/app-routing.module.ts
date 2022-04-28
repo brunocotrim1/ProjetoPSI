@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent,canActivate: [AuthenticationGuard] },
   { path: 'login', component: LoginComponent},
   { path: 'mainmenu', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
-  { path: 'criar-equipas', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
+  { path: 'criar-equipas', component: CriarEquipasComponent,canActivate: [AuthenticationGuard]  },
   { path: 'profile', component: ProfileComponent,canActivate: [AuthenticationGuard]},
   { path: 'createuser', component: CreateUserComponent, canActivate: [AuthenticationGuard]  }
 ];
