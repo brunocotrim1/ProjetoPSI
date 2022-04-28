@@ -130,21 +130,27 @@ module.exports = function (dbI) {
 
   
   router.post("/createuser/add", authenticateToken, async (req, res) => {
-    await User.create(
-      { username: req.body.username ,
-      password: SHA_256(req.body.password),
-      role: req.body.role}
-    )
-      .then(function (response) {
-        console.log(response)
-        res.json(response);
-        return;
-      })
-      .catch(function (err) {
-        res.status(404);
-        res.json({ err: "error" })
-        return;
-      });
+    const userExists = await User.exists({ username: req.body.username });
+    if (!userExists) {
+      await User.create(
+        { username: req.body.username ,
+        password: SHA_256(req.body.password),
+        role: req.body.role}
+      )
+        .then(function (response) {
+          console.log(response)
+          res.json(response);
+          return;
+        })
+        .catch(function (err) {
+          res.status(404);
+          res.json({ err: "Internal error." })
+          return;
+        });
+    } else {
+      res.status(404);
+      res.json({ err: "User with the selected name already exists." })
+    }
     //res.sendStatus(200)
   });
 
