@@ -11,6 +11,7 @@ import { CriarEquipasComponent } from './criar-equipas/criar-equipas.component'
 import { ProfileComponent } from './profile/profile.component';
 import { CreateUserComponent } from './createuser/createuser.component';
 import { NavbarComponent } from 'angular-bootstrap-md';
+import { LinkprojectstoteamsComponent } from './linkprojectstoteams/linkprojectstoteams.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/mainmenu', pathMatch: 'full' },
@@ -19,7 +20,8 @@ const routes: Routes = [
   { path: 'mainmenu', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
   { path: 'criar-equipas', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
   { path: 'profile', component: ProfileComponent,canActivate: [AuthenticationGuard]},
-  { path: 'createuser', component: CreateUserComponent, canActivate: [AuthenticationGuard]  }
+  { path: 'createuser', component: CreateUserComponent, canActivate: [AuthenticationGuard]  },
+  { path: 'linkprojectstoteams', component: LinkprojectstoteamsComponent, canActivate: [AuthenticationGuard]  }
 ];
 
 @NgModule({

@@ -1,11 +1,7 @@
-<app-navigbar
-  currentComponent="mainmenu"
-  username="{{ user.username }}"
-  userrole="{{ user.role }}"
-></app-navigbar>
+<app-navigbar currentComponent="mainmenu" username="{{ user.username }}" userrole="{{ user.role }}"></app-navigbar>
 
 <div class="mainContainer">
-<!-- Intro Section -->
+  <!-- Intro Section -->
   <div style="margin-left:15%; margin-right:15%; margin-top:5%; margin-bottom:5%;">
     <div class="enjoyapp text-center">
       <div class="white-text">
@@ -18,28 +14,15 @@
     </div>
     <div class="d-flex align-items-center content-height w-100" style="margin-top:75px; margin-bottom:75px;">
       <div class="row flex-center w-100 flex-row">
-        <button
-          class="lftbut big"
-          mdbBtn
-          type="button"
-          rounded="true"
-          mdbWavesEffect
-        >
+        <button class="lftbut big" mdbBtn type="button" rounded="true" mdbWavesEffect>
           <a href="/createuser">
             <div class="media">
-              <img
-                class="d-flex align-self-center mr-3"
-                src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
-                alt="Generic placeholder image"
-              />
+              <img class="d-flex align-self-center mr-3"
+                src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp" alt="Generic placeholder image" />
               <div class="media-body">
                 <h5 class="mt-0 font-weight-bold">
-                  Create User<button
-                    class="userrole ml-2 mt-1"
-                    mdbBtn
-                    type="button"
-                    size="sm"
-                  >
+                  Create User
+                  <button *ngIf="user.role == 'ADMIN'" class="userrole ml-2 mt-1" mdbBtn type="button" size="sm">
                     admin feature
                   </button>
                 </h5>
@@ -47,8 +30,7 @@
                   This feature allows you, as an administrator, to create a new user
                   of the platform. You are needed to fill a form which requires the
                   user's name, user's password and user's role (default is a normal
-                  user). After completion of the form, a new user object is added to
-                  our database.
+                  user).
                 </p>
                 <p class="mb-0">
                   To use the created user object, first login to our page using the
@@ -60,63 +42,43 @@
         </button>
       </div>
       <div class="row flex-center w-100 flex-row">
-        <button
-          class="rgtbut small"
-          mdbBtn
-          type="button"
-          rounded="true"
-          mdbWavesEffect
-        >
-          <div class="media">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1 font-weight-bold">Beans 2</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-              scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-              vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
-              vulputate fringilla. Donec lacinia congue felis in faucibus.
+        <button class="rgtbut small" mdbBtn type="button" rounded="true" mdbWavesEffect>
+          <a href="/profile">
+            <div class="media">
+              <div class="media-body">
+                <h5 class="mt-0 mb-1 font-weight-bold">View profile</h5>
+                This feature allows any user to check the current state of their profile, such as agenda and tasks.
+              </div>
+              <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
+                alt="Generic placeholder image" />
             </div>
-            <img
-              class="d-flex align-self-center ml-3"
-              src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
-              alt="Generic placeholder image"
-            />
-          </div>
+          </a>
         </button>
       </div>
     </div>
     <div class="d-flex align-items-center content-height w-100" style="margin-top:75px; margin-bottom:75px;">
       <div class="row flex-center w-100 flex-row">
-        <button
-          class="lftbut small"
-          mdbBtn
-          type="button"
-          rounded="true"
-          mdbWavesEffect
-        >
-          <div class="media">
-            <img
-              class="d-flex align-self-center mr-3"
-              src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
-              alt="Generic placeholder image"
-            />
-            <div class="media-body">
-              <h5 class="mt-0 mb-1 font-weight-bold">Media object</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-              scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-              vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
-              vulputate fringilla. Donec lacinia congue felis in faucibus.
+        <button class="lftbut small" mdbBtn type="button" rounded="true" mdbWavesEffect>
+          <a href="/linkprojectstoteams">
+            <div class="media">
+              <img class="d-flex align-self-center mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
+                alt="Generic placeholder image" />
+              <div class="media-body">
+                <h5 class="mt-0 mb-1 font-weight-bold">Link projects to teams
+                  <button *ngIf="user.role == 'ADMIN'" class="userrole ml-2 mt-1" mdbBtn type="button" size="sm">
+                  admin feature
+                  </button>
+                </h5>
+                This feature allows an administrator to link projects to teams, 
+                so that the selected project can be developed and worked by the
+                selected team and be canceled at any given time.
+              </div>
             </div>
-          </div>
+          </a>
         </button>
       </div>
       <div class="row flex-center w-100 flex-row">
-        <button
-          class="rgtbut big"
-          mdbBtn
-          type="button"
-          rounded="true"
-          mdbWavesEffect
-        >
+        <button class="rgtbut big" mdbBtn type="button" rounded="true" mdbWavesEffect>
           <div class="media">
             <div class="media-body">
               <h5 class="mt-0 font-weight-bold">Center-aligned media</h5>
@@ -132,38 +94,21 @@
                 nascetur ridiculus mus.
               </p>
             </div>
-            <img
-              class="d-flex align-self-center ml-3"
-              src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
-              alt="Generic placeholder image"
-            />
+            <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
+              alt="Generic placeholder image" />
           </div>
         </button>
       </div>
     </div>
     <div class="d-flex align-items-center content-height w-100" style="margin-top:75px; margin-bottom:75px;">
       <div class="row flex-center w-100 flex-row">
-        <button
-          class="lftbut big"
-          mdbBtn
-          type="button"
-          rounded="true"
-          mdbWavesEffect
-        >
+        <button class="lftbut big" mdbBtn type="button" rounded="true" mdbWavesEffect>
           <div class="media">
-            <img
-              class="d-flex align-self-center mr-3"
-              src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
-              alt="Generic placeholder image"
-            />
+            <img class="d-flex align-self-center mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
+              alt="Generic placeholder image" />
             <div class="media-body">
               <h5 class="mt-0 font-weight-bold">
-                Create User<button
-                  class="userrole ml-2 mt-1"
-                  mdbBtn
-                  type="button"
-                  size="sm"
-                >
+                Create User<button class="userrole ml-2 mt-1" mdbBtn type="button" size="sm">
                   admin feature
                 </button>
               </h5>
@@ -183,13 +128,7 @@
         </button>
       </div>
       <div class="row flex-center w-100 flex-row">
-        <button
-          class="rgtbut small"
-          mdbBtn
-          type="button"
-          rounded="true"
-          mdbWavesEffect
-        >
+        <button class="rgtbut small" mdbBtn type="button" rounded="true" mdbWavesEffect>
           <div class="media">
             <div class="media-body">
               <h5 class="mt-0 mb-1 font-weight-bold">Beans 2</h5>
@@ -198,11 +137,8 @@
               vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
               vulputate fringilla. Donec lacinia congue felis in faucibus.
             </div>
-            <img
-              class="d-flex align-self-center ml-3"
-              src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
-              alt="Generic placeholder image"
-            />
+            <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
+              alt="Generic placeholder image" />
           </div>
         </button>
       </div>

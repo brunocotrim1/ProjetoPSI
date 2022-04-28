@@ -21,6 +21,7 @@ import { FooterComponent } from './footer/footer.component';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
+import { LinkprojectstoteamsComponent } from './linkprojectstoteams/linkprojectstoteams.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +34,7 @@ import { TaskDetailComponent } from './task-detail/task-detail.component';
     NavigbarComponent,
     FooterComponent,
     TaskDetailComponent,
+    LinkprojectstoteamsComponent,
 
   ],
   imports: [
