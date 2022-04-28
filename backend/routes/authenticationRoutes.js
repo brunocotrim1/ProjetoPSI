@@ -110,7 +110,6 @@ module.exports = function (dbI) {
     });
   });
 
-
   router.post("/logout", authenticateToken, async (req, res) => {
     await User.updateOne(
       { username: req.user.username },
@@ -128,8 +127,30 @@ module.exports = function (dbI) {
       });
     //res.sendStatus(200)
   });
+
+  
+  router.post("/createuser/add", authenticateToken, async (req, res) => {
+    await User.create(
+      { username: req.body.username ,
+      password: SHA_256(req.body.password),
+      role: req.body.role}
+    )
+      .then(function (response) {
+        console.log(response)
+        res.json(response);
+        return;
+      })
+      .catch(function (err) {
+        res.status(404);
+        res.json({ err: "error" })
+        return;
+      });
+    //res.sendStatus(200)
+  });
+
   return router;
 };
+
 function generateAccessToken(user) {
   return jwt.sign(user, process.env.accessToken_SECRET, { expiresIn: 5 * 60 });
 }
@@ -141,8 +162,7 @@ function authenticateToken(req, res, next) {
   if (token == null) return res.sendStatus(401);
   jwt.verify(token, process.env.accessToken_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
-   
-    req.user = user; 
+    req.user = user;
     req.user.refreshToken = token;
     next();
   });

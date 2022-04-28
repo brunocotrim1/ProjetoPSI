@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CreateuserService {
-  private createuserURL: string = "/createuser";
+  private createuserURL: string = "/api/authentication/createuser";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -18,6 +18,6 @@ export class CreateuserService {
   }
 
   createUser(username: string, password: string, role: string): Observable<any>{
-    return this.http.post<any>(`${this.createuserURL}/add`, { username, password, role}, this.httpOptions);
+    return this.http.post<any>(`${this.createuserURL}/add`, {username, password, role}, this.httpOptions);
   }
 }
