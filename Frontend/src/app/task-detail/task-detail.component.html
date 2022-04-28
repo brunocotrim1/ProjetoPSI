@@ -4,6 +4,26 @@
   userrole="{{ user.role }}"
 ></app-navigbar>
 <div class="mainContainer">
-  <div class="profileContainer"></div>
+  <div class="detailContainer">
+
+    <div style="background-color: aqua;">
+      <h1>Task Details</h1>
+      <div id="search-component">
+
+        <div> {{ task.name }}</div>
+
+
+        <label for="user-search-box">Assign User</label>
+        <input #searchBox id="user-search-box" (input)="search(searchBox.value)" />
+      
+        <ul *ngIf = "!userSelected"class="search-result">
+          <li  *ngFor="let user of users | async" >
+            <a (click) = selectedUser(user)>{{ user.username }}</a>
+          </li>
+        </ul>
+      </div>
+      
+    </div>
+  </div>
   <app-footer style="width: 100%"></app-footer>
 </div>
