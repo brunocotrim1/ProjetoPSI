@@ -4,26 +4,29 @@
   userrole="{{ user.role }}"
 ></app-navigbar>
 <div class="mainContainer">
-  <div class="detailContainer">
+  <div class="detailContainer" style="color: white;">
 
-    <div style="background-color: aqua;">
-      <h1>Task Details</h1>
-      <div id="search-component">
-
-        <div> {{ task.name }}</div>
-
-
-        <label for="user-search-box">Assign User</label>
-        <input #searchBox id="user-search-box" (input)="search(searchBox.value)" />
+    <div  class="tittle" >
       
-        <ul *ngIf = "!userSelected"class="search-result">
-          <li  *ngFor="let user of users | async" >
-            <a (click) = selectedUser(user)>{{ user.username }}</a>
+      <h1>Task Details</h1>
+      <h2>Name: {{task.name}}</h2>
+      <div class="search-component">
+
+        
+
+
+        <h4 for="user-search-box">Assigned User:</h4>
+        <input style="margin-left: 0px;" #searchBox class="user-search-box" (input)="search(searchBox.value)" [ngModel]="userSelected.username"/>  
+        <ul *ngIf = "!userSelected.username"class="search-result">
+          <li class ="sugestion" *ngFor="let user of users | async" >
+            <a class ="sugestion" (click) = selectedUser(user)>{{ user.username }}</a>
           </li>
         </ul>
       </div>
-      
-    </div>
+       <button mdbBtn class="saveBut" type="button" style="margin-left: 0;"  (click)=saveChanges() rounded="true" mdbWavesEffect>Save Changes</button>
+       <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{ error }}</div>
+       <div *ngIf="message" class="alert success-color mt-3 mb-0">{{ message }}</div>
+      </div>
   </div>
   <app-footer style="width: 100%"></app-footer>
 </div>

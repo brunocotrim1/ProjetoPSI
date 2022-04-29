@@ -52,13 +52,21 @@ init()
 
 module.exports = function (dbI) {
     router.get("/tasks", authenticateToken, async (req, res) => {
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user.id).catch(function (err) {
+            res.status(404);
+            res.json({ err: "Error" });
+            return;
+        });;
         if (!user) {
             res.status(404);
             res.json({ err: "User not found" });
             return;
         }
-        const tasks = await Task.find({ userAssociated: user._id });
+        const tasks = await Task.find({ userAssociated: user._id }).catch(function (err) {
+            res.status(404);
+            res.json({ err: "Error" });
+            return;
+        });;
         if (!tasks || tasks.length == 0) {
             res.status(404);
             res.json({ err: "No tasks found" });
@@ -67,12 +75,18 @@ module.exports = function (dbI) {
         res.json(tasks);
     });
     router.get("/usersByName/:term", authenticateToken, async (req, res) => {
-        const users = await User.find({});
+        const users = await User.find({}).catch(function (err) {
+            res.status(404);
+            res.json({ err: "Error" });
+            return;
+        });;
         const usersMap = users.map(function (user) {
             user = user.toObject();
             delete user.password;
             delete user.refreshToken;
             delete user.accessToken;
+            user.id = user._id;
+            delete user._id;
             return user;
         }).filter(function (user) {
             return user.username.toLowerCase().includes(req.params.term.toLowerCase());
@@ -82,16 +96,92 @@ module.exports = function (dbI) {
     });
 
     router.get("/task/:id", authenticateToken, async (req, res) => {
-        console.log(req.params.id)
-        console.log("aaaaaaaa")
-        const task = await Task.findById(req.params.id);
-        
+        const task = await Task.findById(req.params.id).catch(function (err) {
+            res.status(404);
+            res.json({ err: "Error" });
+            return;
+        });;
+
         if (!task) {
             res.status(404);
             res.json({ err: "Task not found" });
             return;
         }
         res.json(task);
+    });
+
+    router.get("/user/:id", authenticateToken, async (req, res) => {
+        console.log(req.params.id)
+        let user = await User.findById(req.params.id).catch(function (err) {
+            res.status(404);
+            res.json({ err: "Error" });
+            return;
+        });;
+        if(!user){
+            res.status(404);
+            res.json({ err: "User not found" });
+            return;
+        }
+        user = user.toObject();
+        delete user.password;
+        delete user.refreshToken;
+        delete user.accessToken;
+        user.id = user._id;
+        delete user._id;
+        res.json(user);
+    });
+
+    router.post("/saveTask", authenticateToken, async (req, res) => {
+        let user = undefined;
+        if (req.body.term) {
+            user = await User.findOne({ username: req.body.term }).catch(function (err) {
+                res.status(404);
+                res.json({ err: "Error" });
+                return;
+            });
+            console.log(req.body.term)
+            if (!user) {
+                res.status(404);
+                res.json({ err: "User not found" });
+                return;
+            }
+            Task.updateOne(
+                { _id: req.body.task._id },
+                { $set: { userAssociated: user._id } }
+            )
+                .then(function (response) {
+                    if (response.matchedCount == 0) {
+                        res.status(404);
+                        res.json({ err: "Task not found" });
+                        return;
+                    }
+                    else res.json(response);
+                })
+                .catch(function (err) {
+                    res.status(404);
+                    res.json({ err: "Error" });
+                    return;
+                });
+        }
+        else {
+            Task.updateOne(
+                { _id: req.body.task._id },
+                { $set: { userAssociated: req.body.task.userAssociated } }
+            )
+                .then(function (response) {
+                    if (response.matchedCount == 0) {
+                        res.status(404);
+                        res.json({ err: "Task not found" });
+                        return;
+                    }
+                })
+                .catch(function (err) {
+                    res.status(404);
+                    res.json({ err: "Error" });
+                    return;
+                });
+        }
+        res.json({ msg: "Task Saved Suceffully" });
     });
     return router;
 };
