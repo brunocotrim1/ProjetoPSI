@@ -11,6 +11,7 @@ import { CriarEquipasComponent } from './criar-equipas/criar-equipas.component'
 import { ProfileComponent } from './profile/profile.component';
 import { CreateUserComponent } from './createuser/createuser.component';
 import { NavbarComponent } from 'angular-bootstrap-md';
+import { LinkprojectstoteamsComponent } from './linkprojectstoteams/linkprojectstoteams.component';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 
 const routes: Routes = [
@@ -18,9 +19,10 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent,canActivate: [AuthenticationGuard] },
   { path: 'login', component: LoginComponent},
   { path: 'mainmenu', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
-  { path: 'criar-equipas', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
+  { path: 'criar-equipas', component: CriarEquipasComponent,canActivate: [AuthenticationGuard]  },
   { path: 'profile', component: ProfileComponent,canActivate: [AuthenticationGuard]},
   { path: 'createuser', component: CreateUserComponent, canActivate: [AuthenticationGuard]  },
+  { path: 'linkprojectstoteams', component: LinkprojectstoteamsComponent, canActivate: [AuthenticationGuard]  },
   { path: 'taskDetail/:id', component: TaskDetailComponent, canActivate: [AuthenticationGuard]  }
 ];
 

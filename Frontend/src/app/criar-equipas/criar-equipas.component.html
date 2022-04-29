@@ -1,151 +1,90 @@
-<!--Navbar-->
-<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark elegant-color-dark fixed-top" [containerInside]="false">
+<app-navigbar currentComponent="criar-equipas" username={{user.username}} userrole={{user.role}}></app-navigbar>
+  
 
-    <!-- Navbar brand -->
-    <mdb-navbar-brand><a class="navbar-brand" href="/mainmenu">BeansCorp.</a></mdb-navbar-brand>
-  
-    <!-- Collapsible content -->
-    <links>
-  
-      <!-- Links -->
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link waves-light" mdbWavesEffect>Main Menu<span class="sr-only">(current)</span></a>
-        </li>
-  
-        <!-- Dropdown -->
-        <li class="nav-item dropdown" dropdown>
-          <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-            Features<span class="caret"></span></a>
-          <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
-            <a *ngIf="user.role == 'admin'" class="dropdown-item waves-light" mdbWavesEffect href="#">Create User</a>
-            <a class="dropdown-item waves-light" mdbWavesEffect href="#">Another action</a>
-            <a class="dropdown-item waves-light" mdbWavesEffect href="#">Something else here</a>
-            <div class="divider dropdown-divider"></div>
-            <a class="dropdown-item waves-light" mdbWavesEffect href="#">Separated link</a>
-          </div>
-        </li>
-  
-      </ul>
-      <!-- Links -->
-      <ul class="navbar-nav ml-auto">
-  
-        <!-- Dropdown -->
-        <li class="nav-item dropdown" dropdown>
-          <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-            <mdb-icon fas icon="user"></mdb-icon> {{user.username}}
-            <button class="userrole" mdbBtn type="button" size="sm">{{user.role}} </button>
-          </a>
-          <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
-            <a class="dropdown-item waves-light" mdbWavesEffect href="#">My account</a>
-            <a class="dropdown-item waves-light" mdbWavesEffect  (click)="logout()">Log out</a>
-          </div>
-        </li>
-  
-      </ul>
-    </links>
-    <!-- Collapsible content -->
-  
-  </mdb-navbar>
-  <!--/.Navbar-->
-  
-  <h1>CRIAR EQUIPA</h1><br><br>
-  <input type="text" id="fname" name="fname"><br><br>
-  <div id="window-1" class="team-user-window" style="overflow:scroll; height:20%; width:30%"></div>
-  <div id="window-2" class="team-user-window" style="overflow:scroll; height:20%; width:30%"></div>
-  <!-- Intro Section -->
-  <div class="view jarallax" data-jarallax='{"speed": 0.5}' style="background-image: url(../../assets/images/backgroundImage.png);">
-    <div class="full-bg-img mask rgba-black-light">
-          <div class="container flex-center align-items-center" style="height: auto;">
-            
-          </div>
-    </div>
-  </div>
-  
-  <!-- Footer -->
-  <footer class="page-footer font-small elegant-color pt-4">
-  
-    <!-- Footer Links -->
-    <div class="container-fluid text-center text-md-left">
-  
-      <!-- Grid row -->
-      <div class="row">
-  
-        <!-- Grid column -->
-        <div class="col-md-6 mt-md-2 mt-3">
-  
-          <!-- Content -->
-          <h5 class="text-uppercase">Welcome to our page!</h5>
-          <p>For any help regarding the usage of our page, consult one of us using one of the following links:</p>
-  
-        </div>
-        <!-- Grid column -->
-  
-        <hr class="clearfix w-100 d-md-none pb-3">
-  
-        <!-- Grid column -->
-        <div class="col-md-2 mb-md-0 mb-2">
-  
-            <!-- Links -->
-            <h5 class="text-uppercase">Links</h5>
-  
-            <ul class="list-unstyled">
-              <li>
-                <a href="#!">Link 1</a>
-              </li>
-              <li>
-                <a href="#!">Link 2</a>
-              </li>
-            </ul>
-  
-          </div>
-          <!-- Grid column -->
-  
-          <!-- Grid column -->
-          <div class="col-md-2 mb-md-0 mb-2">
-  
-            <!-- Links -->
-            <h5 class="text-uppercase">Links</h5>
-  
-            <ul class="list-unstyled">
-              <li>
-                <a href="#!">Link 1</a>
-              </li>
-              <li>
-                <a href="#!">Link 2</a>
-              </li>
-            </ul>
-  
-          </div>
-          <div class="col-md-2 mb-md-0 mb-2">
-  
-            <!-- Links -->
-            <h5 class="text-uppercase">Links</h5>
-  
-            <ul class="list-unstyled">
-              <li>
-                <a href="#!">Link 3</a>
-              </li>
-              <li>
-                <a href="#!">Link 4</a>
-              </li>
-            </ul>
-  
-          </div>
-          <!-- Grid column -->
-  
+
+<div class="mainContainer">
+  <div style="margin-top:6%; margin-bottom:5%;">
+    <div class="enjoyapp text-center">
+      <div class="white-text">
+        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">Create a new team</h2>
+        <hr class="hr-light wow" data-wow-delay="0.3s">
       </div>
-      <!-- Grid row -->
-  
     </div>
-    <!-- Footer Links -->
-  
-    <!-- Copyright -->
-    <div class="footer-copyright text-center py-3 elegant-color-dark">2022 ProjetoPSI
-      <a href="https://beanscorp.com">BeansCorp.</a>
+    
+    <button class="lftbut" mdbBtn type="button" rounded="true"> abc</button>
+    <div style="width:50%">
+      <app-multiselect-dropdown></app-multiselect-dropdown>
     </div>
-    <!-- Copyright -->
+    <!-- <form class="d-flex flex-column text-center" [formGroup]="userForm" (ngSubmit)="onSubmit()" style="margin:50px;">
+      <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Create user</h4>
+      <div class="form-group">
+        <input type="text" formControlName="username" placeholder="Username" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['username'].errors }" />
+        <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
+          <div *ngIf="f['username'].errors['required']">
+            Username is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <select class="form-select form-control browser-default custom-select" formControlName="role"
+          [ngClass]="{ 'is-invalid': submitted && f['role'].errors }" id="validationCustom04" required>
+          <option selected disabled value="">Choose role...</option>
+          <option value="USER">User</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+        <div class="invalid-feedback">
+          Please select a valid role
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="password" formControlName="password" placeholder="Password" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"/>
+        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+          <div *ngIf="f['password'].errors['required']">Password is required</div>
+          <div *ngIf="f['password'].errors['minlength']">Password must be at least length of 3</div>
+          <div *ngIf="f['password'].errors['pattern']">Password is not alphanumeric</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="password" formControlName="confirm_password" placeholder="Confirm Password" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['confirm_password'].errors}"/>
+        <div *ngIf="submitted && f['confirm_password'].errors" class="invalid-feedback">
+          <div *ngIf="f['confirm_password'].errors['required']">
+            Confirm Password is required
+          </div>
+          <div *ngIf="f['confirm_password'].errors['matching']">
+            Confirmed Password does not match
+          </div>
+        </div>
+      </div>
+      <button mdbBtn color="info" type="submit" mdbWavesEffect
+        style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          Submit
+        </button>
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+      <div *ngIf="returnmessage" class="alert alert-success">
+        {{ returnmessage }}
+      </div>
+    </form> -->
+    
+  </div>
+  <app-footer style="width: 100%"></app-footer>
+</div>
   
-  </footer>
-  <!-- Footer -->
+  
+  
+  
+  
+
+
+
+
+
+  
+  
+ 
   
