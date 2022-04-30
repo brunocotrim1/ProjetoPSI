@@ -10,11 +10,20 @@
         <hr class="hr-light wow" data-wow-delay="0.3s">
       </div>
     </div>
-    
-    <button class="lftbut" mdbBtn type="button" rounded="true"> abc</button>
-    <div style="width:50%">
-      <app-multiselect-dropdown></app-multiselect-dropdown>
+    <div class="create-teams-main">
+      <div class="multiselect-parent">
+        <app-multiselect-dropdown></app-multiselect-dropdown>
+        <button id="create-team-button" class="lftbut" mdbBtn type="button" rounded="true"> ADD TO TEAM </button>
+      </div>
+      <div class="selected-box-parent">
+        <div class="selected-box">
+          
+        </div>
+      </div>
+      
     </div>
+    
+    
     <!-- <form class="d-flex flex-column text-center" [formGroup]="userForm" (ngSubmit)="onSubmit()" style="margin:50px;">
       <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Create user</h4>
       <div class="form-group">

@@ -23,6 +23,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { MultiselectDropdownComponent } from './multiselect-dropdown/multiselect-dropdown.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { LinkprojectstoteamsComponent } from './linkprojectstoteams/linkprojectstoteams.component';
 
 @NgModule({
   declarations: [
@@ -36,11 +37,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     NavigbarComponent,
     FooterComponent,
     TaskDetailComponent,
-<<<<<<< HEAD
     MultiselectDropdownComponent,
-=======
     LinkprojectstoteamsComponent,
->>>>>>> a0d674db86527645fbe5acb5ca7f75f1529d313c
 
   ],
   imports: [
