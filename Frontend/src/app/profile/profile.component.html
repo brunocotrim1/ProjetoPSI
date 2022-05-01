@@ -51,9 +51,9 @@
 
               <links>
                 <ul class="list-group">
+                    <div *ngIf="error" class="alert alert-danger mt-3 mb-0">No Tasks</div>
                   <li
                     style="
-                      background: #6b6b6b;
                       font-size: 1.5em;
                       font-weight: bold;
                       font-family: 'Gill Sans', 'Gill Sans MT', Calibri,

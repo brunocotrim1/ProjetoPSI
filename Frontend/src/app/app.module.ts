@@ -55,12 +55,13 @@ import { ProjectsComponent } from './projects/projects.component';
     CriarEquipasComponent,
     ProfileComponent,
     CreateUserComponent,
-    NavigbarComponent,
+      NavigbarComponent,
     FooterComponent,
     TaskDetailComponent,
     MultiselectDropdownComponent,
     LinkprojectstoteamsComponent,
     ProjectsComponent
+
   ],
   imports: [
     BrowserAnimationsModule,

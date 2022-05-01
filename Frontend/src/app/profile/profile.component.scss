@@ -29,7 +29,13 @@
   border-color: #04aa6d;
   border-radius: 20px;
 }
-
+.list-group-item{
+  background-color: #6b6b6b;
+}
+.list-group-item:hover{
+  cursor:pointer;
+  background-color: darkgrey;
+}
 .calendar-header{
   display: flex;
   flex-direction: row;

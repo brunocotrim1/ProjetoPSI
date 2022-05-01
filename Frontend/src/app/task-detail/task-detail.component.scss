@@ -38,6 +38,35 @@
     margin: 0;
     margin-top: 20px;
   }
+.tittle{
+  width: 70vw;
+  padding: 30px;
+}
+.saveBut{
+  background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.818);
+}
+.search-component{
+  margin-top: 20px;
+}
+.search-component > *{
+  margin-top: 10px;
+}
+.tittle > * {
+  margin-top: 30px;
+}
+.user-search-box{
+ width: 10%;
+ border-radius: 15px;
+}
+.sugestion {
+  width:20%;
+  background-color: white;
+}
+h1 {
+  text-align:center;
+}
   @media screen and (max-width: 500px) {
     .profileContainer {
       display: flex;
@@ -82,7 +111,7 @@ input:focus {
   outline: #336699 auto 1px;
 }
 
-li {
+.search-result li {
   list-style-type: none;
 }
 .search-result li a {
@@ -97,7 +126,12 @@ li {
   text-decoration: none;
   color: black;
 }
-
+.search-result{
+  border-radius: 50px;
+  display: flex;
+  flex-direction: column;
+  
+}
 .search-result li a:hover {
   background-color: #435A60;
   color: white;

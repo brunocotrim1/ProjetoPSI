@@ -9,6 +9,7 @@ import { Task } from '../Task';
 })
 export class TaskDetailService {
 
+
   constructor(private http: HttpClient, private authenticationService: AuthenticationService) { }
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -21,8 +22,15 @@ export class TaskDetailService {
       return {} as User
   }
 
-
+  getUserById(userAssociated: string): Observable<User> {
+    return this.http.get<any>(`/api/user/${userAssociated}`, this.httpOptions);
+  }
   getTaskDetail(id: string): Observable<Task> {
     return this.http.get<any>(`/api/task/${id}`, this.httpOptions);
   }
+
+  saveTask(task: any): Observable<any> {
+    return this.http.post<any>('/api/saveTask', task, this.httpOptions);
+  }
+
 }
