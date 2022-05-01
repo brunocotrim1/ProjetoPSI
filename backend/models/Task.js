@@ -26,4 +26,4 @@ const TaskSchema = mongoose.Schema({
         type: Date,
     },
 });
-const User = module.exports = mongoose.model("Task", TaskSchema);
+const Task = module.exports = mongoose.model("Task", TaskSchema);

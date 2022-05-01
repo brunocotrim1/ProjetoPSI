@@ -15,9 +15,7 @@ export class CreateTeamService {
     return false
   }
 
-  // generateTeam(teamName: string): Team {
-  //   return new Team(teamName, []);
-  // }
+  
 
 
   saveTeam(team: Team): void {

@@ -7,17 +7,20 @@ require("dotenv").config();
 var crypto = require('crypto');
 const User = require("../models/User");
 const Task = require("../models/Task");
+const Project = require("../models/Project");
+const Team = require("../models/Team");
 const { translateAliases } = require("../models/User");
 
-
+Team.collection.drop();
 Task.collection.drop();
-
-
+Project.collection.drop();
 
 async function init() {
     // await User.collection.drop();
     // await User.deleteMany({})
-    const testUser = await User.findOne({ username: "bruno" }); const tasks = [
+    const testUser = await User.findOne({ username: "bruno" }); 
+
+    const tasks = [
         {
             name: "Task 1",
             userAssociated: testUser.id,
@@ -41,11 +44,50 @@ async function init() {
         const task = new Task(tasks[i]);
         await task.save().catch(function (err) { });
     }
-    //   await User.create({
-    //     username: "bruno",
-    //     password: SHA_256("bruno"), 
-    //     role: "admin",
-    //   })
+
+    const testUser2 = await User.findOne({ username: "miguel" }); 
+
+    const testTeams = [
+        {
+            name: "Team 1",
+            members: [testUser.id,testUser2.id]
+        },
+        {
+            name: "Team 2",
+            members: [testUser2.id]
+        },
+        {
+            name: "Team 3",
+            members: [testUser2.id]
+        }
+    ];
+    for (let i = 0; i < testTeams.length; i++) {
+        const team = new Team(testTeams[i]);
+        await team.save().catch(function (err) { });
+    }
+
+    const checkteams = await Team.find({});
+
+    const testProject = [
+        {
+            name: "Project 1",
+            acronym: "PT1",
+            linkedTeam: checkteams[0].id,
+        },
+        {
+            name: "Project 2",
+            acronym: "PT2",
+            linkedTeam: checkteams[1].id,
+        },
+        {
+            name: "Project 3",
+            acronym: "PT3",
+        },
+    ];
+    for (let i = 0; i < testProject.length; i++) {
+        const proj = new Project(testProject[i]);
+        await proj.save().catch(function (err) { });
+    }
 }
 
 init()
@@ -82,8 +124,6 @@ module.exports = function (dbI) {
     });
 
     router.get("/task/:id", authenticateToken, async (req, res) => {
-        console.log(req.params.id)
-        console.log("aaaaaaaa")
         const task = await Task.findById(req.params.id);
         
         if (!task) {
@@ -93,6 +133,59 @@ module.exports = function (dbI) {
         }
         res.json(task);
     });
+
+    
+    router.get("/getprojects", authenticateToken, async (req, res) => {
+        await Project.find({})
+        .then(function (response) {
+            console.log(response);
+          res.json(response);
+        })
+        .catch(function (err) {
+          res.status(404);
+          res.json({ err: "Not Found" });
+        });;
+    });
+
+    router.get("/getteam/:id", authenticateToken, async (req, res) => {
+        await Team.findById(req.params.id)
+        .then(async function (response) {
+            response = response.toObject();
+            for(let i = 0; i < response.members.length; i++){
+                response.members[i] = await User.findById(response.members[i])
+                .then(function (usr) {
+                    usr = usr.toObject();
+                    delete usr.password;
+                    delete usr.refreshToken;
+                    delete usr.accessToken;
+                    return usr;
+                }).catch(function (err) {
+                    res.status(404);
+                    throw err;
+                });
+            }
+            res.json(response);
+            return;
+        })
+        .catch(function (err) {
+            console.log(err)
+          res.status(404);
+          res.json({ err: "Not Found" });
+          return;
+        });
+    });
+
+    router.get("/getteams", authenticateToken, async (req, res) => {
+        await Team.find({})
+        .then(function (response) {
+          res.json(response);
+        })
+        .catch(function (err) {
+          res.status(404);
+          res.json({ err: "Not Found" });
+        });;
+    });
+
     return router;
 };
 

@@ -2,39 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validator, ValidatorFn, Validators, FormGroupDirective, NgForm,} from '@angular/forms';
 import { AuthenticationService } from '../services/authentication.service';
 import { User } from '../User';
-import { LinkprojectstoteamsService } from './linkprojectstoteams.service';
+import { ProjectsService } from './projects.service';
 import Validation from './validation';
 import {ErrorStateMatcher} from '@angular/material/core';
 import { Project } from '../Project';
-
-// export class MyErrorStateMatcher implements ErrorStateMatcher {
-//   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-//     const isSubmitted = form && form.submitted;
-//     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-//   }
-// }
+import { Team } from '../Team';
 
 @Component({
-  selector: 'app-linkprojectstoteams',
-  templateUrl: './linkprojectstoteams.component.html',
-  styleUrls: ['./linkprojectstoteams.component.scss']
+  selector: 'app-projects',
+  templateUrl: './projects.component.html',
+  styleUrls: ['./projects.component.scss']
 })
-export class LinkprojectstoteamsComponent implements OnInit {
-  
-  // selected = new FormControl('valid', [Validators.required, Validators.pattern('valid')]);
-
-  // selectFormControl = new FormControl('valid', [Validators.required, Validators.pattern('valid')]);
-
-  // nativeSelectFormControl = new FormControl('valid', [
-  //   Validators.required,
-  //   Validators.pattern('valid'),
-  // ]);
-
-  // matcher = new MyErrorStateMatcher();
+export class ProjectsComponent implements OnInit {
 
   projectForm = new FormGroup(
     {
-    role: new FormControl('', Validators.required)
+    project: new FormControl('', Validators.required)
     }
   );
 
@@ -46,27 +29,57 @@ export class LinkprojectstoteamsComponent implements OnInit {
 
   user = {} as User;
   listOfProjects = {} as Project[];
+  listOfTeams = {} as Team[];
+  currentProject = {} as Project;
+  currentProjectTeam = {} as Team;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private linkprojectstoteamsService: LinkprojectstoteamsService,
-    private authenticationService: AuthenticationService) { }
+  private projectsService: ProjectsService,
+  private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
     this.user = this.authenticationService.loadUser()!;
-    this.linkprojectstoteamsService.getProjects()
+    this.projectsService.getProjects()
     .subscribe({
       next: (project) => {
         this.listOfProjects = project;
-        console.log("projetos get feito success");
       },
       error: error => {
+        this.listOfProjects = {} as Project[];
         this.error = error;
         this.loading = false;
       }
     });
   }
 
+  checkIfProjects(){
+    return Object.keys(this.listOfProjects).length === 0;
+  }
+
+  checkIfEmptyObject(){
+    return Object.keys(this.currentProject).length !== 0;
+  }
+
+  checkIfExistsTeam(){
+    return Object.keys(this.currentProjectTeam).length !== 0;
+  }
+
+  onChangeObj() {
+    this.currentProject = this.f["project"].value
+    this.projectsService.getTeam(this.f["project"].value.linkedTeam)
+    .subscribe({
+      next: (team) => {
+        this.currentProjectTeam = team;
+        console.log(this.currentProjectTeam)
+      },
+      error: error => {
+        this.currentProjectTeam = {} as Team;
+        this.error = error;
+        this.loading = false;
+      }
+    });
+  }
+  
   get f() { 
     return this.projectForm.controls; 
   }
@@ -77,7 +90,7 @@ export class LinkprojectstoteamsComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.linkprojectstoteamsService.getProjects()
+    this.projectsService.getProjects()
       .subscribe({
         next: () => {
           this.returnmessage = "New user created!";
