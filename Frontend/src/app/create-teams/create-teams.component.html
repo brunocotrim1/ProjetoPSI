@@ -10,17 +10,16 @@
     </div>
     
     <div class="lftbut">
-      <form class="d-flex flex-column text-center" [formGroup]="projectForm" (ngSubmit)="onSubmit()" style="margin:50px;">
+      <form class="d-flex flex-column text-center" [formGroup]="teamForm" (ngSubmit)="onSubmit()" style="margin:50px;">
         <input mdbInput placeholder="Team name" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" type="text" id="form58" class="form-control">        
         
         <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
           <div *ngIf="f['name'].errors['required']">Name is required</div>
-          <div *ngIf="f['name'].errors['minlength']">name must be at least length of 3</div>
+          <div *ngIf="f['name'].errors['minlength']">Name must be at least length of 3</div>
           <div *ngIf="f['name'].errors['pattern']">Password is not alphanumeric</div>
-  
         </div>
         
-        <app-multiselect-dropdown></app-multiselect-dropdown>
+        <app-multiselect-dropdown formControlName="dropdown"></app-multiselect-dropdown>
          
         <button id="create-team-button" class="add-team-but" mdbBtn type="submit" rounded="true" style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">Create Team</button>
         
