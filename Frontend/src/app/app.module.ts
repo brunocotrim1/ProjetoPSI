@@ -13,7 +13,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { AuthenticationService } from './services/authentication.service';
 import { AppInitializer } from './appInitiazlier/AppInitializer';
 import { MainMenuComponent } from './mainmenu/mainmenu.component';
-import { CriarEquipasComponent } from './criar-equipas/criar-equipas.component';
+import { CreateTeamsComponent } from './create-teams/create-teams.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateUserComponent } from './createuser/createuser.component';
 import { NavigbarComponent } from './navbar/navigbar.component';
@@ -24,7 +24,6 @@ import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { LinkprojectstoteamsComponent } from './linkprojectstoteams/linkprojectstoteams.component';
 import { MultiselectDropdownComponent } from './multiselect-dropdown/multiselect-dropdown.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { LinkprojectstoteamsComponent } from './linkprojectstoteams/linkprojectstoteams.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -55,10 +54,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     LoginComponent,
     DashboardComponent,
     MainMenuComponent,
-    CriarEquipasComponent,
+    CreateTeamsComponent,
     ProfileComponent,
     CreateUserComponent,
-      NavigbarComponent,
+    NavigbarComponent,
     FooterComponent,
     TaskDetailComponent,
     MultiselectDropdownComponent,

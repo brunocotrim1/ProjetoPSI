@@ -1,0 +1,48 @@
+<app-navigbar currentComponent="criar-equipas" username={{user.username}} userrole={{user.role}}></app-navigbar>
+  
+<div class="mainContainer">
+  <div style="margin-top:6%; margin-bottom:5%;">
+    <div class="enjoyapp text-center">
+      <div class="white-text">
+        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">Create a new team</h2>
+        <hr class="hr-light wow" data-wow-delay="0.3s">
+      </div>
+    </div>
+    
+    <div class="lftbut">
+      <form class="d-flex flex-column text-center" [formGroup]="projectForm" (ngSubmit)="onSubmit()" style="margin:50px;">
+        <input mdbInput placeholder="Team name" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" type="text" id="form58" class="form-control">        
+        
+        <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+          <div *ngIf="f['name'].errors['required']">Name is required</div>
+          <div *ngIf="f['name'].errors['minlength']">name must be at least length of 3</div>
+          <div *ngIf="f['name'].errors['pattern']">Password is not alphanumeric</div>
+  
+        </div>
+        
+        <app-multiselect-dropdown></app-multiselect-dropdown>
+         
+        <button id="create-team-button" class="add-team-but" mdbBtn type="submit" rounded="true" style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">Create Team</button>
+        
+      </form>
+      
+      
+    </div>
+    
+  </div>
+  <app-footer style="width: 100%"></app-footer>
+</div>
+  
+  
+  
+  
+  
+
+
+
+
+
+  
+  
+ 
+  
