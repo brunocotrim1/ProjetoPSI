@@ -6,8 +6,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class LinkprojectstoteamsService {
-  private linkprojectstoteamsURL: string = "/api/authentication/linkprojectstoteams";
+export class CreateProjectService {
+  private createprojectURL: string = "/api/authentication/createproject";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -17,12 +17,7 @@ export class LinkprojectstoteamsService {
     //  this.removeUser()
   }
 
-  getProjects(): Observable<any>{
-    return this.http.get<any>(`/api/getprojects`, this.httpOptions);
+  createProject(username: string, acronym: string, startDate: Date, finalDate: Date): Observable<any>{
+    return this.http.post<any>(`${this.createprojectURL}/add`, {username, acronym, startDate, finalDate}, this.httpOptions);
   }
-
-  getTeams(): Observable<any>{
-    return this.http.get<any>(`/api/getteams`, this.httpOptions);
-  }
-  
 }

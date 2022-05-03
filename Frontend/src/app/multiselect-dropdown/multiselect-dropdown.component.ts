@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { IDropdownSettings, } from 'ng-multiselect-dropdown';
 import { CreateTeamService } from '../services/create-team.service';
 
@@ -10,9 +10,21 @@ import { CreateTeamService } from '../services/create-team.service';
 export class MultiselectDropdownComponent implements OnInit {
 
   constructor(private create_team_service: CreateTeamService) { }
+  @Input()
+    items!: string;
 
   dropdownList: any[] = [];
-  dropdownSettings:IDropdownSettings={};
+
+  fillInDropdown(typeobject : string) {
+    if(typeobject === "Project") {
+      //ir fazer getallprojects do service do project
+    } else if(typeobject === "Team") {
+      //ir fazer getallprojects do service do project
+    }
+    //...
+  } 
+
+  dropdownSettings: IDropdownSettings={};
   ngOnInit() {
     this.dropdownList = [];
     

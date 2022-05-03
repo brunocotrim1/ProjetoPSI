@@ -1,0 +1,71 @@
+<app-navigbar currentComponent="createproject" username={{user.username}} userrole={{user.role}}></app-navigbar>
+
+<div class="mainContainer">
+  <div style="margin-top:6%; margin-bottom:5%;">
+    <div class="enjoyapp text-center">
+      <div class="white-text">
+        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">Create a new project</h2>
+        <hr class="hr-light wow" data-wow-delay="0.3s">
+      </div>
+    </div>
+    <button class="lftbut" mdbBtn type="button" rounded="true">
+      <form class="d-flex flex-column text-center" [formGroup]="projectForm" (ngSubmit)="onSubmit()" style="margin:50px;">
+        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Create user</h4>
+        <div class="form-group">
+          <input type="text" formControlName="name" placeholder="Name" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" />
+          <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+            <div *ngIf="f['name'].errors['required']">Name is required</div>
+            <div *ngIf="f['name'].errors['minlength']">name must be at least length of 3</div>
+            <div *ngIf="f['name'].errors['pattern']">Password is not alphanumeric</div>
+          </div>
+        </div>
+        <div class="form-group">
+            <input type="text" formControlName="acronym" placeholder="Project Acronym" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f['acronym'].errors }"/>
+            <div *ngIf="submitted && f['acronym'].errors" class="invalid-feedback">
+              <div *ngIf="f['acronym'].errors['required']">Password is required</div>
+              <div *ngIf="f['acronym'].errors['minlength']">Password must be at least length of 8</div>
+              <div *ngIf="f['acronym'].errors['pattern']">Required at least one uppercase and downcase letter and digit</div>
+            </div>
+          </div>
+        <div class="form-group">
+          <input type="text" formControlName="beginDate" placeholder="Begin Date" class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker"
+            [ngClass]="{ 'is-invalid': submitted && f['beginDate'].errors }"/>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+              </div>
+          <div *ngIf="submitted && f['beginDate'].errors" class="invalid-feedback">
+            <div *ngIf="f['beginDate'].errors['required']">Password is required</div>
+            <div *ngIf="f['beginDate'].errors['minlength']">Password must be at least length of 8</div>
+            <div *ngIf="f['beginDate'].errors['pattern']">Required at least one uppercase and downcase letter and digit</div>
+          </div>
+        </div>
+        <div class="form-group">
+            <input type="text" formControlName="endDate" placeholder="End Date" class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker"
+              [ngClass]="{ 'is-invalid': submitted && f['endDate'].errors }"/>
+              <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+                </div>
+            <div *ngIf="submitted && f['endDate'].errors" class="invalid-feedback">
+              <div *ngIf="f['endDate'].errors['required']">Password is required</div>
+              <div *ngIf="f['endDate'].errors['minlength']">Password must be at least length of 8</div>
+              <div *ngIf="f['endDate'].errors['pattern']">Required at least one uppercase and downcase letter and digit</div>
+            </div>
+          </div>
+        <button mdbBtn color="info" type="submit" mdbWavesEffect
+          style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Submit
+          </button>
+        <div *ngIf="error" class="alert alert-danger">
+          {{ error }}
+        </div>
+        <div *ngIf="returnmessage" class="alert alert-success">
+          {{ returnmessage }}
+        </div>
+      </form>
+    </button>
+  </div>
+  <app-footer style="width: 100%"></app-footer>
+</div>

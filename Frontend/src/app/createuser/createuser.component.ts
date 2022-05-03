@@ -15,8 +15,8 @@ export class CreateUserComponent implements OnInit {
 
   userForm = new FormGroup(
     {
-    username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-z0-9]+$/i)]),
+    username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-z0-9]+$/i)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/(.*[a-z].*)(.*[A-Z].*)(.*\d.*)/i)]),
     role: new FormControl('', Validators.required),
     confirm_password: new FormControl('', Validators.required)
     }, {

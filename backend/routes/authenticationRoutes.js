@@ -6,31 +6,32 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 var crypto = require('crypto');
 const User = require("../models/User");
+const Project = require("../models/Project");
 const users = [
   {
-      username: "bruno",
-      password: SHA_256("bruno"),
-      role: "ADMIN",
+    username: "bruno",
+    password: SHA_256("bruno"),
+    role: "ADMIN",
   },
   {
-      username: "miguel",
-      password:SHA_256("miguel"),
-      role: "ADMIN",
+    username: "miguel",
+    password: SHA_256("miguel"),
+    role: "ADMIN",
   },
   {
-      username: "joao",
-      password: SHA_256("joao"),
-      role: "ADMIN",
+    username: "joao",
+    password: SHA_256("joao"),
+    role: "ADMIN",
   },
   {
-      username: "diogo",
-      password: SHA_256("diogo"),
-      role: "ADMIN",
+    username: "diogo",
+    password: SHA_256("diogo"),
+    role: "ADMIN",
   },
   {
-      username: "miguelS",
-      password: SHA_256("miguelS"),
-      role: "ADMIN",
+    username: "miguelS",
+    password: SHA_256("miguelS"),
+    role: "ADMIN",
   },
 ];
 
@@ -40,8 +41,8 @@ async function init() {
   // await User.deleteMany({})
 
   for (let i = 0; i < users.length; i++) {
-      const user = new User(users[i]);
-      await user.save().catch(function (err) {});
+    const user = new User(users[i]);
+    await user.save().catch(function (err) { });
   }
   //   await User.create({
   //     username: "bruno",
@@ -61,7 +62,7 @@ module.exports = function (dbI) {
     var user = await User.findOne({ username: req.body.username });
     if (user == null) {
       res.status(401);
-      res.json({ err: "Usuário ou senha incorretos"  })
+      res.json({ err: "Usuário ou senha incorretos" })
       return;
     }
     user = user.toObject();
@@ -128,14 +129,21 @@ module.exports = function (dbI) {
     //res.sendStatus(200)
   });
 
-  
+
   router.post("/createuser/add", authenticateToken, async (req, res) => {
-    const userExists = await User.exists({ username: req.body.username });
+    const userExists = await User.exists({ username: req.body.username })
+    .catch(function (err) {
+      res.status(404);
+      res.json({ err: "Internal error." })
+      return;
+    });
     if (!userExists) {
       await User.create(
-        { username: req.body.username ,
-        password: SHA_256(req.body.password),
-        role: req.body.role}
+        {
+          username: req.body.username,
+          password: SHA_256(req.body.password),
+          role: req.body.role
+        }
       )
         .then(function (response) {
           console.log(response)
@@ -154,6 +162,39 @@ module.exports = function (dbI) {
     //res.sendStatus(200)
   });
 
+  router.post("/createproject/add", authenticateToken, async (req, res) => {
+    const projectExists = await Project.exists({ name: req.body.name })
+    .catch(function (err) {
+      res.status(404);
+      res.json({ err: "Internal error." })
+      return;
+    });
+    if (!projectExists) {
+      await Project.create(
+        {
+          name: req.body.username,
+          acronym: req.body.acronym,
+          beginDate: req.body.beginDate,
+          endDate: req.body.endDate
+        }
+      )
+        .then(function (response) {
+          console.log(response)
+          res.json(response);
+          return;
+        })
+        .catch(function (err) {
+          res.status(404);
+          res.json({ err: "Internal error." })
+          return;
+        });
+    } else {
+      res.status(404);
+      res.json({ err: "Project with the selected name already exists." })
+    }
+    //res.sendStatus(200)
+  });
+
   return router;
 };
 
@@ -166,6 +207,18 @@ function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (token == null) return res.sendStatus(401);
+  console.log(req.path)
+  if (req.path == "/refresh_token") {
+    jwt.verify(token, process.env.accessToken_SECRET, { ignoreExpiration: true }, async (err, decoded) => {
+      if (err) return res.sendStatus(403);
+      req.user = decoded;
+      req.user.refreshToken = token;
+    }
+    );
+    return next();
+  }
+
+
   jwt.verify(token, process.env.accessToken_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
     req.user = user;

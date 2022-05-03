@@ -1,10 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validator, ValidatorFn, Validators} from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validator, ValidatorFn, Validators, FormGroupDirective, NgForm,} from '@angular/forms';
 import { AuthenticationService } from '../services/authentication.service';
 import { User } from '../User';
 import { LinkprojectstoteamsService } from './linkprojectstoteams.service';
 import Validation from './validation';
+import {ErrorStateMatcher} from '@angular/material/core';
+import { Project } from '../Project';
 
+// export class MyErrorStateMatcher implements ErrorStateMatcher {
+//   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+//     const isSubmitted = form && form.submitted;
+//     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+//   }
+// }
 
 @Component({
   selector: 'app-linkprojectstoteams',
@@ -12,19 +20,24 @@ import Validation from './validation';
   styleUrls: ['./linkprojectstoteams.component.scss']
 })
 export class LinkprojectstoteamsComponent implements OnInit {
+  
+  // selected = new FormControl('valid', [Validators.required, Validators.pattern('valid')]);
 
-  userForm = new FormGroup(
+  // selectFormControl = new FormControl('valid', [Validators.required, Validators.pattern('valid')]);
+
+  // nativeSelectFormControl = new FormControl('valid', [
+  //   Validators.required,
+  //   Validators.pattern('valid'),
+  // ]);
+
+  // matcher = new MyErrorStateMatcher();
+
+  projectForm = new FormGroup(
     {
-    username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-z0-9]+$/i)]),
-    role: new FormControl('', Validators.required),
-    confirm_password: new FormControl('', Validators.required)
-    }, {
-      validators: [Validation.match('password', 'confirm_password')]
+    role: new FormControl('', Validators.required)
     }
   );
 
-  defaultrole = "USER";
   loading = false;
   submitted = false;
   returnUrl!: string;
@@ -32,6 +45,7 @@ export class LinkprojectstoteamsComponent implements OnInit {
   returnmessage = '';
 
   user = {} as User;
+  listOfProjects = {} as Project[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,22 +54,30 @@ export class LinkprojectstoteamsComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.authenticationService.loadUser()!;
+    this.linkprojectstoteamsService.getProjects()
+    .subscribe({
+      next: (project) => {
+        this.listOfProjects = project;
+        console.log("projetos get feito success");
+      },
+      error: error => {
+        this.error = error;
+        this.loading = false;
+      }
+    });
   }
 
   get f() { 
-    return this.userForm.controls; 
+    return this.projectForm.controls; 
   }
 
   onSubmit() {
     this.submitted = true;
-    if (this.userForm.invalid) {
+    if (this.projectForm.invalid) {
       return;
     }
     this.loading = true;
-    console.log(this.f["username"].value)
-    console.log(this.f["password"].value)
-    console.log(this.f["role"].value)
-    this.linkprojectstoteamsService.createUser(this.f["username"].value, this.f["password"].value, this.f["role"].value)
+    this.linkprojectstoteamsService.getProjects()
       .subscribe({
         next: () => {
           this.returnmessage = "New user created!";
@@ -70,6 +92,6 @@ export class LinkprojectstoteamsComponent implements OnInit {
 
   onReset(): void {
     this.submitted = false;
-    this.userForm.reset();
+    this.projectForm.reset();
   }
 }

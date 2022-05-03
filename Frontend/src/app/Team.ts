@@ -1,6 +1,7 @@
-import { Member } from "./Member"
+import { User } from "./User";
 
 export interface Team {
-    id: string;
-    members: Member[];
+    _id: string;
+    name: string;
+    members: User[];
   }

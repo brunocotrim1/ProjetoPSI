@@ -6,8 +6,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class LinkprojectstoteamsService {
-  private linkprojectstoteamsURL: string = "/api/authentication/linkprojectstoteams";
+export class ProjectsService {
+  private projectsURL: string = "/api";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -18,11 +18,19 @@ export class LinkprojectstoteamsService {
   }
 
   getProjects(): Observable<any>{
-    return this.http.get<any>(`/api/getprojects`, this.httpOptions);
+    return this.http.get<any>(`${this.projectsURL}/getprojects`, this.httpOptions);
+  }
+
+  getTeam(id : string): Observable<any>{
+    return this.http.get<any>(`${this.projectsURL}/getteam/${id}`, this.httpOptions);
   }
 
   getTeams(): Observable<any>{
-    return this.http.get<any>(`/api/getteams`, this.httpOptions);
+    return this.http.get<any>(`${this.projectsURL}/getteams`, this.httpOptions);
+  }
+
+  updateTeam(): Observable<any>{
+    return this.http.put<any>(`${this.projectsURL}/updateproject`, this.httpOptions);
   }
   
 }
