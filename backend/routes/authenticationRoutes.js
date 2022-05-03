@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 var crypto = require('crypto');
 const User = require("../models/User");
+const Project = require("../models/Project");
 const users = [
   {
     username: "bruno",
@@ -157,6 +158,39 @@ module.exports = function (dbI) {
     } else {
       res.status(404);
       res.json({ err: "User with the selected name already exists." })
+    }
+    //res.sendStatus(200)
+  });
+
+  router.post("/createproject/add", authenticateToken, async (req, res) => {
+    const projectExists = await Project.exists({ name: req.body.name })
+    .catch(function (err) {
+      res.status(404);
+      res.json({ err: "Internal error." })
+      return;
+    });
+    if (!projectExists) {
+      await Project.create(
+        {
+          name: req.body.username,
+          acronym: req.body.acronym,
+          beginDate: req.body.beginDate,
+          endDate: req.body.endDate
+        }
+      )
+        .then(function (response) {
+          console.log(response)
+          res.json(response);
+          return;
+        })
+        .catch(function (err) {
+          res.status(404);
+          res.json({ err: "Internal error." })
+          return;
+        });
+    } else {
+      res.status(404);
+      res.json({ err: "Project with the selected name already exists." })
     }
     //res.sendStatus(200)
   });

@@ -13,6 +13,7 @@ import { CreateUserComponent } from './createuser/createuser.component';
 import { LinkprojectstoteamsComponent } from './linkprojectstoteams/linkprojectstoteams.component';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { ProjectsComponent } from './projects/projects.component';
+import { CreateProjectComponent } from './create-project/create-project.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/mainmenu', pathMatch: 'full' },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'createuser', component: CreateUserComponent, canActivate: [AuthenticationGuard]  },
   { path: 'linkprojectstoteams', component: LinkprojectstoteamsComponent, canActivate: [AuthenticationGuard]  },
   { path: 'projects', component: ProjectsComponent, canActivate: [AuthenticationGuard]  },
+  { path: 'createproject', component: CreateProjectComponent, canActivate: [AuthenticationGuard]  },
   { path: 'taskDetail/:id', component: TaskDetailComponent, canActivate: [AuthenticationGuard]  }
 ];
 

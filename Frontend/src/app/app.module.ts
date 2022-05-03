@@ -25,6 +25,8 @@ import { LinkprojectstoteamsComponent } from './linkprojectstoteams/linkprojects
 import { MultiselectDropdownComponent } from './multiselect-dropdown/multiselect-dropdown.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ProjectsComponent } from './projects/projects.component';
+import { CreateProjectComponent } from './create-project/create-project.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // import {MatButtonModule} from '@angular/material/button';
 // import {MatFormFieldModule} from '@angular/material/form-field';
@@ -60,7 +62,8 @@ import { ProjectsComponent } from './projects/projects.component';
     TaskDetailComponent,
     MultiselectDropdownComponent,
     LinkprojectstoteamsComponent,
-    ProjectsComponent
+    ProjectsComponent,
+    CreateProjectComponent
 
   ],
   imports: [
@@ -73,6 +76,7 @@ import { ProjectsComponent } from './projects/projects.component';
     FormsModule,
     MDBBootstrapModule.forRoot(),
     ReactiveFormsModule,
+    NgbModule,
     // CalendarModule.forRoot({
     //   provide: DateAdapter,
     //   useFactory: adapterFactory,
