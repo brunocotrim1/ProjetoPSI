@@ -21,6 +21,12 @@ export class ProjectsComponent implements OnInit {
     }
   );
 
+  selectedTeamForm = new FormGroup(
+    {
+    selectedTeam: new FormControl('', Validators.required)
+    }
+  );
+
   loading = false;
   submitted = false;
   returnUrl!: string;
@@ -52,16 +58,24 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
-  checkIfProjects(){
+  checkIfNoProjects(){
     return Object.keys(this.listOfProjects).length === 0;
   }
 
-  checkIfEmptyObject(){
+  checkIfNoTeams(){
+    return Object.keys(this.listOfTeams).length === 0;
+  }
+
+  checkIfExistsObject(){
     return Object.keys(this.currentProject).length !== 0;
   }
 
-  checkIfExistsTeam(){
+  checkIfExistsTeamProject(){
     return Object.keys(this.currentProjectTeam).length !== 0;
+  }
+
+  checkIfGetTeams(){
+    return Object.keys(this.listOfTeams).length !== 0;
   }
 
   onChangeObj() {
@@ -80,10 +94,49 @@ export class ProjectsComponent implements OnInit {
     });
   }
   
+  onClickGetTeams() {
+    this.projectsService.getTeams()
+    .subscribe({
+      next: (teams) => {
+        this.listOfTeams = teams;
+        console.log(this.listOfTeams)
+      },
+      error: error => {
+        this.listOfTeams = {} as Team[];
+        this.error = error;
+        this.loading = false;
+      }
+    });
+  }
+
+  onSubmitTeam() {
+    console.log(this.currentProject)
+    console.log(this.currentProjectTeam)
+    this.submitted = true;
+    if (this.selectedTeamForm.invalid) {
+      return;
+    }
+    this.loading = true;
+    this.projectsService.updateTeam()
+      .subscribe({
+        next: () => {
+          this.returnmessage = "Project has been updated!";
+          this.loading = false;
+        },
+        error: error => {
+          this.error = error;
+          this.loading = false;
+        }
+      });
+  }
+
   get f() { 
     return this.projectForm.controls; 
   }
 
+  get f1() { 
+    return this.selectedTeamForm.controls; 
+  }
   onSubmit() {
     this.submitted = true;
     if (this.projectForm.invalid) {
