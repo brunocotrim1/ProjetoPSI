@@ -172,7 +172,7 @@ module.exports = function (dbI) {
     if (!projectExists) {
       await Project.create(
         {
-          name: req.body.username,
+          name: req.body.name,
           acronym: req.body.acronym,
           beginDate: req.body.beginDate,
           endDate: req.body.endDate
