@@ -10,48 +10,54 @@
     </div>
     <button class="lftbut" mdbBtn type="button" rounded="true">
       <form class="d-flex flex-column text-center" [formGroup]="projectForm" (ngSubmit)="onSubmit()" style="margin:50px;">
-        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Create user</h4>
+        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Create Project</h4>
         <div class="form-group">
           <input type="text" formControlName="name" placeholder="Name" class="form-control"
             [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" />
           <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
             <div *ngIf="f['name'].errors['required']">Name is required</div>
-            <div *ngIf="f['name'].errors['minlength']">name must be at least length of 3</div>
-            <div *ngIf="f['name'].errors['pattern']">Password is not alphanumeric</div>
+            <div *ngIf="f['name'].errors['minlength']">Name must have a minimum of 4 characters</div>
+            <div *ngIf="f['name'].errors['pattern']">Name must be alphanumeric</div>
           </div>
         </div>
         <div class="form-group">
-            <input type="text" formControlName="acronym" placeholder="Project Acronym" class="form-control"
+            <input type="text" formControlName="acronym" placeholder="Acronym" class="form-control"
               [ngClass]="{ 'is-invalid': submitted && f['acronym'].errors }"/>
             <div *ngIf="submitted && f['acronym'].errors" class="invalid-feedback">
-              <div *ngIf="f['acronym'].errors['required']">Password is required</div>
-              <div *ngIf="f['acronym'].errors['minlength']">Password must be at least length of 8</div>
-              <div *ngIf="f['acronym'].errors['pattern']">Required at least one uppercase and downcase letter and digit</div>
+              <div *ngIf="f['acronym'].errors['required']">Acronym is required</div>
+              <div *ngIf="f['acronym'].errors['minlength']">Acronym must have exactly 3 characters</div>
+              <div *ngIf="f['acronym'].errors['pattern']">Acronym must have exactly 3 alphanumeric characters of length</div>
             </div>
           </div>
-        <div class="form-group">
-          <input type="text" formControlName="beginDate" placeholder="Begin Date" class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker"
-            [ngClass]="{ 'is-invalid': submitted && f['beginDate'].errors }"/>
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
-              </div>
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput [ngxMatDatetimePicker]="picker" placeholder="Begin Date" formControlName ="beginDate"
+                 [min]="minDate" [max]="maxDate" [disabled]="disabled">
+              <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                 [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond"
+                 [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian" 
+                 [disableMinute]="disableMinute" [hideTime]="hideTime">
+              </ngx-mat-datetime-picker>
+           </mat-form-field>
           <div *ngIf="submitted && f['beginDate'].errors" class="invalid-feedback">
-            <div *ngIf="f['beginDate'].errors['required']">Password is required</div>
-            <div *ngIf="f['beginDate'].errors['minlength']">Password must be at least length of 8</div>
-            <div *ngIf="f['beginDate'].errors['pattern']">Required at least one uppercase and downcase letter and digit</div>
+            <div *ngIf="f['beginDate'].errors['incorrect']">Invalid date</div>
           </div>
-        </div>
-        <div class="form-group">
-            <input type="text" formControlName="endDate" placeholder="End Date" class="form-control" name="dp" ngbDatepicker #d="ngbDatepicker"
-              [ngClass]="{ 'is-invalid': submitted && f['endDate'].errors }"/>
-              <div class="input-group-append">
-                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
-                </div>
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput [ngxMatDatetimePicker]="picker2" placeholder="End Date" formControlName ="endDate"
+                 [min]="minDate" [max]="maxDate" [disabled]="disabled">
+              <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker2 [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                 [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond"
+                 [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian" 
+                 [disableMinute]="disableMinute" [hideTime]="hideTime">
+              </ngx-mat-datetime-picker>
+           </mat-form-field>
             <div *ngIf="submitted && f['endDate'].errors" class="invalid-feedback">
-              <div *ngIf="f['endDate'].errors['required']">Password is required</div>
-              <div *ngIf="f['endDate'].errors['minlength']">Password must be at least length of 8</div>
-              <div *ngIf="f['endDate'].errors['pattern']">Required at least one uppercase and downcase letter and digit</div>
+              <div *ngIf="f['endDate'].errors['incorrect']">Invalid date</div>
             </div>
+          </div>
           </div>
         <button mdbBtn color="info" type="submit" mdbWavesEffect
           style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
