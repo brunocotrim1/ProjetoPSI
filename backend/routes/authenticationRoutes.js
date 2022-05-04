@@ -133,11 +133,11 @@ module.exports = function (dbI) {
   router.post("/createuser/add", authenticateToken, async (req, res) => {
     if (req.user.role != "ADMIN") return res.sendStatus(401);
     const userExists = await User.exists({ username: req.body.username })
-    .catch(function (err) {
-      res.status(404);
-      res.json({ err: "Internal error." })
-      return;
-    });
+      .catch(function (err) {
+        res.status(404);
+        res.json({ err: "Internal error." })
+        return;
+      });
     if (!userExists) {
       await User.create(
         {
@@ -206,11 +206,11 @@ module.exports = function (dbI) {
 
   router.post("/createproject/add", authenticateToken, async (req, res) => {
     const projectExists = await Project.exists({ name: req.body.name })
-    .catch(function (err) {
-      res.status(404);
-      res.json({ err: "Internal error." })
-      return;
-    });
+      .catch(function (err) {
+        res.status(404);
+        res.json({ err: "Internal error." })
+        return;
+      });
     if (!projectExists) {
       await Project.create(
         {

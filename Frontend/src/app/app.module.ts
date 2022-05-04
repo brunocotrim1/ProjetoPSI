@@ -27,7 +27,24 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ProjectsComponent } from './projects/projects.component';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxMatDateFormats, NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule, NGX_MAT_DATE_FORMATS } from '@angular-material-components/datetime-picker';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
+import { MatNativeDateModule } from '@angular/material/core';
 
+const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
+  parse: {
+    dateInput: "l, LTS"
+  },
+  display: {
+    dateInput: "l, LTS",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
+};
 // import {MatButtonModule} from '@angular/material/button';
 // import {MatFormFieldModule} from '@angular/material/form-field';
 // import {MatInputModule} from '@angular/material/input';
@@ -85,6 +102,19 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AppRoutingModule,
     BrowserAnimationsModule,
     NgMultiSelectDropDownModule.forRoot(),
+    BrowserModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    NgxMatTimepickerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    NgxMatDatetimePickerModule,
+    NgxMatNativeDateModule,
+    NgxMatMomentModule,
+    MatNativeDateModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
@@ -95,7 +125,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     { provide: APP_INITIALIZER, useFactory: AppInitializer, multi: true, deps: [AuthenticationService] },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
