@@ -82,9 +82,13 @@
           <a href="/createproject">
           <div class="media">
             <div class="media-body">
-              <h5 class="mt-0 font-weight-bold">Create Project</h5>
+              <h5 class="mt-0 font-weight-bold">Create Project
+                <button *ngIf="user.role == 'ADMIN'" class="userrole ml-2 mt-1" mdbBtn type="button" size="sm">
+                  admin feature
+                  </button>
+              </h5>
               <p>
-                This feature allows any user to create projects.
+                This feature allows an administrator to create projects.
               </p>
             </div>
             <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
