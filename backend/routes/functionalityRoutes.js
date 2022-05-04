@@ -18,24 +18,24 @@ Project.collection.drop();
 async function init() {
     // await User.collection.drop();
     // await User.deleteMany({})
-    const testUser = await User.findOne({ username: "bruno" }); 
+    const testUser = await User.findOne({ username: "bruno" });
 
     const tasks = [
         {
             name: "Task 1",
-            userAssociated: testUser.id,
+            usersAssigned: [testUser._id],
             progress: 33,
             priority: "LOW",
         },
         {
             name: "Task 2",
-            userAssociated: testUser.id,
+            usersAssigned: [testUser._id],
             progress: 15,
             priority: "CRITICAL",
         },
         {
             name: "Task 3",
-            userAssociated: testUser.id,
+            usersAssigned: [testUser._id],
             progress: 66,
             priority: "MEDIUM",
         },
@@ -45,16 +45,24 @@ async function init() {
         await task.save().catch(function (err) { });
     }
 
-    const testUser2 = await User.findOne({ username: "miguel" }); 
+    const testUser2 = await User.findOne({ username: "miguel" });
 
     const testTeams = [
         {
             name: "Team 1",
+<<<<<<< HEAD
             users: [testUser.id,testUser2.id]
         },
         {
             name: "Team 2",
             users: [testUser2.id]
+=======
+            members: [testUser.id, testUser2.id]
+        },
+        {
+            name: "Team 2",
+            members: [testUser.id]
+>>>>>>> 48a558f7e528f113f70bfd623e9f57d61a3ef5c5
         },
         {
             name: "Team 3",
@@ -104,7 +112,7 @@ module.exports = function (dbI) {
             res.json({ err: "User not found" });
             return;
         }
-        const tasks = await Task.find({ userAssociated: user._id }).catch(function (err) {
+        const tasks = await Task.find({ usersAssigned: user._id}).catch(function (err) {
             res.status(404);
             res.json({ err: "Error" });
             return;
@@ -116,7 +124,7 @@ module.exports = function (dbI) {
         }
         res.json(tasks);
     });
-    router.get("/usersByName/:term", authenticateToken, async (req, res) => {
+    router.get("/getusers", authenticateToken, async (req, res) => {
         const users = await User.find({}).catch(function (err) {
             res.status(404);
             res.json({ err: "Error" });
@@ -130,44 +138,52 @@ module.exports = function (dbI) {
             user.id = user._id;
             delete user._id;
             return user;
-        }).filter(function (user) {
-            return user.username.toLowerCase().includes(req.params.term.toLowerCase());
-        }
-        );
+        })
         res.json(usersMap);
     });
 
     router.get("/task/:id", authenticateToken, async (req, res) => {
-        
-        const task = await Task.findById(req.params.id).catch(function (err) {
-            res.status(404);
-            res.json({ err: "Error" });
-            return;
-        });;
-
-        if (!task) {
-            res.status(404);
-            res.json({ err: "Task not found" });
-            return;
-        }
-        res.json(task);
+        await Task.findById(req.params.id)
+            .then(async function (response) {
+                response = response.toObject();
+                for (let f = 0; f < response.usersAssigned.length; f++) {
+                    response.usersAssigned[f] = await User.findById(response.usersAssigned[f])
+                        .then(function (usr) {
+                            usr = usr.toObject();
+                            delete usr.password;
+                            delete usr.refreshToken;
+                            delete usr.accessToken;
+                            return usr;
+                        }).catch(function (err) {
+                            res.status(404);
+                            throw err;
+                        });
+                }
+                console.log(response);
+                res.json(response);
+            })
+            .catch(function (err) {
+                res.status(404);
+                res.json({ err: "Not Found" });
+            });;
     });
 
-    
+
     router.get("/getprojects", authenticateToken, async (req, res) => {
         await Project.find({})
-        .then(function (response) {
-            console.log(response);
-          res.json(response);
-        })
-        .catch(function (err) {
-          res.status(404);
-          res.json({ err: "Not Found" });
-        });;
+            .then(function (response) {
+                console.log(response);
+                res.json(response);
+            })
+            .catch(function (err) {
+                res.status(404);
+                res.json({ err: "Not Found" });
+            });;
     });
 
     router.get("/getteam/:id", authenticateToken, async (req, res) => {
         await Team.findById(req.params.id)
+<<<<<<< HEAD
         .then(async function (response) {
             response = response.toObject();
             for(let i = 0; i < response.users.length; i++){
@@ -192,12 +208,54 @@ module.exports = function (dbI) {
           res.json({ err: "Not Found" });
           return;
         });
+=======
+            .then(async function (response) {
+                response = response.toObject();
+                for (let i = 0; i < response.members.length; i++) {
+                    response.members[i] = await User.findById(response.members[i])
+                        .then(function (usr) {
+                            usr = usr.toObject();
+                            delete usr.password;
+                            delete usr.refreshToken;
+                            delete usr.accessToken;
+                            return usr;
+                        }).catch(function (err) {
+                            res.status(404);
+                            throw err;
+                        });
+                }
+                res.json(response);
+                return;
+            })
+            .catch(function (err) {
+                console.log(err)
+                res.status(404);
+                res.json({ err: "Not Found" });
+                return;
+            });
+>>>>>>> 48a558f7e528f113f70bfd623e9f57d61a3ef5c5
     });
 
     router.get("/getteams", authenticateToken, async (req, res) => {
         await Team.find({})
-        .then(function (response) {
-          res.json(response);
+            .then(async function (response) {
+                for(let i = 0; i < response.length; i++){
+                    response[i] = response[i].toObject();
+                    for(let f = 0; f < response[i].members.length; f++){
+                        response[i].members[f] = await User.findById(response[i].members[f])
+                        .then(function (usr) {
+                            usr = usr.toObject();
+                            delete usr.password;
+                            delete usr.refreshToken;
+                            delete usr.accessToken;
+                            return usr;
+                        }).catch(function (err) {
+                            res.status(404);
+                            throw err;
+                        });
+                    }  
+                }
+            res.json(response);
         })
         .catch(function (err) {
           res.status(404);
@@ -223,7 +281,7 @@ module.exports = function (dbI) {
             res.json({ err: "Error" });
             return;
         });;
-        if(!user){
+        if (!user) {
             res.status(404);
             res.json({ err: "User not found" });
             return;
@@ -238,55 +296,23 @@ module.exports = function (dbI) {
     });
 
     router.post("/saveTask", authenticateToken, async (req, res) => {
-        let user = undefined;
-        if (req.body.term) {
-            user = await User.findOne({ username: req.body.term }).catch(function (err) {
+        Task.updateOne(
+            { _id: req.body._id },
+            { $set: { usersAssigned: req.body.usersAssigned } }
+        )
+            .then(function (response) {
+                if (response.matchedCount == 0) {
+                    res.status(404);
+                    res.json({ err: "Task not found" });
+                    return;
+                }
+            })
+            .catch(function (err) {
                 res.status(404);
                 res.json({ err: "Error" });
                 return;
             });
-            console.log(req.body.term)
-            if (!user) {
-                res.status(404);
-                res.json({ err: "User not found" });
-                return;
-            }
-            Task.updateOne(
-                { _id: req.body.task._id },
-                { $set: { userAssociated: user._id } }
-            )
-                .then(function (response) {
-                    if (response.matchedCount == 0) {
-                        res.status(404);
-                        res.json({ err: "Task not found" });
-                        return;
-                    }
-                    else res.json(response);
-                })
-                .catch(function (err) {
-                    res.status(404);
-                    res.json({ err: "Error" });
-                    return;
-                });
-        }
-        else {
-            Task.updateOne(
-                { _id: req.body.task._id },
-                { $set: { userAssociated: req.body.task.userAssociated } }
-            )
-                .then(function (response) {
-                    if (response.matchedCount == 0) {
-                        res.status(404);
-                        res.json({ err: "Task not found" });
-                        return;
-                    }
-                })
-                .catch(function (err) {
-                    res.status(404);
-                    res.json({ err: "Error" });
-                    return;
-                });
-        }
+
         res.json({ msg: "Task Saved Suceffully" });
     });
 
@@ -364,21 +390,21 @@ function authenticateToken(req, res, next) {
     if (token == null) return res.sendStatus(401);
     console.log(req.path)
     if (req.path == "/refresh_token") {
-      jwt.verify(token, process.env.accessToken_SECRET, { ignoreExpiration: true }, async (err, decoded) => {
-        if (err) return res.sendStatus(403);
-        req.user = decoded;
-        req.user.refreshToken = token;
-      }
-      );
-      return next();
+        jwt.verify(token, process.env.accessToken_SECRET, { ignoreExpiration: true }, async (err, decoded) => {
+            if (err) return res.sendStatus(403);
+            req.user = decoded;
+            req.user.refreshToken = token;
+        }
+        );
+        return next();
     }
-  
-  
+
+
     jwt.verify(token, process.env.accessToken_SECRET, (err, user) => {
-      if (err) return res.sendStatus(403);
-      req.user = user;
-      req.user.refreshToken = token;
-      next();
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        req.user.refreshToken = token;
+        next();
     });
-  }
+}
 

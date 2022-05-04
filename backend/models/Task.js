@@ -5,11 +5,10 @@ const TaskSchema = mongoose.Schema({
         required: true,
         unique: true,
     },
-    userAssociated: {
+    usersAssigned: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
-    },
+    }],
     progress: {
         type: Number,
         required: true

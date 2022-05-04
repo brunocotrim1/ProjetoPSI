@@ -1,7 +1,9 @@
+import { User } from "./User";
+
 export interface Task {
     _id:string;
     name: string;
-    userAssociated: string;
+    usersAssigned: User[] | any;
     progress: number;
     priority: string;
     beginDate: Date;

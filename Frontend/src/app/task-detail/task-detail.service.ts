@@ -28,7 +28,9 @@ export class TaskDetailService {
   getTaskDetail(id: string): Observable<Task> {
     return this.http.get<any>(`/api/task/${id}`, this.httpOptions);
   }
-
+  getUsers(): Observable<User[]> {
+    return this.http.get<any>(`/api/getusers/`, this.httpOptions);
+  }
   saveTask(task: any): Observable<any> {
     return this.http.post<any>('/api/saveTask', task, this.httpOptions);
   }

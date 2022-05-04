@@ -23,19 +23,21 @@ export class ProjectsComponent implements OnInit {
 
   selectedTeamForm = new FormGroup(
     {
-    selectedTeam: new FormControl('', Validators.required)
+    selteam: new FormControl('', Validators.required)
     }
   );
 
   loading = false;
   submitted = false;
   returnUrl!: string;
+  showUnasignedInfo = false;
   error = '';
   returnmessage = '';
 
   user = {} as User;
   listOfProjects = {} as Project[];
   listOfTeams = {} as Team[];
+  listOfAvailableTeams = {} as Team[];
   currentProject = {} as Project;
   currentProjectTeam = {} as Team;
 
@@ -45,10 +47,36 @@ export class ProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.authenticationService.loadUser()!;
+
     this.projectsService.getProjects()
     .subscribe({
       next: (project) => {
         this.listOfProjects = project;
+        this.projectsService.getTeams()
+        .subscribe({
+          next: (teams) => {
+            this.listOfTeams = teams;
+            this.listOfAvailableTeams = Array<Team>();
+            for(let i = 0; i < this.listOfTeams.length; i++) {
+              var isNotValidTeam = false;
+              for (let f = 0; f < this.listOfProjects.length; f++) {
+                if(this.listOfProjects[f].linkedTeam == this.listOfTeams[i]._id){
+                  isNotValidTeam = true;
+                }
+              }
+              if(!isNotValidTeam){
+                this.listOfAvailableTeams.push(this.listOfTeams[i]);
+              }
+            }
+            console.log("AVAILABLE TEAMS: ",this.listOfAvailableTeams)
+          },
+          error: error => {
+            this.listOfTeams = {} as Team[];
+            this.listOfAvailableTeams = {} as Team[];
+            this.error = error;
+            this.loading = false;
+          }
+        });
       },
       error: error => {
         this.listOfProjects = {} as Project[];
@@ -56,6 +84,15 @@ export class ProjectsComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  
+  get f() { 
+    return this.projectForm.controls; 
+  }
+
+  get f1() { 
+    return this.selectedTeamForm.controls; 
   }
 
   checkIfNoProjects(){
@@ -66,7 +103,7 @@ export class ProjectsComponent implements OnInit {
     return Object.keys(this.listOfTeams).length === 0;
   }
 
-  checkIfExistsObject(){
+  checkIfExistsCurrentProject(){
     return Object.keys(this.currentProject).length !== 0;
   }
 
@@ -74,53 +111,63 @@ export class ProjectsComponent implements OnInit {
     return Object.keys(this.currentProjectTeam).length !== 0;
   }
 
-  checkIfGetTeams(){
-    return Object.keys(this.listOfTeams).length !== 0;
+  updateShowUnasignedInfo(){
+    this.showUnasignedInfo = true;
   }
 
   onChangeObj() {
     this.currentProject = this.f["project"].value
-    this.projectsService.getTeam(this.f["project"].value.linkedTeam)
-    .subscribe({
-      next: (team) => {
-        this.currentProjectTeam = team;
-        console.log(this.currentProjectTeam)
-      },
-      error: error => {
-        this.currentProjectTeam = {} as Team;
-        this.error = error;
-        this.loading = false;
-      }
-    });
+    if(this.f["project"].value.linkedTeam != undefined){
+      console.log("This project has a linked team")
+      this.projectsService.getTeam(this.f["project"].value.linkedTeam)
+      .subscribe({
+        next: (team) => {
+          this.currentProjectTeam = team;
+          // console.log("Projects =>",this.listOfProjects)
+          // console.log("Teams =>",this.listOfTeams)
+          // console.log("Current Project onChangeObj =>",this.currentProject)
+          // console.log("Current Project Team onChangeObj =>",this.currentProjectTeam)
+        },
+        error: error => {
+          this.currentProjectTeam = {} as Team;
+          //console.log("ERRO NO PEDIDO DE TEAM")
+          this.error = error;
+          this.loading = false;
+        }
+      });
+    } else {
+      this.currentProjectTeam = {} as Team;
+    }
   }
   
-  onClickGetTeams() {
-    this.projectsService.getTeams()
-    .subscribe({
-      next: (teams) => {
-        this.listOfTeams = teams;
-        console.log(this.listOfTeams)
-      },
-      error: error => {
-        this.listOfTeams = {} as Team[];
-        this.error = error;
-        this.loading = false;
-      }
-    });
-  }
-
   onSubmitTeam() {
-    console.log(this.currentProject)
-    console.log(this.currentProjectTeam)
+    //this.currentProject.linkedTeam
+    this.showUnasignedInfo = false;
+    this.currentProject.linkedTeam = this.f1["selteam"].value._id
+    this.currentProjectTeam = this.f1["selteam"].value
+    console.log("BEFORE UPDATE =>",this.listOfAvailableTeams)
+    this.listOfAvailableTeams = this.listOfAvailableTeams.filter((item) => {
+      return item != this.f1["selteam"].value
+    })
+    console.log("AFTER UPDATE =>",this.listOfAvailableTeams)
+    for (let i = 0; i < this.listOfProjects.length; i++) {
+      if (this.listOfProjects[i].name == this.currentProject.name){
+        this.listOfProjects[i] = this.currentProject
+      }
+    }
     this.submitted = true;
     if (this.selectedTeamForm.invalid) {
       return;
     }
     this.loading = true;
-    this.projectsService.updateTeam()
+    this.projectsService.updateProject(this.currentProject._id, this.f1["selteam"].value._id)
       .subscribe({
         next: () => {
-          this.returnmessage = "Project has been updated!";
+          // console.log("Projects =>",this.listOfProjects)
+          // console.log("Teams =>",this.listOfTeams)
+          // console.log("Current Project submitTeam =>",this.currentProject)
+          // console.log("Current Project Team submitTeam =>",this.currentProjectTeam)
+          this.returnmessage = "Team has been linked!";
           this.loading = false;
         },
         error: error => {
@@ -130,23 +177,21 @@ export class ProjectsComponent implements OnInit {
       });
   }
 
-  get f() { 
-    return this.projectForm.controls; 
-  }
-
-  get f1() { 
-    return this.selectedTeamForm.controls; 
-  }
-  onSubmit() {
-    this.submitted = true;
-    if (this.projectForm.invalid) {
-      return;
-    }
-    this.loading = true;
-    this.projectsService.getProjects()
+  updateAndRemoveTeam(){
+    this.currentProject.linkedTeam = "";
+    this.listOfAvailableTeams.push(this.currentProjectTeam)
+    //console.log("UNSORTED =>",this.listOfAvailableTeams)
+    this.listOfAvailableTeams.sort((a,b) => a.name.localeCompare(b.name));
+    //console.log("SORTED =>",this.listOfAvailableTeams)
+    this.currentProjectTeam = {} as Team;
+    this.projectsService.updateProject(this.currentProject._id, "")
       .subscribe({
         next: () => {
-          this.returnmessage = "New user created!";
+          // console.log("Projects =>",this.listOfProjects)
+          // console.log("Teams =>",this.listOfTeams)
+          // console.log("Current Project updateandremove =>",this.currentProject)
+          // console.log("Current Project Team updateandremove =>",this.currentProjectTeam)
+          this.returnmessage = "Team has been removed!";
           this.loading = false;
         },
         error: error => {
@@ -159,5 +204,9 @@ export class ProjectsComponent implements OnInit {
   onReset(): void {
     this.submitted = false;
     this.projectForm.reset();
+  }
+
+  refresh(): void {
+    window.location.reload();
   }
 }

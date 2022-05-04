@@ -131,12 +131,13 @@ module.exports = function (dbI) {
 
 
   router.post("/createuser/add", authenticateToken, async (req, res) => {
+    if (req.user.role != "ADMIN") return res.sendStatus(401);
     const userExists = await User.exists({ username: req.body.username })
-    .catch(function (err) {
-      res.status(404);
-      res.json({ err: "Internal error." })
-      return;
-    });
+      .catch(function (err) {
+        res.status(404);
+        res.json({ err: "Internal error." })
+        return;
+      });
     if (!userExists) {
       await User.create(
         {
@@ -162,17 +163,58 @@ module.exports = function (dbI) {
     //res.sendStatus(200)
   });
 
+
+  router.put("/updateproject/:id", authenticateToken, async (req, res) => {
+    console.log(req.params.id)
+    console.log(req.body.linkedTeam)
+    if (req.body.linkedTeam.length == 0) {
+      await Project.updateOne({ _id: req.params.id }, { $unset: {linkedTeam: ""}})
+      .then(function (response) {
+        if (response.matchedCount == 0){
+          console.log("Dont exist")
+          res.status(404)
+          res.json({msg: "Project doesn't exist on DB."})
+        } else {
+          console.log("All good")
+          console.log(response)
+          res.json({msg: "Project linkedteam cleared on DB updated."})
+        }
+      }).catch(function(exception){
+        console.log("VERY BAD")
+        res.status(500)
+        res.json({msg: "Couldnt update project", error: exception.message})
+      });
+    } else {
+      await Project.updateOne({ _id: req.params.id }, { $set: {linkedTeam: req.body.linkedTeam}})
+      .then(function (response) {
+        if (response.matchedCount == 0){
+          console.log("Dont exist")
+          res.status(404)
+          res.json({msg: "Project doesn't exist on DB."})
+        } else {
+          console.log("All good")
+          console.log(response)
+          res.json({msg: "Project linkedteam info on DB updated."})
+        }
+      }).catch(function(exception){
+        console.log("VERY BAD")
+        res.status(500)
+        res.json({msg: "Couldnt update project", error: exception.message})
+      });
+    }
+  });
+
   router.post("/createproject/add", authenticateToken, async (req, res) => {
     const projectExists = await Project.exists({ name: req.body.name })
-    .catch(function (err) {
-      res.status(404);
-      res.json({ err: "Internal error." })
-      return;
-    });
+      .catch(function (err) {
+        res.status(404);
+        res.json({ err: "Internal error." })
+        return;
+      });
     if (!projectExists) {
       await Project.create(
         {
-          name: req.body.username,
+          name: req.body.name,
           acronym: req.body.acronym,
           beginDate: req.body.beginDate,
           endDate: req.body.endDate
@@ -192,7 +234,6 @@ module.exports = function (dbI) {
       res.status(404);
       res.json({ err: "Project with the selected name already exists." })
     }
-    //res.sendStatus(200)
   });
 
   return router;

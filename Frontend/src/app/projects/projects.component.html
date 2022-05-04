@@ -27,61 +27,58 @@
               NO PROJECTS AVAILABLE
           </div>
         </form>
-        <!-- <form class="d-flex flex-column text-center" [formGroup]="projectForm" style="margin:50px;">
-          <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Create project</h4>
-          <a href="/createProject">
-            <button mdbBtn color="info" type="submit" mdbWavesEffect
-            style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-              Create a new project
-            </button>
-          </a>
-        </form> -->
-        <button *ngIf="checkIfExistsObject()" class="showProject" mdbBtn type="button" rounded="true">
+        <button *ngIf="checkIfExistsCurrentProject()" class="showProject" mdbBtn type="button" rounded="true">
           <div class="white-text">
             <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">{{currentProject.name}} ({{currentProject.acronym}})</h2>
             <hr class="hr-light wow" data-wow-delay="0.3s">
           </div>
-          <div *ngIf="checkIfExistsTeamProject(); else elseBlock">
-            <mdb-icon fas icon="tag"></mdb-icon>Team name: {{currentProjectTeam.name}}
-            <div style="margin-top: 5%;">Members:            
-              <div *ngFor="let user of currentProjectTeam.members">
-                <mdb-icon fas icon="user"></mdb-icon>{{user.username}}
-              </div>
-            </div>
-          </div>
-          <ng-template #elseBlock>
-            <button mdbBtn color="info" mdbWavesEffect (click)="onClickGetTeams()"
-            style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);" onclick="style.display = 'none'">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-              Assign a team to this project
-            </button>
-            <form *ngIf="checkIfGetTeams();" class="d-flex flex-column text-center" [formGroup]="selectedTeamForm" style="margin:50px;" 
-            (ngSubmit)="onSubmitTeam()">
-              <div class="form-group">
-                <select class="form-select form-control browser-default custom-select" formControlName="selectedTeam"
-                  [ngClass]="{ 'is-invalid': submitted && f['selectedTeam'].errors }" required>
-                  <option selected disabled value="">Choose team...</option>
-                  <option [ngValue]="team" *ngFor="let team of listOfTeams">
-                    {{team.name}}
-                  </option>
-                </select>
-                <div class="invalid-feedback">
-                  Please select a team
-                </div>
-              </div>
-              <div *ngIf="checkIfNoTeams()">
-                  NO TEAMS AVAILABLE
-              </div>
-              <button mdbBtn color="info" type="submit" mdbWavesEffect
-              style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
-              <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Assign this team!
-              </button>
-            </form>
-          </ng-template>
+                          <div *ngIf="checkIfExistsTeamProject(); else elseBlock">
+                                            <mdb-icon fas icon="tag"></mdb-icon>Team name: {{currentProjectTeam.name}}
+                                            <div style="margin-top: 5%;">Members:            
+                                              <div *ngFor="let user of currentProjectTeam.members">
+                                                <mdb-icon fas icon="user"></mdb-icon>{{user.username}}
+                                              </div>
+                                            </div>
+                                            <button mdbBtn color="info" mdbWavesEffect (click)="updateAndRemoveTeam()"
+                                              style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
+                                              <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                              Unassign this team!
+                                            </button>
+                          </div>
+                          <ng-template #elseBlock>
+                                            <button *ngIf="!showUnasignedInfo; else elseBlockTeamSubmit" mdbBtn color="info" mdbWavesEffect (click)="updateShowUnasignedInfo()"
+                                              style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);" onclick="style.display = 'none'">
+                                              <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                              Assign a team to this project
+                                            </button>
+                                            <ng-template #elseBlockTeamSubmit>
+                                              <form class="d-flex flex-column text-center" [formGroup]="selectedTeamForm"
+                                                style="margin:50px;" (ngSubmit)="onSubmitTeam()">
+                                                <div class="form-group">
+                                                  <select class="form-select form-control browser-default custom-select" formControlName="selteam"
+                                                    [ngClass]="{ 'is-invalid': submitted && f1['selteam'].errors }" required>
+                                                    <option selected disabled value="">Choose available team...</option>
+                                                    <option [ngValue]="team" *ngFor="let team of listOfAvailableTeams">
+                                                      {{team.name}}
+                                                    </option>
+                                                  </select>
+                                                  <div class="invalid-feedback">
+                                                    Please select a team
+                                                  </div>
+                                                </div>
+                                                <div *ngIf="checkIfNoTeams()">
+                                                  NO TEAMS AVAILABLE
+                                                </div>
+                                                <button mdbBtn color="info" type="submit" mdbWavesEffect
+                                                  style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
+                                                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                                  Assign this team!
+                                                </button>
+                                              </form>
+                                            </ng-template>
+                          </ng-template>
           <div style="margin-top: 5%;">
-            <mdb-icon far icon="clock"></mdb-icon>Start date: 
+            <mdb-icon far icon="clock"></mdb-icon>Start date:
             <mdb-icon fas icon="clock"></mdb-icon>Due date:
           </div>
         </button>
