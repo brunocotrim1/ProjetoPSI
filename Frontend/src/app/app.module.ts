@@ -13,7 +13,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { AuthenticationService } from './services/authentication.service';
 import { AppInitializer } from './appInitiazlier/AppInitializer';
 import { MainMenuComponent } from './mainmenu/mainmenu.component';
-import { CriarEquipasComponent } from './criar-equipas/criar-equipas.component';
+import { CreateTeamsComponent } from './create-teams/create-teams.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateUserComponent } from './createuser/createuser.component';
 import { NavigbarComponent } from './navbar/navigbar.component';
@@ -25,6 +25,8 @@ import { LinkprojectstoteamsComponent } from './linkprojectstoteams/linkprojects
 import { MultiselectDropdownComponent } from './multiselect-dropdown/multiselect-dropdown.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ProjectsComponent } from './projects/projects.component';
+import { CreateProjectComponent } from './create-project/create-project.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // import {MatButtonModule} from '@angular/material/button';
 // import {MatFormFieldModule} from '@angular/material/form-field';
@@ -52,15 +54,16 @@ import { ProjectsComponent } from './projects/projects.component';
     LoginComponent,
     DashboardComponent,
     MainMenuComponent,
-    CriarEquipasComponent,
+    CreateTeamsComponent,
     ProfileComponent,
     CreateUserComponent,
-      NavigbarComponent,
+    NavigbarComponent,
     FooterComponent,
     TaskDetailComponent,
     MultiselectDropdownComponent,
     LinkprojectstoteamsComponent,
-    ProjectsComponent
+    ProjectsComponent,
+    CreateProjectComponent
 
   ],
   imports: [
@@ -73,6 +76,7 @@ import { ProjectsComponent } from './projects/projects.component';
     FormsModule,
     MDBBootstrapModule.forRoot(),
     ReactiveFormsModule,
+    NgbModule,
     // CalendarModule.forRoot({
     //   provide: DateAdapter,
     //   useFactory: adapterFactory,
