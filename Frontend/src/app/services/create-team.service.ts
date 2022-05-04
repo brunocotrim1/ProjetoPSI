@@ -1,28 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Team } from '../Team';
 import { Member } from '../Member';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CreateTeamService {
-  private createuserURL: string = "/api/authentication/createuser";
+  private createTeamURL: string = "/api/authentication/createteam";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
-  constructor() { }
+
+  constructor(private router: Router,
+    private http: HttpClient) { }
 
 
-  validName(name: string): boolean {
-    // CHECK COM REGEX
-    // apenas alfanumericos, pelo menos 4 chars e unico
-    return false
-  }
-
-  
   getMembers(): Member[] {
     
     const fake_member_1: Member = {
@@ -48,8 +43,20 @@ export class CreateTeamService {
     return [fake_member_1, fake_member_2, fake_member_3, fake_member_4, fake_member_5]
   }
 
-  saveTeam(team: Team): void {
+  getMemberById(id: String): Member {
+    let everyMember = this.getMembers() as Member[];
+    for (let i = 0; i < everyMember.length; i++) {
+      if (everyMember[i].id == id) {
+        return everyMember[i]
+      } 
+    }
+    return {} as Member
+  }
 
+
+  
+  saveTeam(team_name: String, members: Member[]): Observable<any> {
+    return this.http.post<any>(`${this.createTeamURL}/add`, {team_name, members}, this.httpOptions);
   }
 
 

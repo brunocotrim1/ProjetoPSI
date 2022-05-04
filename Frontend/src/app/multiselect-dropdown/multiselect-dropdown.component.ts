@@ -18,10 +18,21 @@ export class MultiselectDropdownComponent implements OnInit {
   fillInDropdown(typeobject : string) {
     if(typeobject === "Project") {
       //ir fazer getallprojects do service do project
+      
+
     } else if(typeobject === "Team") {
-      //ir fazer getallprojects do service do project
+
+      //ir fazer getallmembers do service do team
+      this.dropdownList = [];
+    
+      let users = this.create_team_service.getMembers();
+      for (let i = 0; i < users.length; i++) {
+        let user = users[i];
+        this.dropdownList.push({ item_id: user.id, item_text: user.username});
+      }
+
     }
-    //...
+    
   } 
 
   dropdownSettings: IDropdownSettings={};
@@ -33,7 +44,7 @@ export class MultiselectDropdownComponent implements OnInit {
       let user = users[i];
       this.dropdownList.push({ item_id: user.id, item_text: user.username});
     }
-    
+    console.log(this.dropdownList);
     this.dropdownSettings = {
       idField: 'item_id' ,
       textField: 'item_text',

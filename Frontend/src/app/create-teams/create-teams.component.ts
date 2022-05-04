@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors,
 
 import { AuthenticationService } from '../services/authentication.service';
 import { User } from '../User';
+import { CreateTeamService } from '../services/create-team.service';
 
 
 @Component({
@@ -13,27 +14,40 @@ import { User } from '../User';
 export class CreateTeamsComponent implements OnInit {
 
   user = {} as User;
-  projectForm = new FormGroup(
+  teamForm = new FormGroup(
     {
       name: new FormControl('', [Validators.required, Validators.minLength(4), Validators.pattern(/^[a-z0-9]+$/i)])
     }
   );
   submitted = false;
-  constructor(private authenticationService: AuthenticationService) { }
+  constructor(private createteamservice: CreateTeamService,
+              private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
     this.user = this.authenticationService.loadUser()!;
   }
 
   get f() { 
-    return this.projectForm.controls; 
+    return this.teamForm.controls; 
   }
   
   onSubmit() {
     this.submitted = true;
-    if (this.projectForm.invalid) {
+    if (this.teamForm.invalid) {
       return;
     }
+    // this.createteamservice.saveTeam(this.f["name"].value, this.f["dropdown"])
+    //   .subscribe({
+    //     next: () => {
+    //       // this.returnmessage = "New team created!";
+    //       // this.loading = false;
+    //     },
+    //     error: error => {
+    //       // this.error = error;
+    //       // this.loading = false;
+
+    //     }
+    //   });
   }
   logout() {
     this.authenticationService.logout();
