@@ -58,7 +58,7 @@
                                                   <select class="form-select form-control browser-default custom-select" formControlName="selteam"
                                                     [ngClass]="{ 'is-invalid': submitted && f1['selteam'].errors }" required>
                                                     <option selected disabled value="">Choose available team...</option>
-                                                    <option [ngValue]="team" *ngFor="let team of listOfTeams">
+                                                    <option [ngValue]="team" *ngFor="let team of listOfAvailableTeams">
                                                       {{team.name}}
                                                     </option>
                                                   </select>
@@ -77,9 +77,6 @@
                                               </form>
                                             </ng-template>
                           </ng-template>
-          <!-- <div *ngIf="returnmessage" class="alert alert-success">
-            {{ returnmessage }}
-          </div> -->
           <div style="margin-top: 5%;">
             <mdb-icon far icon="clock"></mdb-icon>Start date:
             <mdb-icon fas icon="clock"></mdb-icon>Due date:
