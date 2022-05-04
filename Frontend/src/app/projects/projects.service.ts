@@ -29,8 +29,8 @@ export class ProjectsService {
     return this.http.get<any>(`${this.projectsURL}/getteams`, this.httpOptions);
   }
 
-  updateTeam(): Observable<any>{
-    return this.http.put<any>(`${this.projectsURL}/updateproject`, this.httpOptions);
+  updateProject(id : string, linkedTeam : string): Observable<any>{
+    return this.http.put<any>(`${this.projectsURL}/authentication/updateproject/${id}`, {linkedTeam}, this.httpOptions);
   }
   
 }

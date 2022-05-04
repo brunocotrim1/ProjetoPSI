@@ -54,7 +54,7 @@ async function init() {
         },
         {
             name: "Team 2",
-            members: [testUser2.id]
+            members: [testUser.id]
         },
         {
             name: "Team 3",
@@ -196,8 +196,24 @@ module.exports = function (dbI) {
 
     router.get("/getteams", authenticateToken, async (req, res) => {
         await Team.find({})
-        .then(function (response) {
-          res.json(response);
+            .then(async function (response) {
+                for(let i = 0; i < response.length; i++){
+                    response[i] = response[i].toObject();
+                    for(let f = 0; f < response[i].members.length; f++){
+                        response[i].members[f] = await User.findById(response[i].members[f])
+                        .then(function (usr) {
+                            usr = usr.toObject();
+                            delete usr.password;
+                            delete usr.refreshToken;
+                            delete usr.accessToken;
+                            return usr;
+                        }).catch(function (err) {
+                            res.status(404);
+                            throw err;
+                        });
+                    }  
+                }
+            res.json(response);
         })
         .catch(function (err) {
           res.status(404);
