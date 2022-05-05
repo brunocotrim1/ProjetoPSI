@@ -303,38 +303,7 @@ module.exports = function (dbI) {
         res.json({ msg: "Task Saved Suceffully" });
     });
 
-    router.get("/api/getteamusers/:teamname", authenticateToken, async ({ body: { title, body } }, res) => {
 
-        const team = async () => {
-            Team.findOne({ name: req.params.teamname }).then(
-                function (response) {
-                    let users = team.users;
-                    let userList = [];
-                    for (let i = 0; i < users.length; i++) {
-
-                        let user = new User;
-                        user.id = users[i]._id,
-                            user.username = users[i].name
-
-                        userList.push(user)
-
-
-                    }
-
-                    res.json(userList)
-
-                    return
-                }).catch(function (err) {
-                    res.status(404);
-                    res.json({ err: "Error" });
-                    return;
-                });
-        }
-        team().then(function (v) {
-            res.send(v)
-        })
-
-    });
 
     router.post("/teams/add", authenticateToken, async (req, res) => {
         console.log("TRYING TO CREATE")
