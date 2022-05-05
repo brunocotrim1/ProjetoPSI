@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CreateProjectService {
-  private createprojectURL: string = "/api/authentication/createproject";
+  private createprojectURL: string = "/api";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -17,7 +17,7 @@ export class CreateProjectService {
     //  this.removeUser()
   }
 
-  createProject(username: string, acronym: string, startDate: Date, finalDate: Date): Observable<any>{
-    return this.http.post<any>(`${this.createprojectURL}/add`, {username, acronym, startDate, finalDate}, this.httpOptions);
+  createProject(username: string, acronym: string, beginDate: Date, endDate: Date): Observable<any>{
+    return this.http.post<any>(`${this.createprojectURL}/addproject`, {username, acronym, beginDate, endDate}, this.httpOptions);
   }
 }

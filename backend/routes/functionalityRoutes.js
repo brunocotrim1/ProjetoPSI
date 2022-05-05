@@ -222,6 +222,7 @@ module.exports = function (dbI) {
             });
     });
 
+
     router.get("/getteams", authenticateToken, async (req, res) => {
         await Team.find({})
             .then(async function (response) {
@@ -251,13 +252,13 @@ module.exports = function (dbI) {
 
     router.get("/getusers", authenticateToken, async (req, res) => {
         await User.find({})
-        .then(function (response) {
-          res.json(response);
-        })
-        .catch(function (err) {
-          res.status(404);
-          res.json({ err: "Not Found" });
-        });;
+            .then(function (response) {
+                res.json(response);
+            })
+            .catch(function (err) {
+                res.status(404);
+                res.json({ err: "Not Found" });
+            });;
     });
 
     router.get("/user/:id", authenticateToken, async (req, res) => {
@@ -302,10 +303,10 @@ module.exports = function (dbI) {
         res.json({ msg: "Task Saved Suceffully" });
     });
 
-    router.get("/api/getteamusers/:teamname", authenticateToken, async ({body: { title, body }}, res) => {
+    router.get("/api/getteamusers/:teamname", authenticateToken, async ({ body: { title, body } }, res) => {
 
-        const team = async() => {
-            Team.findOne({name: req.params.teamname}).then(
+        const team = async () => {
+            Team.findOne({ name: req.params.teamname }).then(
                 function (response) {
                     let users = team.users;
                     let userList = [];
@@ -313,57 +314,72 @@ module.exports = function (dbI) {
 
                         let user = new User;
                         user.id = users[i]._id,
-                        user.username = users[i].name
-                        
+                            user.username = users[i].name
+
                         userList.push(user)
 
 
                     }
-                        
+
                     res.json(userList)
-                    
+
                     return
                 }).catch(function (err) {
                     res.status(404);
                     res.json({ err: "Error" });
                     return;
                 });
-            }
-        team().then(function(v) {
+        }
+        team().then(function (v) {
             res.send(v)
         })
-        
+
     });
-    
+
     router.post("/teams/add", authenticateToken, async (req, res) => {
         console.log("TRYING TO CREATE")
         console.log(req.body.name)
         console.log(req.body.members)
         const teamExists = await Team.exists({ name: req.body.name })
-        .catch(function (err) {
-        res.status(404);
-        res.json({ err: "Internal error." })
-        return;
-        });
+            .catch(function (err) {
+                res.status(404);
+                res.json({ err: "Internal error." })
+                return;
+            });
         if (!teamExists) {
-        await Team.create(
-            {name: req.body.name, members: req.body.members }
-        )
+            await Team.create(
+                { name: req.body.name, members: req.body.members }
+            )
+                .then(function (response) {
+                    console.log(response)
+                    res.json(response);
+                    return;
+                })
+                .catch(function (err) {
+                    res.status(404);
+                    res.json({ err: "Internal error." })
+                    return;
+                });
+        } else {
+            res.status(404);
+            res.json({ err: "User with the selected name already exists." })
+        }
+        res.json({ msg: "Team Saved Suceffully" });
+    });
+
+    router.post("/addproject", authenticateToken, async (req, res) => {
+        console.log(req.body);
+        await Project.create({ name: req.body.username, acronym: req.body.acronym, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate) })
             .then(function (response) {
-            console.log(response)
-            res.json(response);
-            return;
+                res.json({ msg: "Projeto criado com sucesso" });
+                return;
             })
             .catch(function (err) {
-            res.status(404);
-            res.json({ err: "Internal error." })
-            return;
-            });
-        } else {
-        res.status(404);
-        res.json({ err: "User with the selected name already exists." })
-        }    
-        res.json({ msg: "Team Saved Suceffully" });
+                console.log(err);
+                res.status(404);
+                res.json({ err: "Internal error." })
+                return;
+            })
     });
 
     return router;
