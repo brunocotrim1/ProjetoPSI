@@ -26,18 +26,27 @@ async function init() {
             usersAssigned: [testUser._id],
             progress: 33,
             priority: "LOW",
+            beginDate: new Date().setDate(new Date().getDate()+4),
+            
+            endDate: new Date().setDate(new Date().getDate()+6),
         },
         {
             name: "Task 2",
             usersAssigned: [testUser._id],
             progress: 15,
             priority: "CRITICAL",
+            beginDate: new Date().setDate(new Date().getDate()+3),
+            
+            endDate: new Date().setDate(new Date().getDate()+2),
         },
         {
             name: "Task 3",
             usersAssigned: [testUser._id],
             progress: 66,
             priority: "MEDIUM",
+            beginDate: new Date().setDate(new Date().getDate()+10),
+            
+            endDate: new Date().setDate(new Date().getDate()+11),
         },
     ];
     for (let i = 0; i < tasks.length; i++) {
@@ -104,7 +113,7 @@ module.exports = function (dbI) {
             res.json({ err: "User not found" });
             return;
         }
-        const tasks = await Task.find({ usersAssigned: user._id}).catch(function (err) {
+        const tasks = await Task.find({ usersAssigned: user._id }).catch(function (err) {
             res.status(404);
             res.json({ err: "Error" });
             return;
@@ -116,6 +125,18 @@ module.exports = function (dbI) {
         }
         res.json(tasks);
     });
+
+    router.get("/allTasks", authenticateToken, async (req, res) => {
+        const tasks = await Task.find({}).then(
+            function (tasks) {
+                res.json(tasks);
+            }
+        ).catch(function (err) {
+        });;
+
+
+    });
+
     router.get("/getusers", authenticateToken, async (req, res) => {
         const users = await User.find({}).catch(function (err) {
             res.status(404);
@@ -204,28 +225,28 @@ module.exports = function (dbI) {
     router.get("/getteams", authenticateToken, async (req, res) => {
         await Team.find({})
             .then(async function (response) {
-                for(let i = 0; i < response.length; i++){
+                for (let i = 0; i < response.length; i++) {
                     response[i] = response[i].toObject();
-                    for(let f = 0; f < response[i].members.length; f++){
+                    for (let f = 0; f < response[i].members.length; f++) {
                         response[i].members[f] = await User.findById(response[i].members[f])
-                        .then(function (usr) {
-                            usr = usr.toObject();
-                            delete usr.password;
-                            delete usr.refreshToken;
-                            delete usr.accessToken;
-                            return usr;
-                        }).catch(function (err) {
-                            res.status(404);
-                            throw err;
-                        });
-                    }  
+                            .then(function (usr) {
+                                usr = usr.toObject();
+                                delete usr.password;
+                                delete usr.refreshToken;
+                                delete usr.accessToken;
+                                return usr;
+                            }).catch(function (err) {
+                                res.status(404);
+                                throw err;
+                            });
+                    }
                 }
-            res.json(response);
-        })
-        .catch(function (err) {
-          res.status(404);
-          res.json({ err: "Not Found" });
-        });;
+                res.json(response);
+            })
+            .catch(function (err) {
+                res.status(404);
+                res.json({ err: "Not Found" });
+            });;
     });
     router.get("/user/:id", authenticateToken, async (req, res) => {
         console.log(req.params.id)

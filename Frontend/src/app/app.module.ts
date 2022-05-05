@@ -33,6 +33,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 import { MatNativeDateModule } from '@angular/material/core';
+import { TasklistComponent } from './tasklist/tasklist/tasklist.component';
+
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
   parse: {
@@ -80,7 +82,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     MultiselectDropdownComponent,
     LinkprojectstoteamsComponent,
     ProjectsComponent,
-    CreateProjectComponent
+    CreateProjectComponent,
+    TasklistComponent
 
   ],
   imports: [

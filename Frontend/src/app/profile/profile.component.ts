@@ -50,13 +50,30 @@ export class ProfileComponent implements OnInit {
   user = {} as User;
   error: string | undefined;
   tasks: Task[] = [];
-  constructor(private profileService: ProfileService, private http: HttpClient, private router: Router,private modal: NgbModal) { }
+  events = [] as CalendarEvent[];
+  constructor(private profileService: ProfileService, private http: HttpClient, private router: Router, private modal: NgbModal) { }
   ngOnInit(): void {
     this.profileService.getTaskList().subscribe({
       next: (tasks) => {
         this.tasks = tasks;
-        console.log(tasks)
-        console.log(this.tasks)
+        for (let i = 0; i < this.tasks.length; i++) {
+          tasks[i].beginDate = new Date(tasks[i].beginDate);
+          tasks[i].endDate = new Date(tasks[i].endDate);
+          this.events.push({
+            start:  tasks[i].beginDate,
+            end: tasks[i].endDate,
+            title: tasks[i].name,
+            color: colors[Math.floor(Math.random()*colors.length)],
+            resizable: {
+              beforeStart: true,
+              afterEnd: true,
+            },
+            draggable: false,
+          });
+          console.log( colors[Math.floor(Math.random()*colors.length)])
+        }
+        this.refresh.next();
+
       },
       error: error => {
         this.error = error;
@@ -69,7 +86,7 @@ export class ProfileComponent implements OnInit {
 
 
 
-  
+
   @ViewChild('modalContent', { static: true })
   modalContent!: TemplateRef<any>;
 
@@ -104,47 +121,47 @@ export class ProfileComponent implements OnInit {
 
   refresh = new Subject<void>();
 
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: colors.red,
-    //  actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-     // actions: this.actions,
-      draggable: true,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: colors.blue,
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: colors.yellow,
-   //   actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-  ];
+  // events: CalendarEvent[] = [
+  //   {
+  //     start: subDays(startOfDay(new Date()), 1),
+  //     end: addDays(new Date(), 1),
+  //     title: 'A 3 day event',
+  //     color: colors.red,
+  //   //  actions: this.actions,
+  //     allDay: true,
+  //     resizable: {
+  //       beforeStart: true,
+  //       afterEnd: true,
+  //     },
+  //     draggable: true,
+  //   },
+  //   {
+  //     start: startOfDay(new Date()),
+  //     title: 'An event with no end date',
+  //     color: colors.yellow,
+  //    // actions: this.actions,
+  //     draggable: true,
+  //   },
+  //   {
+  //     start: subDays(endOfMonth(new Date()), 3),
+  //     end: addDays(endOfMonth(new Date()), 3),
+  //     title: 'A long event that spans 2 months',
+  //     color: colors.blue,
+  //     allDay: true,
+  //   },
+  //   {
+  //     start: addHours(startOfDay(new Date()), 2),
+  //     end: addHours(new Date(), 2),
+  //     title: 'A draggable and resizable event',
+  //     color: colors.yellow,
+  //  //   actions: this.actions,
+  //     resizable: {
+  //       beforeStart: true,
+  //       afterEnd: true,
+  //     },
+  //     draggable: true,
+  //   },
+  // ];
 
   activeDayIsOpen: boolean = true;
 
@@ -197,7 +214,7 @@ export class ProfileComponent implements OnInit {
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }
-    eventClicked({ event }: { event: CalendarEvent }): void {
+  eventClicked({ event }: { event: CalendarEvent }): void {
     console.log('Event clicked', event);
   }
 
