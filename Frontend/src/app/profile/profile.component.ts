@@ -27,20 +27,20 @@ import {
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
 } from 'angular-calendar';
-const colors: any = {
-  red: {
+const colors: any = [
+  {
     primary: '#ad2121',
     secondary: '#FAE3E3',
   },
-  blue: {
+  {
     primary: '#1e90ff',
     secondary: '#D1E8FF',
   },
-  yellow: {
+  {
     primary: '#e3bc08',
     secondary: '#FDF1BA',
   },
-};
+];
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -60,17 +60,16 @@ export class ProfileComponent implements OnInit {
           tasks[i].beginDate = new Date(tasks[i].beginDate);
           tasks[i].endDate = new Date(tasks[i].endDate);
           this.events.push({
-            start:  tasks[i].beginDate,
+            start: tasks[i].beginDate,
             end: tasks[i].endDate,
             title: tasks[i].name,
-            color: colors[Math.floor(Math.random()*colors.length)],
+            color: colors[Math.floor(Math.random() * colors.length)],
             resizable: {
               beforeStart: true,
               afterEnd: true,
             },
             draggable: false,
           });
-          console.log( colors[Math.floor(Math.random()*colors.length)])
         }
         this.refresh.next();
 

@@ -59,19 +59,11 @@ async function init() {
     const testTeams = [
         {
             name: "Team 1",
-<<<<<<< HEAD
             users: [testUser.id,testUser2.id]
         },
         {
             name: "Team 2",
             users: [testUser2.id]
-=======
-            members: [testUser.id, testUser2.id]
-        },
-        {
-            name: "Team 2",
-            members: [testUser.id]
->>>>>>> 48a558f7e528f113f70bfd623e9f57d61a3ef5c5
         },
         {
             name: "Team 3",
@@ -204,32 +196,6 @@ module.exports = function (dbI) {
 
     router.get("/getteam/:id", authenticateToken, async (req, res) => {
         await Team.findById(req.params.id)
-<<<<<<< HEAD
-        .then(async function (response) {
-            response = response.toObject();
-            for(let i = 0; i < response.users.length; i++){
-                response.users[i] = await User.findById(response.users[i])
-                .then(function (usr) {
-                    usr = usr.toObject();
-                    delete usr.password;
-                    delete usr.refreshToken;
-                    delete usr.accessToken;
-                    return usr;
-                }).catch(function (err) {
-                    res.status(404);
-                    throw err;
-                });
-            }
-            res.json(response);
-            return;
-        })
-        .catch(function (err) {
-            console.log(err)
-          res.status(404);
-          res.json({ err: "Not Found" });
-          return;
-        });
-=======
             .then(async function (response) {
                 response = response.toObject();
                 for (let i = 0; i < response.members.length; i++) {
@@ -254,7 +220,6 @@ module.exports = function (dbI) {
                 res.json({ err: "Not Found" });
                 return;
             });
->>>>>>> 48a558f7e528f113f70bfd623e9f57d61a3ef5c5
     });
 
     router.get("/getteams", authenticateToken, async (req, res) => {
