@@ -18,9 +18,17 @@
           <div *ngIf="f['name'].errors['minlength']">Name must be at least length of 3</div>
           <div *ngIf="f['name'].errors['pattern']">Password is not alphanumeric</div>
         </div>
-        
-        <app-multiselect-dropdown formControlName="dropdown"></app-multiselect-dropdown>
-         
+        <ng-multiselect-dropdown
+[settings]="dropdownSettings"
+[data]="dropdownList"
+class="form-select" 
+formControlName="dropdown"
+[ngClass]="{ 'is-invalid': submitted && f['dropdown'].errors }"></ng-multiselect-dropdown>
+<!-- </ng-multiselect-dropdown>
+        <ng-multiselect-dropdown ></ng-multiselect-dropdown> -->
+        <div *ngIf="submitted && f['dropdown'].errors" class="invalid-feedback">
+          <div *ngIf="f['dropdown'].errors['dropdown-error']">Team must have at least one member</div>
+        </div>
         <button id="create-team-button" class="add-team-but" mdbBtn type="submit" rounded="true" style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">Create Team</button>
         
       </form>

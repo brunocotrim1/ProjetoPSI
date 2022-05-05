@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ɵConsole } from '@angular/core';
 import { IDropdownSettings, } from 'ng-multiselect-dropdown';
 import { CreateTeamService } from '../services/create-team.service';
+import { User } from '../User';
 
 @Component({
   selector: 'app-multiselect-dropdown',
@@ -14,6 +15,7 @@ export class MultiselectDropdownComponent implements OnInit {
     items!: string;
 
   dropdownList: any[] = [];
+  
 
   fillInDropdown(typeobject : string) {
     if(typeobject === "Project") {
@@ -21,33 +23,33 @@ export class MultiselectDropdownComponent implements OnInit {
       
 
     } else if(typeobject === "Team") {
-
-      //ir fazer getallmembers do service do team
       this.dropdownList = [];
     
-      let users = this.create_team_service.getMembers();
-      for (let i = 0; i < users.length; i++) {
-        let user = users[i];
-        this.dropdownList.push({ item_id: user.id, item_text: user.username});
-      }
+      this.create_team_service.getAllUsers().subscribe(
+          userList => {
+              
+            this.dropdownList = [...userList].map(x => x.username);
+              
+          }
+        );
 
     }
     
   } 
 
+
+
   dropdownSettings: IDropdownSettings={};
   ngOnInit() {
-    this.dropdownList = [];
     
-    let users = this.create_team_service.getMembers();
-    for (let i = 0; i < users.length; i++) {
-      let user = users[i];
-      this.dropdownList.push({ item_id: user.id, item_text: user.username});
-    }
-    console.log(this.dropdownList);
+    
+    this.fillInDropdown("Team") 
+    
     this.dropdownSettings = {
       idField: 'item_id' ,
       textField: 'item_text',
     };
   }
+
+  
 }

@@ -59,15 +59,23 @@ async function init() {
     const testTeams = [
         {
             name: "Team 1",
+<<<<<<< HEAD
+            users: [testUser.id,testUser2.id]
+        },
+        {
+            name: "Team 2",
+            users: [testUser2.id]
+=======
             members: [testUser.id, testUser2.id]
         },
         {
             name: "Team 2",
             members: [testUser.id]
+>>>>>>> 48a558f7e528f113f70bfd623e9f57d61a3ef5c5
         },
         {
             name: "Team 3",
-            members: [testUser2.id]
+            users: [testUser2.id]
         }
     ];
     for (let i = 0; i < testTeams.length; i++) {
@@ -196,6 +204,32 @@ module.exports = function (dbI) {
 
     router.get("/getteam/:id", authenticateToken, async (req, res) => {
         await Team.findById(req.params.id)
+<<<<<<< HEAD
+        .then(async function (response) {
+            response = response.toObject();
+            for(let i = 0; i < response.users.length; i++){
+                response.users[i] = await User.findById(response.users[i])
+                .then(function (usr) {
+                    usr = usr.toObject();
+                    delete usr.password;
+                    delete usr.refreshToken;
+                    delete usr.accessToken;
+                    return usr;
+                }).catch(function (err) {
+                    res.status(404);
+                    throw err;
+                });
+            }
+            res.json(response);
+            return;
+        })
+        .catch(function (err) {
+            console.log(err)
+          res.status(404);
+          res.json({ err: "Not Found" });
+          return;
+        });
+=======
             .then(async function (response) {
                 response = response.toObject();
                 for (let i = 0; i < response.members.length; i++) {
@@ -220,6 +254,7 @@ module.exports = function (dbI) {
                 res.json({ err: "Not Found" });
                 return;
             });
+>>>>>>> 48a558f7e528f113f70bfd623e9f57d61a3ef5c5
     });
 
     router.get("/getteams", authenticateToken, async (req, res) => {
@@ -248,6 +283,18 @@ module.exports = function (dbI) {
                 res.json({ err: "Not Found" });
             });;
     });
+
+    router.get("/getusers", authenticateToken, async (req, res) => {
+        await User.find({})
+        .then(function (response) {
+          res.json(response);
+        })
+        .catch(function (err) {
+          res.status(404);
+          res.json({ err: "Not Found" });
+        });;
+    });
+
     router.get("/user/:id", authenticateToken, async (req, res) => {
         console.log(req.params.id)
         let user = await User.findById(req.params.id).catch(function (err) {
@@ -289,6 +336,71 @@ module.exports = function (dbI) {
 
         res.json({ msg: "Task Saved Suceffully" });
     });
+
+    router.get("/api/getteamusers/:teamname", authenticateToken, async ({body: { title, body }}, res) => {
+
+        const team = async() => {
+            Team.findOne({name: req.params.teamname}).then(
+                function (response) {
+                    let users = team.users;
+                    let userList = [];
+                    for (let i = 0; i < users.length; i++) {
+
+                        let user = new User;
+                        user.id = users[i]._id,
+                        user.username = users[i].name
+                        
+                        userList.push(user)
+
+
+                    }
+                        
+                    res.json(userList)
+                    
+                    return
+                }).catch(function (err) {
+                    res.status(404);
+                    res.json({ err: "Error" });
+                    return;
+                });
+            }
+        team().then(function(v) {
+            res.send(v)
+        })
+        
+    });
+    
+    router.post("/teams/add", authenticateToken, async (req, res) => {
+        console.log("TRYING TO CREATE")
+        console.log(req.body.name)
+        console.log(req.body.members)
+        const teamExists = await Team.exists({ name: req.body.name })
+        .catch(function (err) {
+        res.status(404);
+        res.json({ err: "Internal error." })
+        return;
+        });
+        if (!teamExists) {
+        await Team.create(
+            {name: req.body.name, members: req.body.members }
+        )
+            .then(function (response) {
+            console.log(response)
+            res.json(response);
+            return;
+            })
+            .catch(function (err) {
+            res.status(404);
+            res.json({ err: "Internal error." })
+            return;
+            });
+        } else {
+        res.status(404);
+        res.json({ err: "User with the selected name already exists." })
+        }    
+        res.json({ msg: "Team Saved Suceffully" });
+    });
+
     return router;
 };
 
