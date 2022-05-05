@@ -12,7 +12,7 @@
         <h6 class="wow" data-wow-delay="0.3s">Use one of our many features</h6>
       </div>
     </div>
-    <div class="d-flex align-items-center content-height w-100" style="margin-top:75px; margin-bottom:75px;">
+    <div *ngIf="user.role == 'ADMIN'" class="d-flex align-items-center content-height w-100" style="margin-top:75px; margin-bottom:75px;">
       <div class="row flex-center w-100 flex-row">
         <button class="lftbut big" mdbBtn type="button" rounded="true" mdbWavesEffect>
           <a href="/createuser">
@@ -21,7 +21,7 @@
                 src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp" alt="Generic placeholder image" />
               <div class="media-body">
                 <h5 class="mt-0 font-weight-bold">
-                  Create User
+                  Create Users
                   <button *ngIf="user.role == 'ADMIN'" class="userrole ml-2 mt-1" mdbBtn type="button" size="sm">
                     admin feature
                   </button>
@@ -42,21 +42,27 @@
         </button>
       </div>
       <div class="row flex-center w-100 flex-row">
-        <button class="rgtbut small" mdbBtn type="button" rounded="true" mdbWavesEffect>
-          <a href="/profile">
-            <div class="media">
-              <div class="media-body">
-                <h5 class="mt-0 mb-1 font-weight-bold">View profile</h5>
-                This feature allows any user to check the current state of their profile, such as agenda and tasks.
-              </div>
-              <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
-                alt="Generic placeholder image" />
+        <button class="rgtbut big" mdbBtn type="button" rounded="true" mdbWavesEffect>
+          <a href="/createteam">
+          <div class="media">
+            <div class="media-body">
+              <h5 class="mt-0 font-weight-bold">Create Teams
+                <button *ngIf="user.role == 'ADMIN'" class="userrole ml-2 mt-1" mdbBtn type="button" size="sm">
+                  admin feature
+                  </button>
+              </h5>
+              <p>
+                This feature allows an administrator to create projects.
+              </p>
             </div>
-          </a>
+            <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
+              alt="Generic placeholder image" />
+          </div>
+        </a>
         </button>
       </div>
     </div>
-    <div class="d-flex align-items-center content-height w-100" style="margin-top:75px; margin-bottom:75px;">
+    <div *ngIf="user.role == 'ADMIN'" class="d-flex align-items-center content-height w-100" style="margin-top:75px; margin-bottom:75px;">
       <div class="row flex-center w-100 flex-row">
         <button class="lftbut small" mdbBtn type="button" rounded="true" mdbWavesEffect>
           <a href="/projects">
@@ -101,42 +107,35 @@
     <div class="d-flex align-items-center content-height w-100" style="margin-top:75px; margin-bottom:75px;">
       <div class="row flex-center w-100 flex-row">
         <button class="lftbut big" mdbBtn type="button" rounded="true" mdbWavesEffect>
+          <a href="/createtask">
           <div class="media">
-            <img class="d-flex align-self-center mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
-              alt="Generic placeholder image" />
+            <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
+            alt="Generic placeholder image" />
             <div class="media-body">
-              <h5 class="mt-0 font-weight-bold">
-                Create User<button class="userrole ml-2 mt-1" mdbBtn type="button" size="sm">
-                  admin feature
-                </button>
-              </h5>
-              <p>
-                This feature allows you, as an administrator, to create a new user
-                of the platform. You are needed to fill a form which requires the
-                user's name, user's password and user's role (default is a normal
-                user). After completion of the form, a new user object is added to
-                our database.
-              </p>
-              <p class="mb-0">
-                To use the created user object, first login to our page using the
-                information previously filled in the form.
-              </p>
+              <h5 class="mt-0 mb-1 font-weight-bold">Create tasks</h5>
+              This feature allows any user to manage their given tasks related to their
+              projects.
             </div>
           </div>
+          </a>
         </button>
       </div>
       <div class="row flex-center w-100 flex-row">
         <button class="rgtbut small" mdbBtn type="button" rounded="true" mdbWavesEffect>
-          <a href="/tasks">
-          <div class="media">
-            <div class="media-body">
-              <h5 class="mt-0 mb-1 font-weight-bold">Link tasks to Projects</h5>
-              This feature allows any user to manage their given tasks related to their
-              projects.
-            </div>
-            <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
+          <a href="/tasklist">
+            <div class="media">
+              <div class="media-body">
+                <h5 class="mt-0 font-weight-bold">
+                  Edit tasks
+                </h5>
+                <p>
+                  This feature allows you, as our user, to edit the existing tasks in our system, such as projects and users
+                  possibly associated to it.
+                </p>
+              </div>
+              <img class="d-flex align-self-center mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
               alt="Generic placeholder image" />
-          </div>
+            </div>
           </a>
         </button>
       </div>
