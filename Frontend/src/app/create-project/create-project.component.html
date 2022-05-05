@@ -9,7 +9,8 @@
       </div>
     </div>
     <button class="lftbut" mdbBtn type="button" rounded="true">
-      <form class="d-flex flex-column text-center" [formGroup]="projectForm" (ngSubmit)="onSubmit()" style="margin:50px;">
+      <form class="d-flex flex-column text-center" [formGroup]="projectForm" (ngSubmit)="onSubmit()"
+        style="margin:50px;">
         <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Create Project</h4>
         <div class="form-group">
           <input type="text" formControlName="name" placeholder="Name" class="form-control"
@@ -20,41 +21,54 @@
             <div *ngIf="f['name'].errors['pattern']">Name must be alphanumeric</div>
           </div>
         </div>
-        <div class="form-group">
-            <input type="text" formControlName="acronym" placeholder="Acronym" class="form-control"
-              [ngClass]="{ 'is-invalid': submitted && f['acronym'].errors }"/>
-            <div *ngIf="submitted && f['acronym'].errors" class="invalid-feedback">
-              <div *ngIf="f['acronym'].errors['required']">Acronym is required</div>
-              <div *ngIf="f['acronym'].errors['minlength']">Acronym must have exactly 3 characters</div>
-              <div *ngIf="f['acronym'].errors['pattern']">Acronym must have exactly 3 alphanumeric characters of length</div>
-            </div>
-          </div>
-          
 
-          <div class="form-group">
-            <mat-form-field appearance="fill">
-              <mat-label>Enter a date range</mat-label>
-              <mat-date-range-input [formGroup]="range" [rangePicker]="picker2">
-                <input matStartDate formControlName="start" placeholder="Start date">
-                <input matEndDate formControlName="end" placeholder="End date">
-              </mat-date-range-input>
-              <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-              <mat-date-range-picker #picker></mat-date-range-picker>
-            
-              <mat-error *ngIf="range.controls['start'].hasError('matStartDateInvalid')">Invalid start date</mat-error>
-              <mat-error *ngIf="range.controls['end'].hasError('matEndDateInvalid')">Invalid end date</mat-error>
-            </mat-form-field>
-            <div *ngIf="submitted && f['endDate'].errors" class="invalid-feedback">
-              <div *ngIf="f['endDate'].errors['incorrect']">Invalid date</div>
+        <div class="form-group">
+          <input type="text" formControlName="acronym" placeholder="Acronym" class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f['acronym'].errors }" />
+          <div *ngIf="submitted && f['acronym'].errors" class="invalid-feedback">
+            <div *ngIf="f['acronym'].errors['required']">Acronym is required</div>
+            <div *ngIf="f['acronym'].errors['minlength']">Acronym must have exactly 3 characters</div>
+            <div *ngIf="f['acronym'].errors['pattern']">Acronym must have exactly 3 alphanumeric characters of length
             </div>
           </div>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field>
+            <input matInput [ngxMatDatetimePicker]="picker" placeholder="Begin Date" formControlName="beginDate"
+              [min]="minDate" [max]="maxDate" [disabled]="disabled" [ngClass]="{ 'is-invalid': submitted && f['beginDate'].errors }">
+            <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+              [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
+            </ngx-mat-datetime-picker>
+            <div *ngIf="submitted && f['beginDate'].errors" class="invalid-feedback">
+              <div *ngIf="f['beginDate'].errors['notValidWithCurrentDate']">Begin date needs to be after the current date</div>
+            </div>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field>
+            <input matInput [ngxMatDatetimePicker]="picker2" placeholder="End Date" formControlName ="endDate"
+               [min]="minDate" [max]="maxDate" [disabled]="disabled" [ngClass]="{ 'is-invalid': submitted && f['endDate'].errors }">
+            <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker2 [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+               [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond"
+               [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian" 
+               [disableMinute]="disableMinute" [hideTime]="hideTime">
+            </ngx-mat-datetime-picker>
+            <div *ngIf="submitted && f['endDate'].errors" class="invalid-feedback">
+              <div *ngIf="f['endDate'].errors['incorrect']">End date must be after begin date</div>
+            </div>
+         </mat-form-field>
+        </div>
 
         <button mdbBtn color="info" type="submit" mdbWavesEffect
           style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
           <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-            Submit
-          </button>
+          Submit
+        </button>
         <div *ngIf="error" class="alert alert-danger">
           {{ error }}
         </div>

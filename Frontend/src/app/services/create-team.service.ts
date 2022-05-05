@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
+import { User } from '../User';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { User } from '../User';
+import { Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CreateTeamService {
-  private createTeamURL: string = "/api/authentication/createteam";
+  private createTeamURL: string = "/api/teams";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -17,58 +18,54 @@ export class CreateTeamService {
   constructor(private router: Router,
     private http: HttpClient) { }
 
-
-  getMembers(): User[] {
+  // GET /api/getallusers
+  getAllUsers() {
     
-    const fake_member_1: User = {
-      id: "1",
-      username: "Grepolian",
-      accessToken: '',
-      refresh_token: '',
-      role: ''
-    };
-    const fake_member_2: User = {
-      id: "2",
-      username: "Beans",
-      accessToken: '',
-      refresh_token: '',
-      role: ''
-    };
-    const fake_member_3: User = {
-      id: "3",
-      username: "Endo",
-      accessToken: '',
-      refresh_token: '',
-      role: ''
-    };
-    const fake_member_4: User = {
-      id: "4",
-      username: "Belarmino",
-      accessToken: '',
-      refresh_token: '',
-      role: ''
-    };
-    const fake_member_5: User = {
-      id: "5",
-      username: "Siuuu",
-      accessToken: '',
-      refresh_token: '',
-      role: ''
-    };
-    return [fake_member_1, fake_member_2, fake_member_3, fake_member_4, fake_member_5]
-  }
-
-  getMemberById(id: String): User {
-    let everyMember = this.getMembers() as User[];
-    for (let i = 0; i < everyMember.length; i++) {
-      if (everyMember[i].id == id) {
-        return everyMember[i]
-      } 
+    const url = `/api/getusers`;
+    console.log("FETCHED ALL USERS")
+    return this.http.get<User[]>(url)
+      .pipe(
+        catchError(this.handleError)
+      );
     }
-    return {} as User
+
+
+  // GET /api/getteamusers/:teamname
+  getUsersFromTeamName(teamName: String) {
+    if (!teamName.trim()) {
+      // if not search term, return empty hero array.
+      return of([]);
+    }
+    
+    const url = `/api/getteamusers/?teamname=${teamName}`;
+    return this.http.get<User[]>(url).pipe(
+      catchError(this.handleError)
+    );
+      
+  }
+      
+  // GET /api/user/:id
+  getUserById(id: String) {
+    if (!id.trim()) {
+      // if not search term, return empty hero array.
+      return of([]);
+    }
+    
+    const url = `/api/user/id=${id}`;
+    return this.http.get<User>(url).pipe(
+      catchError(this.handleError)
+    );
   }
   
-  saveTeam(team_name: String, members: User[]): Observable<any> {
-    return this.http.post<any>(`${this.createTeamURL}/add`, {team_name, members}, this.httpOptions);
+  // POST /api/teams/add
+  saveTeam(team: any): Observable<any> {
+
+    return this.http.post<any>(`${this.createTeamURL}/add`, {team}, this.httpOptions);
   }
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error);
+ }
+
 }

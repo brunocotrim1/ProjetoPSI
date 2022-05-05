@@ -23,7 +23,7 @@ export class TaskDetailComponent implements OnInit {
   selectedItems: Array<any> = [];
   data: Array<any> = [];
   disabled = false;
-  ShowFilter = false;
+  ShowFilter = true;
   limitSelection = false;
   message = ''
   error = ''
@@ -75,7 +75,7 @@ export class TaskDetailComponent implements OnInit {
       idField: 'item_id',
       textField: 'item_text',
       selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
+      unSelectAllText: 'Unselect All',
       itemsShowLimit: 6,
       allowSearchFilter: this.ShowFilter
     };
