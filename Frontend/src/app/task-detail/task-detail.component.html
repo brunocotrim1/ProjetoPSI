@@ -85,7 +85,19 @@
           [settings]="dropdownSettings"
         >
         </ng-multiselect-dropdown>
-
+        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Check project</h4>
+        <div class="form-group">
+          <select class="form-select form-control browser-default custom-select" formControlName="project"
+            [ngClass]="{ 'is-invalid': submitted && f['project'].errors }" required>
+            <option selected disabled value="">Choose project...</option>
+            <option [ngValue]="proj" *ngFor="let proj of listOfProjects">
+              {{proj.name}}
+            </option>
+          </select>
+          <div class="invalid-feedback">
+            Please select a project
+          </div>
+        </div>
         <button
           mdbBtn
           class="saveBut"

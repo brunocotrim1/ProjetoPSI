@@ -13,13 +13,8 @@ const { translateAliases } = require("../models/User");
 
 
 
-async function init() {
-    // await User.collection.drop();
-    // await User.deleteMany({})
-   
-}
 
-init()
+
 
 module.exports = function (dbI) {
     router.get("/tasks", authenticateToken, async (req, res) => {
@@ -322,9 +317,14 @@ module.exports = function (dbI) {
           });
         }
       });
+
+      router.put("/updatetasktoproject", authenticateToken, async (req, res) => {
+        console.log(req.body.task)
+        console.log(req.body.project)
+        res.json({msg: "eqwopmosfdipsa."})
+      });
+
     return router;
-
-
 };
 
 
