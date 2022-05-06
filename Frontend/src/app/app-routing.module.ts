@@ -15,6 +15,7 @@ import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { AdminGuard } from './guards/admin.guard';
 import { CreateProjectComponent } from './create-project/create-project.component';
+import { CreateTaskComponent } from './create-task/create-task.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/mainmenu', pathMatch: 'full' },
@@ -27,7 +28,8 @@ const routes: Routes = [
   { path: 'linkprojectstoteams', component: LinkprojectstoteamsComponent, canActivate: [AuthenticationGuard]  },
   { path: 'projects', component: ProjectsComponent, canActivate: [AuthenticationGuard]  },
   { path: 'createproject', component: CreateProjectComponent, canActivate: [AuthenticationGuard]  },
-  { path: 'taskDetail/:id', component: TaskDetailComponent, canActivate: [AuthenticationGuard]  }
+  { path: 'taskDetail/:id', component: TaskDetailComponent, canActivate: [AuthenticationGuard]  },
+  { path: 'createtask', component: CreateTaskComponent, canActivate: [AuthenticationGuard]  }
 ];
 
 @NgModule({

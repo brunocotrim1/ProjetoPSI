@@ -6,6 +6,8 @@ import { User } from '../User';
 import { CreateTeamService } from '../services/create-team.service';
 import { Component, Input, OnInit, ɵConsole } from '@angular/core';
 import { IDropdownSettings, } from 'ng-multiselect-dropdown';
+import { tap } from 'rxjs/operators';
+
 
 
 @Component({
@@ -21,6 +23,7 @@ export class CreateTeamsComponent implements OnInit {
 
   dropdownList: any[] = [];
   
+  dropdownUsers: any[] = [];
 
   fillInDropdown(typeobject : string) {
     if(typeobject === "Project") {
@@ -34,7 +37,8 @@ export class CreateTeamsComponent implements OnInit {
           userList => {
               
             this.dropdownList = [...userList].map(x => x.username);
-              
+            
+            this.dropdownUsers = userList as any[];
           }
         );
 
@@ -48,10 +52,10 @@ export class CreateTeamsComponent implements OnInit {
     
 
 
-    ageRangeValidator(control: AbstractControl): { [key: string]: boolean } | null {
-      console.log(control.value.length)
+    DropdownValidator(control: AbstractControl): { [key: string]: boolean } | null {
+      
       if (control.value.length == 0) {
-        console.log("entered if")
+        
           return { 'dropdown-error': true };
       }
       return null;
@@ -60,8 +64,8 @@ export class CreateTeamsComponent implements OnInit {
 
     teamForm = new FormGroup(
       {
-        name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-z0-9]+$/i)]),
-        dropdown: new FormControl('', [this.ageRangeValidator])
+        name: new FormControl('', [Validators.required, Validators.minLength(4), Validators.pattern(/^[a-z0-9]+$/i)]),
+        dropdown: new FormControl('', [this.DropdownValidator])
       }
     );
   
@@ -84,30 +88,33 @@ export class CreateTeamsComponent implements OnInit {
   }
   
   onSubmit() {
-    //console.log("entrou no on submit")
+    
     this.submitted = true;
     //console.log(this.teamForm.invalid)
-    //console.log(this.f['dropdown'].errors)
-    if (this.f['name'].errors) {
-      // console.log(this.f['name'].errors['required'])
-      // console.log(this.f['name'].errors['minlength'])
-      // console.log(this.f['name'].errors['pattern'])
-    }
+   
+    
     
     if (this.teamForm.invalid) {
       // console.log("invalid")
       return;
     }
-    this.createteamservice.saveTeam({name: this.f["name"], members: ["A", "B", "C"]}).subscribe({
+    const fetchUsers = () => {
+      return this.dropdownUsers.filter(x => this.f["dropdown"].value.includes(x.username)).map((x:any) => x.id)
+    }
+    
+    
+    this.createteamservice.saveTeam({name: this.f["name"].value, members: fetchUsers()}).subscribe({
       next: () => {
-        //this.returnmessage = "New user created!";
+        
         this.loading = false;
       },
       error: error => {
-        //this.error = error;
+        console.log("hello");
         this.loading = false;
       }
-    });
+    })
+    
+    
     
     //   });
   }

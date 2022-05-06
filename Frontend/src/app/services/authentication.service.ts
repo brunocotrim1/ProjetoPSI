@@ -49,6 +49,7 @@ export class AuthenticationService {
         const user = this.loadUser();
         if(user == null)
         return;
+        
         user.accessToken = res.accessToken;
         this.storeUser(user);
         this.startRefreshTokenTimer();
@@ -79,6 +80,8 @@ export class AuthenticationService {
     this.refreshTokenTimeout = setTimeout(() => {this.refreshToken().subscribe()
     }, timeout);
   }
+
+  
 
   loadUser():User|null {
     const user: string | null = localStorage.getItem("user")
