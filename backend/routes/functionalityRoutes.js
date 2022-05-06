@@ -47,22 +47,17 @@ async function init() {
 
     const testUser2 = await User.findOne({ username: "miguel" });
 
+    // RESET TEAMS
+    await Team.deleteMany({}); 
+
     const testTeams = [
         {
             name: "Team 1",
-<<<<<<< HEAD
-            users: [testUser.id,testUser2.id]
-        },
-        {
-            name: "Team 2",
-            users: [testUser2.id]
-=======
             members: [testUser.id, testUser2.id]
         },
         {
             name: "Team 2",
             members: [testUser.id]
->>>>>>> 48a558f7e528f113f70bfd623e9f57d61a3ef5c5
         },
         {
             name: "Team 3",
@@ -74,6 +69,7 @@ async function init() {
         await team.save().catch(function (err) { });
     }
 
+    
     const checkteams = await Team.find({});
 
     const testProject = [
@@ -96,6 +92,8 @@ async function init() {
         const proj = new Project(testProject[i]);
         await proj.save().catch(function (err) { });
     }
+
+    
 }
 
 init()
@@ -183,32 +181,6 @@ module.exports = function (dbI) {
 
     router.get("/getteam/:id", authenticateToken, async (req, res) => {
         await Team.findById(req.params.id)
-<<<<<<< HEAD
-        .then(async function (response) {
-            response = response.toObject();
-            for(let i = 0; i < response.users.length; i++){
-                response.users[i] = await User.findById(response.users[i])
-                .then(function (usr) {
-                    usr = usr.toObject();
-                    delete usr.password;
-                    delete usr.refreshToken;
-                    delete usr.accessToken;
-                    return usr;
-                }).catch(function (err) {
-                    res.status(404);
-                    throw err;
-                });
-            }
-            res.json(response);
-            return;
-        })
-        .catch(function (err) {
-            console.log(err)
-          res.status(404);
-          res.json({ err: "Not Found" });
-          return;
-        });
-=======
             .then(async function (response) {
                 response = response.toObject();
                 for (let i = 0; i < response.members.length; i++) {
@@ -233,7 +205,6 @@ module.exports = function (dbI) {
                 res.json({ err: "Not Found" });
                 return;
             });
->>>>>>> 48a558f7e528f113f70bfd623e9f57d61a3ef5c5
     });
 
     router.get("/getteams", authenticateToken, async (req, res) => {
@@ -278,7 +249,7 @@ module.exports = function (dbI) {
         console.log(req.params.id)
         let user = await User.findById(req.params.id).catch(function (err) {
             res.status(404);
-            res.json({ err: "Error" });
+            res.json({ err: "Error searching for user by id" });
             return;
         });;
         if (!user) {
@@ -294,8 +265,10 @@ module.exports = function (dbI) {
         delete user._id;
         res.json(user);
     });
+    
 
-    router.post("/saveTask", authenticateToken, async (req, res) => {
+
+    router.post("/tasks/add", authenticateToken, async (req, res) => {
         Task.updateOne(
             { _id: req.body._id },
             { $set: { usersAssigned: req.body.usersAssigned } }
@@ -316,68 +289,90 @@ module.exports = function (dbI) {
         res.json({ msg: "Task Saved Suceffully" });
     });
 
-    router.get("/api/getteamusers/:teamname", authenticateToken, async ({body: { title, body }}, res) => {
 
-        const team = async() => {
-            Team.findOne({name: req.params.teamname}).then(
-                function (response) {
-                    let users = team.users;
-                    let userList = [];
-                    for (let i = 0; i < users.length; i++) {
-
-                        let user = new User;
-                        user.id = users[i]._id,
-                        user.username = users[i].name
-                        
-                        userList.push(user)
-
-
-                    }
-                        
-                    res.json(userList)
-                    
-                    return
-                }).catch(function (err) {
-                    res.status(404);
-                    res.json({ err: "Error" });
-                    return;
-                });
-            }
-        team().then(function(v) {
-            res.send(v)
-        })
-        
+    router.post("/createtask/add", authenticateToken, async (req, res) => {
+        console.log("entered route")
+        await Task.create({ name: req.body.taskname,  usersAssigned: req.body.userID, progress: req.body.percentage, priority: req.body.priority})
+      .then(function (values) {
+        res.json(values);
+      })
+      .catch(function (err) {
+          console.log("TASK ALREADY EXISTS")
+        if (err.code == 11000) res.json({ masg: "Task already exists" });
+      });
     });
+
+    // router.get("/api/getteamusers/:teamname", authenticateToken, async ({body: { title, body }}, res) => {
+
+    //     const team = async() => {
+    //         Team.findOne({name: req.params.teamname}).then(
+    //             function (response) {
+    //                 let users = team.users;
+    //                 let userList = [];
+    //                 for (let i = 0; i < users.length; i++) {
+
+    //                     let user = new User;
+    //                     user.id = users[i]._id,
+    //                     user.username = users[i].name
+                        
+    //                     userList.push(user)
+
+
+    //                 }
+                        
+    //                 res.json(userList)
+                    
+    //                 return
+    //             }).catch(function (err) {
+    //                 res.status(404);
+    //                 res.json({ err: "Error" });
+    //                 return;
+    //             });
+    //         }
+    //     team().then(function(v) {
+    //         res.send(v)
+    //     })
+        
+    // });
     
     router.post("/teams/add", authenticateToken, async (req, res) => {
-        console.log("TRYING TO CREATE")
-        console.log(req.body.name)
-        console.log(req.body.members)
-        const teamExists = await Team.exists({ name: req.body.name })
-        .catch(function (err) {
-        res.status(404);
-        res.json({ err: "Internal error." })
-        return;
-        });
-        if (!teamExists) {
-        await Team.create(
-            {name: req.body.name, members: req.body.members }
-        )
-            .then(function (response) {
-            console.log(response)
-            res.json(response);
-            return;
-            })
-            .catch(function (err) {
-            res.status(404);
-            res.json({ err: "Internal error." })
-            return;
-            });
-        } else {
-        res.status(404);
-        res.json({ err: "User with the selected name already exists." })
-        }    
-        res.json({ msg: "Team Saved Suceffully" });
+       
+        await Team.create({ name: req.body.team.name })
+      .then(function (values) {
+        res.json(values);
+      })
+      .catch(function (err) {
+          console.log("ALREADY EXISTS")
+        if (err.code == 11000) res.json({ err: "Team already exists" });
+      });
+        
+        // console.log(req.body.team.members)
+        // const teamExists = Team.exists({ name: req.body.team.name })
+        // .catch(function (err) {
+        //     res.status(404);
+        //     res.json({ err: "Internal error." })
+        //     return;
+        // });
+        // console.log(teamExists)
+        // if (teamExists !== null) {
+        //     Team.insertMany([
+        //         {name: req.body.team.name, members: req.body.team.members }
+        //     ],
+        //     function(err, result) {
+        //       if (err) {
+        //         console.log(err)
+        //         res.send(err);
+        //       } else {
+        //         res.send(result);
+        //       }
+        //     })
+        // } else {
+        //     console.log("already exists")
+        //     res.status(404);
+        //     res.json({ err: "Team with the selected name already exists." })
+        //     return
+        // }    
+        
     });
 
     return router;
