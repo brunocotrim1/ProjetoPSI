@@ -1,4 +1,4 @@
-<app-navigbar currentComponent="criar-equipas" username={{user.username}} userrole={{user.role}}></app-navigbar>
+<app-navigbar currentComponent="createteam" username={{user.username}} userrole={{user.role}}></app-navigbar>
   
 <div class="mainContainer">
   <div style="margin-top:6%; margin-bottom:5%;">
@@ -34,9 +34,18 @@
           <div *ngIf="f['dropdown'].errors['dropdown-error']">Team must have at least one member</div>
         </div>
         <button id="create-team-button" class="add-team-but" mdbBtn type="submit" rounded="true" style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">Create Team</button>
-        <div *ngIf="submitted && !f['dropdown'].errors && !f['name'].errors">
+        <!-- <div *ngIf="submitted && !f['dropdown'].errors && !f['name'].errors">
           <div>Team created!</div>
-        </div>
+        </div> -->
+        
+      
+
+      <div *ngIf="success && returnmessage" class="alert alert-success">
+        {{ returnmessage }}
+      </div>
+      <div *ngIf="!success && returnmessage" class="alert alert-danger">
+        {{ returnmessage }}
+      </div>
       </form>
       
       

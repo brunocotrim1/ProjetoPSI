@@ -172,6 +172,7 @@
             </div>
             <div [ngSwitch]="view" class="calendar">
               <mwl-calendar-month-view
+              [refresh]="refresh"
                 *ngSwitchCase="'month'"
                 [viewDate]="viewDate"
                 [events]="events"
@@ -181,6 +182,7 @@
               >
               </mwl-calendar-month-view>
               <mwl-calendar-week-view
+              [refresh]="refresh"
                 *ngSwitchCase="'week'"
                 [viewDate]="viewDate"
                 [events]="events"
@@ -188,6 +190,7 @@
               >
               </mwl-calendar-week-view>
               <mwl-calendar-day-view
+              [refresh]="refresh"
                 *ngSwitchCase="'day'"
                 [viewDate]="viewDate"
                 [events]="events"

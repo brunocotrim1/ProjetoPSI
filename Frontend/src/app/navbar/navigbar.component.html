@@ -18,14 +18,66 @@
         <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
           Features<span class="caret"></span></a>
         <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
-          <a *ngIf="userrole == 'admin' && currentComponent == 'mainmenu'" class="dropdown-item waves-light" mdbWavesEffect href="/createuser">Create User</a>
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#">Another action</a>
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#">Something else here</a>
-          <div class="divider dropdown-divider"></div>
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#">Separated link</a>
+          <div *ngIf="currentComponent == 'mainmenu'">
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createuser">Create User</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createteam">Create Team</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createproject">Create Project</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/projects">Link Teams to Project</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/createtask">Create Task</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/tasklist" >Edit Task</a>
+          </div>
+          <div *ngIf="currentComponent == 'createuser'">
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/mainmenu">Main Menu</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createteam">Create Team</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createproject">Create Project</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/projects">Link Teams to Project</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/createtask">Create Task</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/tasklist" >Edit Task</a>
+          </div>
+          <div *ngIf="currentComponent == 'createproject'">
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/mainmenu">Main Menu</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createuser">Create User</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createteam">Create Team</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/projects">Link Teams to Project</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/createtask">Create Task</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/tasklist" >Edit Task</a>
+          </div>
+          <div *ngIf="currentComponent == 'createteam'">
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/mainmenu">Main Menu</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createuser">Create User</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createproject">Create Project</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/projects">Link Teams to Project</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/createtask">Create Task</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/tasklist" >Edit Task</a>
+          </div>
+          <div *ngIf="currentComponent == 'projects'">
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/mainmenu">Main Menu</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createuser">Create User</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createproject">Create Project</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createteam">Create Team</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/createtask">Create Task</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/tasklist" >Edit Task</a>
+          </div>
+          <div *ngIf="currentComponent == 'taskDetail'">
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/mainmenu">Main Menu</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createuser">Create User</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createproject">Create Project</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createteam">Create Team</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/projects">Link Teams to Project</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/createtask">Create Task</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/tasklist">List of tasks</a>
+          </div>
+          <div *ngIf="currentComponent == 'taskList'">
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/mainmenu">Main Menu</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createuser">Create User</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createproject">Create Project</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/createteam">Create Team</a>
+            <a *ngIf="userrole == 'ADMIN'" class="dropdown-item waves-light" mdbWavesEffect href="/projects">Link Teams to Project</a>
+            <a class="dropdown-item waves-light" mdbWavesEffect href="/createtask">Create Task</a>
+          </div>
         </div>
       </li>
-
+      
     </ul>
     <!-- Links -->
     <ul class="navbar-nav ml-auto">

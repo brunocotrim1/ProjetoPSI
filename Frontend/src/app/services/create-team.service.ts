@@ -33,10 +33,7 @@ export class CreateTeamService {
 
   // GET /api/getteamusers/:teamname
   getUsersFromTeamName(teamName: String) {
-    if (!teamName.trim()) {
-      // if not search term, return empty hero array.
-      return of([]);
-    }
+    
     
     const url = `/api/getteamusers/${teamName}`;
     return this.http.get<User[]>(url).pipe(
@@ -62,9 +59,7 @@ export class CreateTeamService {
   // POST /api/teams/add
   saveTeam(team: any): Observable<any> {
 
-    return this.http.post<any>(`${this.createTeamURL}/add`, {team}, this.httpOptions).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<any>(`${this.createTeamURL}/add`, {team}, this.httpOptions);
   }
 
   private handleError(error: any): Promise<any> {

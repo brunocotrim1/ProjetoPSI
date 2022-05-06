@@ -11,92 +11,10 @@ const Project = require("../models/Project");
 const Team = require("../models/Team");
 const { translateAliases } = require("../models/User");
 
-Team.collection.drop();
-Task.collection.drop();
-Project.collection.drop();
 
-async function init() {
-    // await User.collection.drop();
-    // await User.deleteMany({})
-    const testUser = await User.findOne({ username: "bruno" });
 
-    const tasks = [
-        {
-            name: "Task 1",
-            usersAssigned: [testUser._id],
-            progress: 33,
-            priority: "LOW",
-        },
-        {
-            name: "Task 2",
-            usersAssigned: [testUser._id],
-            progress: 15,
-            priority: "CRITICAL",
-        },
-        {
-            name: "Task 3",
-            usersAssigned: [testUser._id],
-            progress: 66,
-            priority: "MEDIUM",
-        },
-    ];
-    for (let i = 0; i < tasks.length; i++) {
-        const task = new Task(tasks[i]);
-        await task.save().catch(function (err) { });
-    }
 
-    const testUser2 = await User.findOne({ username: "miguel" });
 
-    // RESET TEAMS
-    await Team.deleteMany({}); 
-
-    const testTeams = [
-        {
-            name: "Team 1",
-            members: [testUser.id, testUser2.id]
-        },
-        {
-            name: "Team 2",
-            members: [testUser.id]
-        },
-        {
-            name: "Team 3",
-            users: [testUser2.id]
-        }
-    ];
-    for (let i = 0; i < testTeams.length; i++) {
-        const team = new Team(testTeams[i]);
-        await team.save().catch(function (err) { });
-    }
-
-    
-    const checkteams = await Team.find({});
-
-    const testProject = [
-        {
-            name: "Project 1",
-            acronym: "PT1",
-            linkedTeam: checkteams[0].id,
-        },
-        {
-            name: "Project 2",
-            acronym: "PT2",
-            linkedTeam: checkteams[1].id,
-        },
-        {
-            name: "Project 3",
-            acronym: "PT3",
-        },
-    ];
-    for (let i = 0; i < testProject.length; i++) {
-        const proj = new Project(testProject[i]);
-        await proj.save().catch(function (err) { });
-    }
-
-    
-}
-
-init()
 
 module.exports = function (dbI) {
     router.get("/tasks", authenticateToken, async (req, res) => {
@@ -110,7 +28,7 @@ module.exports = function (dbI) {
             res.json({ err: "User not found" });
             return;
         }
-        const tasks = await Task.find({ usersAssigned: user._id}).catch(function (err) {
+        const tasks = await Task.find({ usersAssigned: user._id }).catch(function (err) {
             res.status(404);
             res.json({ err: "Error" });
             return;
@@ -122,6 +40,18 @@ module.exports = function (dbI) {
         }
         res.json(tasks);
     });
+
+    router.get("/allTasks", authenticateToken, async (req, res) => {
+        const tasks = await Task.find({}).then(
+            function (tasks) {
+                res.json(tasks);
+            }
+        ).catch(function (err) {
+        });;
+
+
+    });
+
     router.get("/getusers", authenticateToken, async (req, res) => {
         const users = await User.find({}).catch(function (err) {
             res.status(404);
@@ -207,49 +137,50 @@ module.exports = function (dbI) {
             });
     });
 
+
     router.get("/getteams", authenticateToken, async (req, res) => {
         await Team.find({})
             .then(async function (response) {
-                for(let i = 0; i < response.length; i++){
+                for (let i = 0; i < response.length; i++) {
                     response[i] = response[i].toObject();
-                    for(let f = 0; f < response[i].members.length; f++){
+                    for (let f = 0; f < response[i].members.length; f++) {
                         response[i].members[f] = await User.findById(response[i].members[f])
-                        .then(function (usr) {
-                            usr = usr.toObject();
-                            delete usr.password;
-                            delete usr.refreshToken;
-                            delete usr.accessToken;
-                            return usr;
-                        }).catch(function (err) {
-                            res.status(404);
-                            throw err;
-                        });
-                    }  
+                            .then(function (usr) {
+                                usr = usr.toObject();
+                                delete usr.password;
+                                delete usr.refreshToken;
+                                delete usr.accessToken;
+                                return usr;
+                            }).catch(function (err) {
+                                res.status(404);
+                                throw err;
+                            });
+                    }
                 }
-            res.json(response);
-        })
-        .catch(function (err) {
-          res.status(404);
-          res.json({ err: "Not Found" });
-        });;
+                res.json(response);
+            })
+            .catch(function (err) {
+                res.status(404);
+                res.json({ err: "Not Found" });
+            });;
     });
 
     router.get("/getusers", authenticateToken, async (req, res) => {
         await User.find({})
-        .then(function (response) {
-          res.json(response);
-        })
-        .catch(function (err) {
-          res.status(404);
-          res.json({ err: "Not Found" });
-        });;
+            .then(function (response) {
+                res.json(response);
+            })
+            .catch(function (err) {
+                res.status(404);
+                res.json({ err: "Not Found" });
+            });;
     });
 
     router.get("/user/:id", authenticateToken, async (req, res) => {
         console.log(req.params.id)
         let user = await User.findById(req.params.id).catch(function (err) {
             res.status(404);
-            res.json({ err: "Error searching for user by id" });
+            res.json({ err: "Error" });
             return;
         });;
         if (!user) {
@@ -265,20 +196,19 @@ module.exports = function (dbI) {
         delete user._id;
         res.json(user);
     });
-    
 
-
-    router.post("/tasks/add", authenticateToken, async (req, res) => {
+    router.post("/saveTask", authenticateToken, async (req, res) => {
         Task.updateOne(
             { _id: req.body._id },
-            { $set: { usersAssigned: req.body.usersAssigned } }
+            { $set: { usersAssigned: req.body.usersAssigned,beginDate: new Date(req.body.beginDate),endDate:new Date(req.body.endDate) } }
         )
             .then(function (response) {
                 if (response.matchedCount == 0) {
                     res.status(404);
                     res.json({ err: "Task not found" });
                     return;
-                }
+                }else
+                res.json({ msg: "Task Saved Suceffully" });
             })
             .catch(function (err) {
                 res.status(404);
@@ -286,94 +216,127 @@ module.exports = function (dbI) {
                 return;
             });
 
-        res.json({ msg: "Task Saved Suceffully" });
     });
-
-
     router.post("/createtask/add", authenticateToken, async (req, res) => {
-        console.log("entered route")
-        await Task.create({ name: req.body.taskname,  usersAssigned: req.body.userID, progress: req.body.percentage, priority: req.body.priority})
-      .then(function (values) {
-        res.json(values);
-      })
-      .catch(function (err) {
-          console.log("TASK ALREADY EXISTS")
-        if (err.code == 11000) res.json({ masg: "Task already exists" });
-      });
+        console.log("TRYING TO CREATE TASK")
+            
+        
+       
+        
+        await Task.create({ name: req.body.taskname, priority: req.body.priority, percentage: req.body.percentage, progress: 0, userID: req.body.userID.id})
+        
+            .then(function (response) {
+                console.log(response)
+                res.json({ msg: "Task Saved Suceffully" });
+                return
+            })
+            .catch(function (err) {
+                
+                console.log(err);
+                res.json({ err: "Internal error." })
+                return;
+            });
+            
+    
     });
 
-    // router.get("/api/getteamusers/:teamname", authenticateToken, async ({body: { title, body }}, res) => {
-
-    //     const team = async() => {
-    //         Team.findOne({name: req.params.teamname}).then(
-    //             function (response) {
-    //                 let users = team.users;
-    //                 let userList = [];
-    //                 for (let i = 0; i < users.length; i++) {
-
-    //                     let user = new User;
-    //                     user.id = users[i]._id,
-    //                     user.username = users[i].name
-                        
-    //                     userList.push(user)
-
-
-    //                 }
-                        
-    //                 res.json(userList)
-                    
-    //                 return
-    //             }).catch(function (err) {
-    //                 res.status(404);
-    //                 res.json({ err: "Error" });
-    //                 return;
-    //             });
-    //         }
-    //     team().then(function(v) {
-    //         res.send(v)
-    //     })
-        
-    // });
     
     router.post("/teams/add", authenticateToken, async (req, res) => {
-       
-        await Team.create({ name: req.body.team.name })
-      .then(function (values) {
-        res.json(values);
-      })
-      .catch(function (err) {
-          console.log("ALREADY EXISTS")
-        if (err.code == 11000) res.json({ err: "Team already exists" });
-      });
+        console.log("TRYING TO CREATE TEAM")
+            
         
-        // console.log(req.body.team.members)
-        // const teamExists = Team.exists({ name: req.body.team.name })
-        // .catch(function (err) {
-        //     res.status(404);
-        //     res.json({ err: "Internal error." })
-        //     return;
-        // });
-        // console.log(teamExists)
-        // if (teamExists !== null) {
-        //     Team.insertMany([
-        //         {name: req.body.team.name, members: req.body.team.members }
-        //     ],
-        //     function(err, result) {
-        //       if (err) {
-        //         console.log(err)
-        //         res.send(err);
-        //       } else {
-        //         res.send(result);
-        //       }
-        //     })
-        // } else {
-        //     console.log("already exists")
-        //     res.status(404);
-        //     res.json({ err: "Team with the selected name already exists." })
-        //     return
-        // }    
+    
         
+        await Team.create({ name: req.body.team.name, members: req.body.team.members})
+        
+            .then(function (response) {
+                console.log(response)
+                res.json({ msg: "Team Saved Suceffully" });
+                return
+            })
+            .catch(function (err) {
+                
+                console.log(err);
+                res.json({ err: "Internal error." })
+                return;
+            });
+            
+    
     });
+
+
+    router.post("/addproject", authenticateToken, async (req, res) => {
+        console.log(req.body);
+        await Project.create({ name: req.body.username, acronym: req.body.acronym, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate) })
+            .then(function (response) {
+                res.json({ msg: "Projeto criado com sucesso" });
+                return;
+            })
+            .catch(function (err) {
+                console.log(err);
+                res.status(404);
+                res.json({ err: "Projeto ja existe" })
+                return;
+            })
+    });
+
+    router.put("/updateteam/:id", authenticateToken, async (req, res) => {
+        console.log(req.params.id)
+        console.log(req.body.members)
+        if (req.body.members.length == 0) {
+          await Team.updateOne({ _id: req.params.id }, { $unset: {members: []}})
+          .then(function (response) {
+            if (response.matchedCount == 0){
+              console.log("Dont exist")
+              res.status(404)
+              res.json({msg: "Team doesn't exist on DB."})
+            } else {
+              console.log("All good")
+              console.log(response)
+              res.json({msg: "Team cleared on DB updated."})
+            }
+          }).catch(function(exception){
+            console.log("VERY BAD cleaning")
+            res.status(500)
+            res.json({msg: "Couldnt update team", error: exception.message})
+          });
+        } else {
+          ids = [];
+          for(let i = 0; i < req.body.members.length; i++) {
+            if(req.body.members[i].id) {
+                ids.push(req.body.members[i].id);
+            }
+            else {
+              ids.push(req.body.members[i]._id)
+            }
+          }
+          console.log(ids);
+          console.log(req.body.members);
+          await Team.updateOne({ _id: req.params.id }, { $set: {members: ids}})
+          .then(function (response) {
+            if (response.matchedCount == 0){
+              console.log("Dont exist")
+              res.status(404)
+              res.json({msg: "Team doesn't exist on DB."})
+            } else {
+              console.log("All good")
+              console.log(response)
+              res.json({msg: "Team info on DB updated."})
+            }
+          }).catch(function(exception){
+            console.log(exception);
+            console.log("VERY BAD putting")
+            res.status(500)
+            res.json({msg: "Couldnt update team", error: exception.message})
+          });
+        }
+      });
+
+      router.put("/updatetasktoproject", authenticateToken, async (req, res) => {
+        console.log(req.body.task)
+        console.log(req.body.project)
+        res.json({msg: "eqwopmosfdipsa."})
+      });
 
     return router;
 };

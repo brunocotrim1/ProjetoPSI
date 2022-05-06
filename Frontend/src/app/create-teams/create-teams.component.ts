@@ -25,6 +25,10 @@ export class CreateTeamsComponent implements OnInit {
   
   dropdownUsers: any[] = [];
 
+  returnmessage = '';
+  success = false;
+
+
   fillInDropdown(typeobject : string) {
     if(typeobject === "Project") {
       //ir fazer getallprojects do service do project
@@ -106,10 +110,14 @@ export class CreateTeamsComponent implements OnInit {
     this.createteamservice.saveTeam({name: this.f["name"].value, members: fetchUsers()}).subscribe({
       next: () => {
         
+        this.success = true
+        this.returnmessage = 'Team created!';
         this.loading = false;
       },
-      error: error => {
-        console.log("hello");
+      error: (error) => {
+        
+        this.success = false
+        this.returnmessage = error;
         this.loading = false;
       }
     })

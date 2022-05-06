@@ -12,17 +12,14 @@ import { MAT_DATE_LOCALE, ThemePalette } from '@angular/material/core';
   templateUrl: './create-project.component.html',
   styleUrls: ['./create-project.component.scss']
 })
-
 export class CreateProjectComponent implements OnInit {
 
-  range = new FormGroup({
-    start: new FormControl(),
-    end: new FormControl(),
-  });
   projectForm = new FormGroup(
     {
     name: new FormControl('', [Validators.required, Validators.minLength(4), Validators.pattern(/^[a-z0-9]+$/i)]),
     acronym: new FormControl('', [Validators.required, Validators.pattern(/^[a-z0-9]{3}$/i)]),
+    beginDate: new FormControl('',[Validators.required]),
+    endDate: new FormControl('',[]),
     }
   );
 
@@ -67,6 +64,20 @@ export class CreateProjectComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    console.log(this.f["beginDate"].value._d);
+
+    this.date = new Date();
+    this.date.setMinutes(this.date.getMinutes() - 1);
+    
+    if(this.f["beginDate"].value._d < this.date) {
+      this.f['beginDate'].setErrors({'notValidWithCurrentDate': true});
+    }
+
+    if(this.f["endDate"].value._d !== null) {
+      if(this.f["endDate"].value._d < this.f["beginDate"].value._d)  {
+        this.f['endDate'].setErrors({'incorrect': true});
+      }
+    }
 
     if (this.projectForm.invalid) {
       return;

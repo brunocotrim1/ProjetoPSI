@@ -4,11 +4,11 @@ import { Observable } from 'rxjs';
 import { AuthenticationService } from '../services/authentication.service';
 import { User } from '../User';
 import { Task } from '../Task';
+import { Project } from '../Project';
 @Injectable({
   providedIn: 'root'
 })
 export class TaskDetailService {
-
 
   constructor(private http: HttpClient, private authenticationService: AuthenticationService) { }
   httpOptions = {
@@ -34,5 +34,10 @@ export class TaskDetailService {
   saveTask(task: any): Observable<any> {
     return this.http.post<any>('/api/saveTask', task, this.httpOptions);
   }
-
+  updateTaskToProject(task: Task, project: Project): Observable<any> {
+    return this.http.put<any>('/api/updatetasktoproject', {task,project}, this.httpOptions);
+  }
+  getProjects(): Observable<any>{
+    return this.http.get<any>(`/api/getprojects`, this.httpOptions);
+  }
 }
