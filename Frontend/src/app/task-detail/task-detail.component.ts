@@ -8,6 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../services/authentication.service';
 import { ThemePalette } from '@angular/material/core';
+import { Project } from '../Project';
 @Component({
   selector: 'app-task-detail',
   templateUrl: './task-detail.component.html',
@@ -16,8 +17,9 @@ import { ThemePalette } from '@angular/material/core';
 export class TaskDetailComponent implements OnInit {
   form = new FormGroup({
     usersform: new FormControl('', Validators.required),
-    beginDate: new FormControl('',[]),
-    endDate: new FormControl('',[]),
+    beginDate: new FormControl('', []),
+    endDate: new FormControl('', []),
+    project: new FormControl('', Validators.required),
   });
   @ViewChild('picker') picker: any;
   @ViewChild('picker') picker2: any;
@@ -50,6 +52,15 @@ export class TaskDetailComponent implements OnInit {
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
+
+  loading = false;
+  submitted = false;
+  returnUrl!: string;
+  showUnasignedInfo = false;
+  listOfProjects = {} as Project[];
+  listofAvailableProjects = {} as Project[];
+  returnmessage = '';
+
   ngOnInit(): void {
     this.user = this.taskDetailService.getUser();
     const id = this.route.snapshot.paramMap.get('id')!;
@@ -76,8 +87,33 @@ export class TaskDetailComponent implements OnInit {
             } this.f['usersform'].setValue(this.selectedItems);
             this.task.beginDate = new Date(this.task.beginDate);
             this.task.endDate = new Date(this.task.endDate);
-            this.f['beginDate'].setValue( this.task.beginDate);
+            this.f['beginDate'].setValue(this.task.beginDate);
             this.f['endDate'].setValue(this.task.endDate);
+
+            this.taskDetailService.getProjects()
+              .subscribe({
+                next: (project) => {
+                  this.listOfProjects = project;
+                  this.listofAvailableProjects = Array<Project>();
+                  for (let i = 0; i < this.listOfProjects.length; i++) {
+                    var isNotValidProject = false;
+                    for (let k = 0; k < this.listOfProjects[i].linkedTasks.length; k++) {
+                      console.log(this.listOfProjects[i].linkedTasks[k]);
+                      if (this.listOfProjects[i].linkedTasks[k] == task) {
+                        isNotValidProject = true;
+                      }
+                    }
+                    if (!isNotValidProject) {
+                      this.listofAvailableProjects.push(this.listOfProjects[i]);
+                    }
+                  }
+                  console.log(this.listofAvailableProjects);
+                }, error: error => {
+                  this.listOfProjects = {} as Project[];
+                  this.error = error;
+                  this.loading = false;
+                }
+              })
           },
           error: error => {
             this.task = {} as Task;
@@ -107,10 +143,10 @@ export class TaskDetailComponent implements OnInit {
 
 
   saveChanges() {
-    if(this.f['beginDate'].value._d){
+    if (this.f['beginDate'].value._d) {
       this.task.beginDate = new Date(this.f['beginDate'].value._d);
     }
-    if(this.f['endDate'].value._d){
+    if (this.f['endDate'].value._d) {
       this.task.endDate = new Date(this.f['endDate'].value._d);
     }
     this.task.usersAssigned = [];
@@ -129,5 +165,25 @@ export class TaskDetailComponent implements OnInit {
         this.error = error;
       }
     });
+    this.listofAvailableProjects = this.listofAvailableProjects.filter((item) => {
+      return item != this.f["project"].value
+    });
+    this.submitted = true;
+    if (this.form.invalid) {
+      return;
+    }
+    this.loading = true;
+    console.log("TASK:", this.task, this.f["project"].value);
+    this.taskDetailService.updateTaskToProject(this.task, this.f["project"].value)
+      .subscribe({
+        next: () => {
+          this.returnmessage = "task has been associated to project!";
+          this.loading = false;
+        },
+        error: error => {
+          this.error = error;
+          this.loading = false;
+        }
+      });
   }
 }

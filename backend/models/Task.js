@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Project = require("./Project");
 const TaskSchema = mongoose.Schema({
     name: {
         type: String,
@@ -24,5 +25,9 @@ const TaskSchema = mongoose.Schema({
     endDate: {
         type: Date,
     },
+    linkedProject: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project',
+    }
 });
 const Task = module.exports = mongoose.model("Task", TaskSchema);

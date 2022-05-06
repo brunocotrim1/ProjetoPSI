@@ -5,6 +5,7 @@ export interface Project {
     name: string;
     acronym: string;
     linkedTeam: string;
+    linkedTasks: Task[] | any;
     beginDate: Date;
     endDate: Date;
 }

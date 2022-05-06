@@ -11,95 +11,10 @@ const Project = require("../models/Project");
 const Team = require("../models/Team");
 const { translateAliases } = require("../models/User");
 
-Team.collection.drop();
-Task.collection.drop();
-Project.collection.drop();
 
-async function init() {
-    // await User.collection.drop();
-    // await User.deleteMany({})
-    const testUser = await User.findOne({ username: "bruno" });
 
-    const tasks = [
-        {
-            name: "Task 1",
-            usersAssigned: [testUser._id],
-            progress: 33,
-            priority: "LOW",
-            beginDate: new Date().setDate(new Date().getDate()+4),
-            
-            endDate: new Date().setDate(new Date().getDate()+6),
-        },
-        {
-            name: "Task 2",
-            usersAssigned: [testUser._id],
-            progress: 15,
-            priority: "CRITICAL",
-            beginDate: new Date().setDate(new Date().getDate()+3),
-            
-            endDate: new Date().setDate(new Date().getDate()+2),
-        },
-        {
-            name: "Task 3",
-            usersAssigned: [testUser._id],
-            progress: 66,
-            priority: "MEDIUM",
-            beginDate: new Date().setDate(new Date().getDate()+10),
-            
-            endDate: new Date().setDate(new Date().getDate()+11),
-        },
-    ];
-    for (let i = 0; i < tasks.length; i++) {
-        const task = new Task(tasks[i]);
-        await task.save().catch(function (err) { });
-    }
 
-    const testUser2 = await User.findOne({ username: "miguel" });
 
-    const testTeams = [
-        {
-            name: "Team 1",
-            users: [testUser.id,testUser2.id]
-        },
-        {
-            name: "Team 2",
-            users: [testUser2.id]
-        },
-        {
-            name: "Team 3",
-            users: [testUser2.id]
-        }
-    ];
-    for (let i = 0; i < testTeams.length; i++) {
-        const team = new Team(testTeams[i]);
-        await team.save().catch(function (err) { });
-    }
-
-    const checkteams = await Team.find({});
-
-    const testProject = [
-        {
-            name: "Project 1",
-            acronym: "PT1",
-            linkedTeam: checkteams[0].id,
-        },
-        {
-            name: "Project 2",
-            acronym: "PT2",
-            linkedTeam: checkteams[1].id,
-        },
-        {
-            name: "Project 3",
-            acronym: "PT3",
-        },
-    ];
-    for (let i = 0; i < testProject.length; i++) {
-        const proj = new Project(testProject[i]);
-        await proj.save().catch(function (err) { });
-    }
-}
-
-init()
 
 module.exports = function (dbI) {
     router.get("/tasks", authenticateToken, async (req, res) => {
@@ -402,9 +317,14 @@ module.exports = function (dbI) {
           });
         }
       });
+
+      router.put("/updatetasktoproject", authenticateToken, async (req, res) => {
+        console.log(req.body.task)
+        console.log(req.body.project)
+        res.json({msg: "eqwopmosfdipsa."})
+      });
+
     return router;
-
-
 };
 
 
