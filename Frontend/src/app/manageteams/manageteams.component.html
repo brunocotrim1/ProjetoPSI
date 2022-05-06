@@ -1,0 +1,75 @@
+<div class="mainContainer" style="height: 80%;">
+    <div class ="bodycontainer" style="margin-top:2%;text-align: center;">
+        <div class="white-text">
+            <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">Manage Teams</h2>
+            <hr class="hr-light" data-wow-delay="0.3s">
+        </div>
+        <div [hidden]= "!teamsbody" class ="teamsbodyContainer" style="margin-bottom:10%;margin-top: 5%;">
+            <div *ngFor = "let t of listOfTeams" class="lftbut" mdbBtn type="button" rounded="true">
+                <div class="{{t.name}}">
+                    <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">{{t.name}}</h2>
+                    <hr class="hr-light wow" data-wow-delay="0.3s">
+                </div>
+                <div *ngFor="let m of t.members" class="membersList">
+                    <h3>{{m.username}}</h3>
+                </div>
+                <div class="teambuttons">
+                    <button (click)="this.setAddBody(true, t)" mdbBtn color="info" type="submit" mdbWavesEffect 
+                    style="background: linear-gradient(to top right, #04AA6D 0% ,#04AA6D 100%);">
+                    Add User
+                    </button>
+                    <button (click)="this.setRemBody(true, t)" mdbBtn color="info" type="submit" mdbWavesEffect
+                    style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
+                    Remove User
+                    </button>
+                </div>
+            </div>
+        </div>
+            
+        <div [hidden] = "!addbody" style="margin-bottom: 10%;text-align: center;max-width: 50%;">
+            <div class="lftbut" mdbBtn type="button" rounded="true">
+                <div class="white-text">
+                    <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">{{currTeam.name}}</h2>
+                    <hr class="hr-light" data-wow-delay="0.3s">
+                </div>
+                <form class="d-flex flex-column text-center" [formGroup]="userForm" (ngSubmit)="onSubmit()" style="margin:50px;">
+                    <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Which user you would like to add to this team?</h4>
+                    <div class="form-group" style="margin-bottom: 5%;">
+                        <input type="text" formControlName="username" placeholder="Username" class="form-control"
+                        value="username"/>
+                    </div>
+                    <div *ngIf="this.error" class="alert alert-danger mt-3 mb-0">
+                        {{ error }}
+                      </div>
+                    </form>
+                    <button (click)="this.saveChanges(true)" mdbBtn color="info" type="submit" mdbWavesEffect
+                    style="background: linear-gradient(to top right, #04AA6D 0%, #04AA6D 100%);">
+                    Save Changes
+                    </button>
+            </div>
+        </div>
+
+        <div [hidden] = "!rembody" style="margin-bottom: 10%;text-align: center;max-width: 50%;">
+            <div class="lftbut" mdbBtn type="button" rounded="true">
+                <div class="white-text">
+                    <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">{{currTeam.name}}</h2>
+                    <hr class="hr-light" data-wow-delay="0.3s">
+                </div>
+                <form class="d-flex flex-column text-center" [formGroup]="userForm" (ngSubmit)="onSubmit()" style="margin:50px;">
+                    <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Which user you would like to remove from this team?</h4>
+                    <div class="form-group" style="margin-bottom: 5%;">
+                        <input type="text" formControlName="username" placeholder="Username" class="form-control"/>
+                    </div>
+                    <div *ngIf="this.error" class="alert alert-danger mt-3 mb-0">
+                        {{ error }}
+                      </div>
+                </form>
+                <button (click)="this.saveChanges(false)" mdbBtn color="info" type="submit" mdbWavesEffect
+                style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
+                Save Changes
+                </button>
+            </div>
+        </div> 
+    </div>     
+    <app-footer style="width: 100% ;"></app-footer>
+</div>

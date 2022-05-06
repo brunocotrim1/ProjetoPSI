@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/User';
 import { Task } from 'src/app/Task';
@@ -7,6 +7,7 @@ import { debounceTime, distinctUntilChanged, Observable, of, Subject, switchMap 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../services/authentication.service';
+import { ThemePalette } from '@angular/material/core';
 @Component({
   selector: 'app-task-detail',
   templateUrl: './task-detail.component.html',
@@ -15,19 +16,36 @@ import { AuthenticationService } from '../services/authentication.service';
 export class TaskDetailComponent implements OnInit {
   form = new FormGroup({
     usersform: new FormControl('', Validators.required),
+    beginDate: new FormControl('',[]),
+    endDate: new FormControl('',[]),
   });
+  @ViewChild('picker') picker: any;
+  @ViewChild('picker') picker2: any;
   user = {} as User;
   task = {} as Task;
   users = [] as User[];
+
   dropdownSettings: any = {};
   selectedItems: Array<any> = [];
   data: Array<any> = [];
-  disabled = false;
   ShowFilter = true;
   limitSelection = false;
   message = ''
   error = ''
-  private searchTerms = new Subject<string>();
+  public minDate!: Date;
+  public maxDate!: Date;
+  public disabled = false;
+  public showSpinners = true;
+  public showSeconds = false;
+  public touchUi = false;
+  public enableMeridian = false;
+  public stepHour = 1;
+  public stepMinute = 1;
+  public stepSecond = 1;
+  public date: Date = new Date();
+  public color: ThemePalette = 'warn';
+  public disableMinute = false;
+  public hideTime = false;
   constructor(private taskDetailService: TaskDetailService, private route: ActivatedRoute, private http: HttpClient, private fb: FormBuilder) { }
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -56,7 +74,10 @@ export class TaskDetailComponent implements OnInit {
                 }
               }
             } this.f['usersform'].setValue(this.selectedItems);
-
+            this.task.beginDate = new Date(this.task.beginDate);
+            this.task.endDate = new Date(this.task.endDate);
+            this.f['beginDate'].setValue( this.task.beginDate);
+            this.f['endDate'].setValue(this.task.endDate);
           },
           error: error => {
             this.task = {} as Task;
@@ -86,6 +107,12 @@ export class TaskDetailComponent implements OnInit {
 
 
   saveChanges() {
+    if(this.f['beginDate'].value._d){
+      this.task.beginDate = new Date(this.f['beginDate'].value._d);
+    }
+    if(this.f['endDate'].value._d){
+      this.task.endDate = new Date(this.f['endDate'].value._d);
+    }
     this.task.usersAssigned = [];
     for (let i = 0; i < this.f['usersform'].value.length; i++) {
       for (let j = 0; j < this.users.length; j++) {

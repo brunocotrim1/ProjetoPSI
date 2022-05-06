@@ -7,7 +7,10 @@
    justify-content: space-between;
    margin-top: 100px;
   }
-  
+  .white-text{
+    flex-grow: 1;
+    max-height: 5%;
+  }
   .detailContainer {
     display: flex;
     padding: 0;
@@ -21,7 +24,6 @@
       rgba(68, 68, 68, 1) 100%
     );
     margin-bottom: 50px;
-    margin-top: 100px;
     border-radius: 20px;
     padding: 20px;
     z-index: 1;
@@ -31,7 +33,7 @@
     border-radius: 20px;
   }
   form{
-    max-width: 30rem;
+    max-width: 50%;
   }
   .calendar-header{
     display: flex;

@@ -285,7 +285,7 @@ module.exports = function (dbI) {
     router.post("/saveTask", authenticateToken, async (req, res) => {
         Task.updateOne(
             { _id: req.body._id },
-            { $set: { usersAssigned: req.body.usersAssigned } }
+            { $set: { usersAssigned: req.body.usersAssigned,beginDate: new Date(req.body.beginDate),endDate:new Date(req.body.endDate) } }
         )
             .then(function (response) {
                 if (response.matchedCount == 0) {
@@ -346,12 +346,65 @@ module.exports = function (dbI) {
             .catch(function (err) {
                 console.log(err);
                 res.status(404);
-                res.json({ err: "Internal error." })
+                res.json({ err: "Projeto ja existe" })
                 return;
             })
     });
 
+    router.put("/updateteam/:id", authenticateToken, async (req, res) => {
+        console.log(req.params.id)
+        console.log(req.body.members)
+        if (req.body.members.length == 0) {
+          await Team.updateOne({ _id: req.params.id }, { $unset: {members: []}})
+          .then(function (response) {
+            if (response.matchedCount == 0){
+              console.log("Dont exist")
+              res.status(404)
+              res.json({msg: "Team doesn't exist on DB."})
+            } else {
+              console.log("All good")
+              console.log(response)
+              res.json({msg: "Team cleared on DB updated."})
+            }
+          }).catch(function(exception){
+            console.log("VERY BAD cleaning")
+            res.status(500)
+            res.json({msg: "Couldnt update team", error: exception.message})
+          });
+        } else {
+          ids = [];
+          for(let i = 0; i < req.body.members.length; i++) {
+            if(req.body.members[i].id) {
+                ids.push(req.body.members[i].id);
+            }
+            else {
+              ids.push(req.body.members[i]._id)
+            }
+          }
+          console.log(ids);
+          console.log(req.body.members);
+          await Team.updateOne({ _id: req.params.id }, { $set: {members: ids}})
+          .then(function (response) {
+            if (response.matchedCount == 0){
+              console.log("Dont exist")
+              res.status(404)
+              res.json({msg: "Team doesn't exist on DB."})
+            } else {
+              console.log("All good")
+              console.log(response)
+              res.json({msg: "Team info on DB updated."})
+            }
+          }).catch(function(exception){
+            console.log(exception);
+            console.log("VERY BAD putting")
+            res.status(500)
+            res.json({msg: "Couldnt update team", error: exception.message})
+          });
+        }
+      });
     return router;
+
+
 };
 
 

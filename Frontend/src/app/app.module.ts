@@ -34,6 +34,7 @@ import { MatInputModule } from '@angular/material/input';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TasklistComponent } from './tasklist/tasklist/tasklist.component';
+import { ManageteamsComponent } from './manageteams/manageteams.component';
 
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
@@ -83,7 +84,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     LinkprojectstoteamsComponent,
     ProjectsComponent,
     CreateProjectComponent,
-    TasklistComponent
+    TasklistComponent,
+    ManageteamsComponent,
 
   ],
   imports: [
