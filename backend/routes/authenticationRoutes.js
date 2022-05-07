@@ -74,6 +74,24 @@ async function init() {
           
           endDate: new Date().setDate(new Date().getDate()+11),
       },
+      {
+        name: "Task 4",
+        usersAssigned: [testUser._id],
+        progress: 66,
+        priority: "MEDIUM",
+        beginDate: new Date().setDate(new Date().getDate()+10),
+        
+        endDate: new Date().setDate(new Date().getDate()+11),
+    },
+    {
+      name: "Task 5",
+      usersAssigned: [testUser._id],
+      progress: 66,
+      priority: "MEDIUM",
+      beginDate: new Date().setDate(new Date().getDate()+10),
+      
+      endDate: new Date().setDate(new Date().getDate()+11),
+  },
   ];
   for (let i = 0; i < tasks.length; i++) {
       const task = new Task(tasks[i]);

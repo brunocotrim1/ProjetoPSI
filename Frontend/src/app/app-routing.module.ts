@@ -10,7 +10,6 @@ import { MainMenuComponent } from './mainmenu/mainmenu.component';
 import { CreateTeamsComponent } from './create-teams/create-teams.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateUserComponent } from './createuser/createuser.component';
-import { LinkprojectstoteamsComponent } from './linkprojectstoteams/linkprojectstoteams.component';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { AdminGuard } from './guards/admin.guard';
@@ -27,7 +26,6 @@ const routes: Routes = [
   { path: 'createteam', component: CreateTeamsComponent,canActivate: [AuthenticationGuard]  },
   { path: 'profile', component: ProfileComponent,canActivate: [AuthenticationGuard]},
   { path: 'createuser', component: CreateUserComponent, canActivate: [AuthenticationGuard, AdminGuard]  },
-  { path: 'linkprojectstoteams', component: LinkprojectstoteamsComponent, canActivate: [AuthenticationGuard]  },
   { path: 'projects', component: ProjectsComponent, canActivate: [AuthenticationGuard]  },
   { path: 'createproject', component: CreateProjectComponent, canActivate: [AuthenticationGuard]  },
   { path: 'taskDetail/:id', component: TaskDetailComponent, canActivate: [AuthenticationGuard]  },

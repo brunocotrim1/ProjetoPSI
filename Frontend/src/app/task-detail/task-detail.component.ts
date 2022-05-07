@@ -15,12 +15,14 @@ import { Project } from '../Project';
   styleUrls: ['./task-detail.component.scss']
 })
 export class TaskDetailComponent implements OnInit {
+
   form = new FormGroup({
     usersform: new FormControl('', Validators.required),
     beginDate: new FormControl('', []),
     endDate: new FormControl('', []),
     project: new FormControl('', Validators.required),
   });
+
   @ViewChild('picker') picker: any;
   @ViewChild('picker') picker2: any;
   user = {} as User;
@@ -34,6 +36,7 @@ export class TaskDetailComponent implements OnInit {
   limitSelection = false;
   message = ''
   error = ''
+
   public minDate!: Date;
   public maxDate!: Date;
   public disabled = false;
@@ -57,9 +60,10 @@ export class TaskDetailComponent implements OnInit {
   submitted = false;
   returnUrl!: string;
   showUnasignedInfo = false;
-  listOfProjects = {} as Project[];
-  listofAvailableProjects = {} as Project[];
+  listOfProjects = [] as Project[];
+  currentProject = {} as Project;
   returnmessage = '';
+  isTaskRelated = false;
 
   ngOnInit(): void {
     this.user = this.taskDetailService.getUser();
@@ -84,36 +88,29 @@ export class TaskDetailComponent implements OnInit {
                   this.selectedItems.push(this.data[i]);
                 }
               }
-            } this.f['usersform'].setValue(this.selectedItems);
-            this.task.beginDate = new Date(this.task.beginDate);
-            this.task.endDate = new Date(this.task.endDate);
-            this.f['beginDate'].setValue(this.task.beginDate);
-            this.f['endDate'].setValue(this.task.endDate);
+            } 
+            this.f['usersform'].setValue(this.selectedItems);
+            if (this.task.beginDate && this.task.endDate){
+              this.task.beginDate = new Date(this.task.beginDate);
+              this.task.endDate = new Date(this.task.endDate);
+              this.f['beginDate'].setValue(this.task.beginDate);
+              this.f['endDate'].setValue(this.task.endDate);
+            }
 
             this.taskDetailService.getProjects()
               .subscribe({
                 next: (project) => {
                   this.listOfProjects = project;
-                  this.listofAvailableProjects = Array<Project>();
-                  for (let i = 0; i < this.listOfProjects.length; i++) {
-                    var isNotValidProject = false;
-                    for (let k = 0; k < this.listOfProjects[i].linkedTasks.length; k++) {
-                      console.log(this.listOfProjects[i].linkedTasks[k]);
-                      if (this.listOfProjects[i].linkedTasks[k] == task) {
-                        isNotValidProject = true;
-                      }
-                    }
-                    if (!isNotValidProject) {
-                      this.listofAvailableProjects.push(this.listOfProjects[i]);
-                    }
-                  }
-                  console.log(this.listofAvailableProjects);
                 }, error: error => {
-                  this.listOfProjects = {} as Project[];
+                  this.listOfProjects = [] as Project[];
                   this.error = error;
                   this.loading = false;
                 }
               })
+
+            if(this.task.linkedProject){
+              this.isTaskRelated = true;
+            }
           },
           error: error => {
             this.task = {} as Task;
@@ -124,9 +121,6 @@ export class TaskDetailComponent implements OnInit {
       error: error => {
       }
     })
-
-
-    //  this.selectedItems = [{ item_id: 4, item_text: 'Pune' }, { item_id: 6, item_text: 'Navsari' }];
     this.dropdownSettings = {
       singleSelection: false,
       idField: 'item_id',
@@ -139,10 +133,16 @@ export class TaskDetailComponent implements OnInit {
 
   }
 
+  removeLinkedProjectOfTask(){
+    this.f['project'].reset();
+    this.task.linkedProject = {} as Project;
+    this.isTaskRelated = false;
+  }
+
   get f() { return this.form.controls; }
 
-
   saveChanges() {
+
     if (this.f['beginDate'].value._d) {
       this.task.beginDate = new Date(this.f['beginDate'].value._d);
     }
@@ -157,33 +157,22 @@ export class TaskDetailComponent implements OnInit {
         }
       }
     }
+    
+    if(!this.f['project'].invalid && !this.isTaskRelated){
+      this.task.linkedProject = this.f['project'].value
+      this.isTaskRelated = true;
+    }
+
+
     this.taskDetailService.saveTask(this.task).subscribe({
       next: (msg) => {
         this.message = msg.msg;
+        setTimeout(() => {this.message = ''
+        }, 2*1000);
       },
       error: error => {
         this.error = error;
       }
     });
-    this.listofAvailableProjects = this.listofAvailableProjects.filter((item) => {
-      return item != this.f["project"].value
-    });
-    this.submitted = true;
-    if (this.form.invalid) {
-      return;
-    }
-    this.loading = true;
-    console.log("TASK:", this.task, this.f["project"].value);
-    this.taskDetailService.updateTaskToProject(this.task, this.f["project"].value)
-      .subscribe({
-        next: () => {
-          this.returnmessage = "task has been associated to project!";
-          this.loading = false;
-        },
-        error: error => {
-          this.error = error;
-          this.loading = false;
-        }
-      });
   }
 }

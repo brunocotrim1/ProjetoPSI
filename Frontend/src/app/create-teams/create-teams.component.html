@@ -1,5 +1,5 @@
 <app-navigbar currentComponent="createteam" username={{user.username}} userrole={{user.role}}></app-navigbar>
-  
+
 <div class="mainContainer">
   <div style="margin-top:6%; margin-bottom:5%;">
     <div class="enjoyapp text-center">
@@ -8,63 +8,38 @@
         <hr class="hr-light wow" data-wow-delay="0.3s">
       </div>
     </div>
-    
-    <div class="lftbut">
+    <button class="lftbut" mdbBtn type="button" rounded="true">
       <form class="d-flex flex-column text-center" [formGroup]="teamForm" (ngSubmit)="onSubmit()" style="margin:50px;">
-        <input mdbInput placeholder="Team name" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" type="text" id="form58" class="form-control">        
-        
-        <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
-          <div *ngIf="f['name'].errors['required']">Name is required</div>
-          <div *ngIf="f['name'].errors['minlength']">Name must be at least 4 characters long</div>
-          <div *ngIf="f['name'].errors['pattern']">Password must be alphanumeric</div>
+        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Create team</h4>
+        <div class="form-group">
+          <input mdbInput placeholder="Team name" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f['name'].errors }" type="text" id="form58" class="form-control">
+          <div *ngIf="submitted && f['name'].errors" class="invalid-feedback">
+            <div *ngIf="f['name'].errors['required']">Name is required</div>
+            <div *ngIf="f['name'].errors['minlength']">Name must be at least 4 characters long</div>
+            <div *ngIf="f['name'].errors['pattern']">Password must be alphanumeric</div>
+          </div>
         </div>
-        <ng-multiselect-dropdown
-        [settings]="dropdownSettings"
-        [data]="dropdownList"
-        classes-btn="'btn-primary btn-block'" 
-        formControlName="dropdown"
-        placeholder="Select team members"
-        classes-btn="'btn-primary btn-block'"
-        
-        [ngClass]="{ 'is-invalid': submitted && f['dropdown'].errors }">
-        
-        </ng-multiselect-dropdown>
-
-        <div *ngIf="submitted && f['dropdown'].errors" class="invalid-feedback">
-          <div *ngIf="f['dropdown'].errors['dropdown-error']">Team must have at least one member</div>
+        <div class="form-group">
+          <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="dropdownList"
+            classes-btn="'btn-primary btn-block'" formControlName="dropdown" placeholder="Select team members"
+            classes-btn="'btn-primary btn-block'" [ngClass]="{ 'is-invalid': submitted && f['dropdown'].errors }">
+          </ng-multiselect-dropdown>
+          <div *ngIf="submitted && f['dropdown'].errors" class="invalid-feedback">
+            <div *ngIf="f['dropdown'].errors['dropdown-error']">Team must have at least one member</div>
+          </div>
         </div>
-        <button id="create-team-button" class="add-team-but" mdbBtn type="submit" rounded="true" style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">Create Team</button>
-        <!-- <div *ngIf="submitted && !f['dropdown'].errors && !f['name'].errors">
-          <div>Team created!</div>
-        </div> -->
-        
-      
-
-      <div *ngIf="success && returnmessage" class="alert alert-success">
-        {{ returnmessage }}
-      </div>
-      <div *ngIf="!success && returnmessage" class="alert alert-danger">
-        {{ returnmessage }}
-      </div>
+        <button mdbBtn color="info" type="submit" mdbWavesEffect style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          Submit
+        </button>
+        <div *ngIf="success && returnmessage" class="alert alert-success">
+          {{ returnmessage }}
+        </div>
+        <div *ngIf="!success && returnmessage" class="alert alert-danger">
+          {{ returnmessage }}
+        </div>
       </form>
-      
-      
-    </div>
-    
+    </button>
   </div>
   <app-footer style="width: 100%"></app-footer>
 </div>
-  
-  
-  
-  
-  
-
-
-
-
-
-  
-  
- 
-  

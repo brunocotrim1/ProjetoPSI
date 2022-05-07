@@ -1,112 +1,71 @@
-<app-navigbar
-  currentComponent="taskDetail"
-  username="{{ user.username }}"
-  userrole="{{ user.role }}"
-></app-navigbar>
+<app-navigbar currentComponent="taskDetail" username="{{ user.username }}" userrole="{{ user.role }}"></app-navigbar>
 <div class="mainContainer">
-  <div class="white-text">
-    <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">Task</h2>
-    <hr class="hr-light wow" data-wow-delay="0.3s" />
-  </div>
-  <div class="detailContainer" style="color: white">
-    <div class="tittle">
-      <h2>Name: {{ task.name }}</h2>
-
+  <div style="margin-top:6%; margin-bottom:5%;">
+    <div class="enjoyapp text-center">
+      <div class="white-text">
+        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">Task Details</h2>
+        <hr class="hr-light wow" data-wow-delay="0.3s">
+      </div>
+    </div>
+    <div class="detailContainer" style="color: white">
       <form [formGroup]="form">
-        Begin Date:
-        <mat-form-field>
-          <input
-            matInput
-            [ngxMatDatetimePicker]="picker"
-            placeholder="Begin Date"
-            formControlName="beginDate"
-            [min]="minDate"
-            [max]="maxDate"
-            [disabled]="disabled"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="$any(picker)"
-          ></mat-datepicker-toggle>
-          <ngx-mat-datetime-picker
-            #picker
-            [showSpinners]="showSpinners"
-            [showSeconds]="showSeconds"
-            [stepHour]="stepHour"
-            [stepMinute]="stepMinute"
-            [stepSecond]="stepSecond"
-            [touchUi]="touchUi"
-            [color]="color"
-            [enableMeridian]="enableMeridian"
-            [disableMinute]="disableMinute"
-            [hideTime]="hideTime"
-          >
-          </ngx-mat-datetime-picker>
-        </mat-form-field>
-        <br />
-
-        End Date:
-        <mat-form-field>
-          <input
-            matInput
-            [ngxMatDatetimePicker]="picker2"
-            placeholder="End Date"
-            formControlName="endDate"
-            [min]="minDate"
-            [max]="maxDate"
-            [disabled]="disabled"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="$any(picker2)"
-          ></mat-datepicker-toggle>
-          <ngx-mat-datetime-picker
-            #picker2
-            [showSpinners]="showSpinners"
-            [showSeconds]="showSeconds"
-            [stepHour]="stepHour"
-            [stepMinute]="stepMinute"
-            [stepSecond]="stepSecond"
-            [touchUi]="touchUi"
-            [color]="color"
-            [enableMeridian]="enableMeridian"
-            [disableMinute]="disableMinute"
-            [hideTime]="hideTime"
-          >
-          </ngx-mat-datetime-picker>
-        </mat-form-field>
-        <h4>Members:</h4>
-        <ng-multiselect-dropdown
-          name="Utilizadores"
-          [placeholder]="'Selected Users'"
-          [data]="data"
-          formControlName="usersform"
-          [disabled]="disabled"
-          [settings]="dropdownSettings"
-        >
-        </ng-multiselect-dropdown>
-        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Check project</h4>
-        <div class="form-group">
-          <select class="form-select form-control browser-default custom-select" formControlName="project"
-            [ngClass]="{ 'is-invalid': submitted && f['project'].errors }" required>
-            <option selected disabled value="">Choose project...</option>
-            <option [ngValue]="proj" *ngFor="let proj of listOfProjects">
-              {{proj.name}}
-            </option>
-          </select>
-          <div class="invalid-feedback">
-            Please select a project
-          </div>
+        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Name: {{ task.name }}</h4>
+        <div class="beginDate">
+          Begin Date:
+          <mat-form-field>
+            <input matInput [ngxMatDatetimePicker]="picker" formControlName="beginDate"
+              [min]="minDate" [max]="maxDate" [disabled]="disabled" />
+            <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+              [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
+            </ngx-mat-datetime-picker>
+          </mat-form-field>
         </div>
-        <button
-          mdbBtn
-          class="saveBut"
-          type="submit"
-          style="margin-left: 0"
-          (click)="saveChanges()"
-          rounded="true"
-          mdbWavesEffect
-        >
+        <div class="endDate">
+          End Date:
+          <mat-form-field>
+            <input matInput [ngxMatDatetimePicker]="picker2" formControlName="endDate"
+              [min]="minDate" [max]="maxDate" [disabled]="disabled" />
+            <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker2 [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+              [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
+            </ngx-mat-datetime-picker>
+          </mat-form-field>
+        </div>
+        <div class="taskMembers">
+          Members:
+          <ng-multiselect-dropdown name="Utilizadores" [placeholder]="'Selected Users'" [data]="data"
+            formControlName="usersform" [disabled]="disabled" [settings]="dropdownSettings">
+          </ng-multiselect-dropdown>
+        </div>
+        <div class="taskProject">
+          <div *ngIf="!isTaskRelated; else elseBlock">
+            Link a project to this task (Optional):
+            <div class="form-group">
+              <select class="form-select form-control browser-default custom-select" formControlName="project"
+                [ngClass]="{ 'is-invalid': submitted && f['project'].errors }" required>
+                <option selected disabled value="">Choose project...</option>
+                <option [ngValue]="proj" *ngFor="let proj of listOfProjects">
+                  {{proj.name}}
+                </option>
+              </select>
+              <div class="invalid-feedback">
+                Please select a project
+              </div>
+            </div>
+          </div>
+          <ng-template #elseBlock>
+            Linked project:
+            <button class="taskProjectButton" mdbBtn type="button" gradient="blue" rounded="true" mdbWavesEffect (click)="removeLinkedProjectOfTask()">
+              {{task.linkedProject.name}}
+              <mdb-icon style="margin-left: 10px;"fas icon="times"></mdb-icon>
+            </button>
+          </ng-template>
+        </div>
+        <button mdbBtn class="saveBut" type="submit" style="margin-left: 0" (click)="saveChanges()" rounded="true"
+          mdbWavesEffect>
           Save Changes
         </button>
         <div *ngIf="error" class="alert alert-danger mt-3 mb-0">

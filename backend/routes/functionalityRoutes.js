@@ -87,6 +87,15 @@ module.exports = function (dbI) {
                             throw err;
                         });
                 }
+                if(response.linkedProject){
+                    response.linkedProject = await Project.findById(response.linkedProject)
+                    .then(function (proj) {
+                        return proj;
+                    }).catch(function (err) {
+                        res.status(404);
+                        throw err;
+                    });
+                }
                 console.log(response);
                 res.json(response);
             })
@@ -198,145 +207,131 @@ module.exports = function (dbI) {
     });
 
     router.post("/saveTask", authenticateToken, async (req, res) => {
+        if(!req.body.linkedProject._id){
+            req.body.linkedProject._id = null;
+        }
+        console.log(req.body)
         Task.updateOne(
             { _id: req.body._id },
-            { $set: { usersAssigned: req.body.usersAssigned,beginDate: new Date(req.body.beginDate),endDate:new Date(req.body.endDate) } }
-        )
-            .then(function (response) {
-                if (response.matchedCount == 0) {
-                    res.status(404);
-                    res.json({ err: "Task not found" });
-                    return;
-                }else
-                res.json({ msg: "Task Saved Suceffully" });
-            })
-            .catch(function (err) {
+            { $set: { usersAssigned: req.body.usersAssigned, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate), linkedProject: req.body.linkedProject._id } }
+        ).then(function (response) {
+            if (response.matchedCount == 0) {
                 res.status(404);
-                res.json({ err: "Error" });
+                res.json({ err: "Task not found" });
                 return;
-            });
-
+            } else
+                res.json({ msg: "Task Saved Suceffully" });
+        })
+        .catch(function (err) {
+            res.status(404);
+            res.json({ err: "Error" });
+            return;
+        });
     });
     router.post("/createtask/add", authenticateToken, async (req, res) => {
-        console.log("TRYING TO CREATE TASK")
-            
-        
-       
-        
-        await Task.create({ name: req.body.taskname, priority: req.body.priority, percentage: req.body.percentage, progress: 0, userID: req.body.userID.id})
-        
-            .then(function (response) {
-                console.log(response)
-                res.json({ msg: "Task Saved Suceffully" });
-                return
-            })
-            .catch(function (err) {
-                
-                console.log(err);
-                res.json({ err: "Internal error." })
-                return;
-            });
-            
-    
+        await Task.create({ name: req.body.taskname, priority: req.body.priority, percentage: req.body.percentage, progress: 0, userID: req.body.userID.id })
+        .then(function (response) {
+            console.log(response)
+            res.json({ msg: "Task Saved Suceffully" });
+            return
+        })
+        .catch(function (err) {
+
+            console.log(err);
+            res.json({ err: "Internal error." })
+            return;
+        });
     });
 
-    
+
     router.post("/teams/add", authenticateToken, async (req, res) => {
-        console.log("TRYING TO CREATE TEAM")
-            
-        
-    
-        
-        await Team.create({ name: req.body.team.name, members: req.body.team.members})
-        
-            .then(function (response) {
-                console.log(response)
-                res.json({ msg: "Team Saved Suceffully" });
-                return
-            })
-            .catch(function (err) {
-                
-                console.log(err);
-                res.json({ err: "Internal error." })
-                return;
-            });
-            
-    
+        await Team.create({ name: req.body.team.name, members: req.body.team.members })
+        .then(function (response) {
+            console.log(response)
+            res.json({ msg: "Team Saved Suceffully" });
+            return
+        })
+        .catch(function (err) {
+
+            console.log(err);
+            res.json({ err: "Internal error." })
+            return;
+        });
     });
 
 
     router.post("/addproject", authenticateToken, async (req, res) => {
         console.log(req.body);
         await Project.create({ name: req.body.username, acronym: req.body.acronym, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate) })
-            .then(function (response) {
-                res.json({ msg: "Projeto criado com sucesso" });
-                return;
-            })
-            .catch(function (err) {
-                console.log(err);
-                res.status(404);
-                res.json({ err: "Projeto ja existe" })
-                return;
-            })
+        .then(function (response) {
+            res.json({ msg: "Projeto criado com sucesso" });
+            return;
+        })
+        .catch(function (err) {
+            console.log(err);
+            res.status(404);
+            res.json({ err: "Projeto ja existe" })
+            return;
+        })
     });
 
     router.put("/updateteam/:id", authenticateToken, async (req, res) => {
         console.log(req.params.id)
         console.log(req.body.members)
         if (req.body.members.length == 0) {
-          await Team.updateOne({ _id: req.params.id }, { $unset: {members: []}})
-          .then(function (response) {
-            if (response.matchedCount == 0){
-              console.log("Dont exist")
-              res.status(404)
-              res.json({msg: "Team doesn't exist on DB."})
-            } else {
-              console.log("All good")
-              console.log(response)
-              res.json({msg: "Team cleared on DB updated."})
-            }
-          }).catch(function(exception){
-            console.log("VERY BAD cleaning")
-            res.status(500)
-            res.json({msg: "Couldnt update team", error: exception.message})
-          });
+            await Team.updateOne({ _id: req.params.id }, { $unset: { members: [] } })
+                .then(function (response) {
+                    if (response.matchedCount == 0) {
+                        console.log("Dont exist")
+                        res.status(404)
+                        res.json({ msg: "Team doesn't exist on DB." })
+                    } else {
+                        console.log("All good")
+                        console.log(response)
+                        res.json({ msg: "Team cleared on DB updated." })
+                    }
+                }).catch(function (exception) {
+                    console.log("VERY BAD cleaning")
+                    res.status(500)
+                    res.json({ msg: "Couldnt update team", error: exception.message })
+                });
         } else {
-          ids = [];
-          for(let i = 0; i < req.body.members.length; i++) {
-            if(req.body.members[i].id) {
-                ids.push(req.body.members[i].id);
+            ids = [];
+            for (let i = 0; i < req.body.members.length; i++) {
+                if (req.body.members[i].id) {
+                    ids.push(req.body.members[i].id);
+                }
+                else {
+                    ids.push(req.body.members[i]._id)
+                }
             }
-            else {
-              ids.push(req.body.members[i]._id)
-            }
-          }
-          console.log(ids);
-          console.log(req.body.members);
-          await Team.updateOne({ _id: req.params.id }, { $set: {members: ids}})
-          .then(function (response) {
-            if (response.matchedCount == 0){
-              console.log("Dont exist")
-              res.status(404)
-              res.json({msg: "Team doesn't exist on DB."})
-            } else {
-              console.log("All good")
-              console.log(response)
-              res.json({msg: "Team info on DB updated."})
-            }
-          }).catch(function(exception){
-            console.log(exception);
-            console.log("VERY BAD putting")
-            res.status(500)
-            res.json({msg: "Couldnt update team", error: exception.message})
-          });
+            console.log(ids);
+            console.log(req.body.members);
+            await Team.updateOne({ _id: req.params.id }, { $set: { members: ids } })
+                .then(function (response) {
+                    if (response.matchedCount == 0) {
+                        console.log("Dont exist")
+                        res.status(404)
+                        res.json({ msg: "Team doesn't exist on DB." })
+                    } else {
+                        console.log("All good")
+                        console.log(response)
+                        res.json({ msg: "Team info on DB updated." })
+                    }
+                }).catch(function (exception) {
+                    console.log(exception);
+                    console.log("VERY BAD putting")
+                    res.status(500)
+                    res.json({ msg: "Couldnt update team", error: exception.message })
+                });
         }
-      });
+    });
 
-      router.put("/updatetasktoproject", authenticateToken, async (req, res) => {
+    router.put("/updatetasktoproject", authenticateToken, async (req, res) => {
         console.log(req.body.task)
         console.log(req.body.project)
-        res.json({msg: "eqwopmosfdipsa."})
-      });
+        res.json({ msg: "eqwopmosfdipsa." })
+    });
 
     return router;
 };

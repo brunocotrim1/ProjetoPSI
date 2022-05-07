@@ -21,7 +21,6 @@
             <div *ngIf="f['name'].errors['pattern']">Name must be alphanumeric</div>
           </div>
         </div>
-
         <div class="form-group">
           <input type="text" formControlName="acronym" placeholder="Acronym" class="form-control"
             [ngClass]="{ 'is-invalid': submitted && f['acronym'].errors }" />
@@ -32,7 +31,6 @@
             </div>
           </div>
         </div>
-
         <div class="form-group">
           <mat-form-field>
             <input matInput [ngxMatDatetimePicker]="picker" placeholder="Begin Date" formControlName="beginDate"
@@ -43,11 +41,11 @@
               [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
             </ngx-mat-datetime-picker>
             <div *ngIf="submitted && f['beginDate'].errors" class="invalid-feedback">
+              <div *ngIf="f['beginDate'].errors['required']">Begin date is required</div>
               <div *ngIf="f['beginDate'].errors['notValidWithCurrentDate']">Begin date needs to be after the current date</div>
             </div>
           </mat-form-field>
         </div>
-
         <div class="form-group">
           <mat-form-field>
             <input matInput [ngxMatDatetimePicker]="picker2" placeholder="End Date" formControlName ="endDate"
@@ -63,7 +61,6 @@
             </div>
          </mat-form-field>
         </div>
-
         <button mdbBtn color="info" type="submit" mdbWavesEffect
           style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
           <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>

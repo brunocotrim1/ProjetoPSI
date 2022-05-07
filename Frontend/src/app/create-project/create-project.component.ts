@@ -46,6 +46,8 @@ export class CreateProjectComponent implements OnInit {
   public disableMinute = false;
   public hideTime = false;
 
+  beginDateRequired = false;
+  notValidBeginDate = false;
 
   user = {} as User;
 
@@ -82,6 +84,7 @@ export class CreateProjectComponent implements OnInit {
     if (this.projectForm.invalid) {
       return;
     }
+
     this.loading = true;
 
     this.createuprojectservice.createProject(this.f["name"].value, this.f["acronym"].value, this.f["beginDate"].value, this.f["endDate"].value)

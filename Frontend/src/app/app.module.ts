@@ -21,7 +21,6 @@ import { FooterComponent } from './footer/footer.component';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
-import { LinkprojectstoteamsComponent } from './linkprojectstoteams/linkprojectstoteams.component';
 import { MultiselectDropdownComponent } from './multiselect-dropdown/multiselect-dropdown.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ProjectsComponent } from './projects/projects.component';
@@ -82,7 +81,6 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     FooterComponent,
     TaskDetailComponent,
     MultiselectDropdownComponent,
-    LinkprojectstoteamsComponent,
     ProjectsComponent,
     CreateProjectComponent,
     CreateTaskComponent,

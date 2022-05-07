@@ -27,14 +27,9 @@
                   </button>
                 </h5>
                 <p>
-                  This feature allows you, as an administrator, to create a new user
-                  of the platform. You are needed to fill a form which requires the
-                  user's name, user's password and user's role (default is a normal
-                  user).
-                </p>
-                <p class="mb-0">
-                  To use the created user object, first login to our page using the
-                  information previously filled in the form.
+                  This feature allows you, as an administrator, to create a brand new user
+                  of the platform. You need to fill a form requiring the
+                  user's name, password and role.
                 </p>
               </div>
             </div>
@@ -52,7 +47,8 @@
                   </button>
               </h5>
               <p>
-                This feature allows an administrator to create projects.
+                This feature allows you, as an administrator, to create a brand new team
+                of the platform, based on users created on the system.
               </p>
             </div>
             <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
@@ -70,14 +66,13 @@
               <img class="d-flex align-self-center mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.webp"
                 alt="Generic placeholder image" />
               <div class="media-body">
-                <h5 class="mt-0 mb-1 font-weight-bold">Link projects to teams
+                <h5 class="mt-0 mb-1 font-weight-bold">Edit projects
                   <button *ngIf="user.role == 'ADMIN'" class="userrole ml-2 mt-1" mdbBtn type="button" size="sm">
                   admin feature
                   </button>
                 </h5>
-                This feature allows an administrator to link projects to teams, 
-                so that the selected project can be developed and worked by the
-                selected team and be canceled at any given time.
+                This feature allows you, as an administrator, to edit existing projects. 
+                Currently you can only edit the project's linked team. 
               </div>
             </div>
           </a>
@@ -94,7 +89,9 @@
                   </button>
               </h5>
               <p>
-                This feature allows an administrator to create projects.
+                This feature allows an administrator to create new projects. 
+                These projects will have a name, acronym, begin and end dates. 
+                You can also edit them in the "Edit Projects" page.
               </p>
             </div>
             <img class="d-flex align-self-center ml-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder7.webp"
@@ -113,8 +110,8 @@
             alt="Generic placeholder image" />
             <div class="media-body">
               <h5 class="mt-0 mb-1 font-weight-bold">Create tasks</h5>
-              This feature allows any user to manage their given tasks related to their
-              projects.
+              This feature allows any user on our platform to create a task associated to the current user. 
+              You can also edit them in the "Edit Tasks" page.
             </div>
           </div>
           </a>

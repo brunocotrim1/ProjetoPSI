@@ -35,9 +35,9 @@ export class ProjectsComponent implements OnInit {
   returnmessage = '';
 
   user = {} as User;
-  listOfProjects = {} as Project[];
-  listOfTeams = {} as Team[];
-  listOfAvailableTeams = {} as Team[];
+  listOfProjects = [] as Project[];
+  listOfTeams = [] as Team[];
+  listOfAvailableTeams = [] as Team[];
   currentProject = {} as Project;
   currentProjectTeam = {} as Team;
 

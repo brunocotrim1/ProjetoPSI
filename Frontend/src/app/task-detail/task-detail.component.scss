@@ -1,51 +1,73 @@
 .mainContainer {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height:100%;
-   justify-content: space-between;
-   margin-top: 100px;
-  }
-  .white-text{
-    flex-grow: 1;
-    max-height: 5%;
-  }
-  .detailContainer {
-    display: flex;
-    padding: 0;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(
-      -45deg,
-      rgba(33, 33, 33, 1) 0%,
-      rgba(46, 46, 46, 1) 36%,
-      rgba(68, 68, 68, 1) 100%
-    );
-    margin-bottom: 50px;
-    border-radius: 20px;
-    padding: 20px;
-    z-index: 1;
-    box-shadow: 0 0.5px 100px rgba(0, 255, 98, 0.15);
-    border: 2px solid;
-    border-color: #04aa6d;
-    border-radius: 20px;
-  }
-  form{
-    max-width: 50%;
-  }
-  .calendar-header{
-    display: flex;
-    flex-direction: row;
-    padding: 0;
-    margin: 0;
-    margin-top: 20px;
-  }
-.tittle{
-  width: 70vw;
-  padding: 30px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height:100%;
+  justify-content: space-between;
 }
+
+.white-text{
+  flex-grow: 1;
+  max-height: 5%;
+}
+
+.detailContainer {
+  background: linear-gradient(
+    -45deg,
+    rgba(33, 33, 33, 1) 0%,
+    rgba(46, 46, 46, 1) 36%,
+    rgba(68, 68, 68, 1) 100%
+  );
+  z-index: 1;
+  box-shadow: 0 0.5px 100px rgba(0, 255, 98, 0.15);
+  border: 2px solid;
+  border-color: #04aa6d;
+  border-radius: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: 100px;
+  margin-right: 100px;
+}
+
+ng-multiselect-dropdown {
+  margin-left: 5px;
+  width: 200px;
+}
+
+.taskProjectButton {
+  display: flex;  
+  align-items: center;
+  height: 30px;
+  width: auto;
+}
+
+.taskMembers, .taskProject {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.taskProject {
+  margin-top: 10px;
+}
+
+.calendar-header{
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 0;
+  margin-top: 20px;
+}
+
 .saveBut{
   background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);
   border-radius: 10px;

@@ -11,58 +11,26 @@ a, h5 {
 .mainContainer {
     display: inline-flex;
     flex-direction: column;
-    
+    align-items: center;
     width:100%;
     height:100%;
-    
-    align-items: center;
-    
-    justify-content:space-around;
+    justify-content: space-between;
 }
-
 
 form {
     display: inline-flex;
     flex-direction: column;
     justify-content:space-around;
-    
-
-    
-}
-
-ng-multiselect-dropdown {
-
 }
 
 .lftbut{
-    background: linear-gradient(-45deg, rgba(33,33,33,1) 0%, rgba(46,46,46,1) 36%, rgba(68,68,68,1) 100%);
-
-    padding: 10px 10px 10px 10px;
-    width: 100%;
-    height: 100%;
-    
+    background: linear-gradient(45deg, rgba(33,33,33,1) 0%, rgba(46,46,46,1) 36%, rgba(68,68,68,1) 100%);
     color: white;
     border: 2px solid black;
     border-color: #04AA6D;
     border-radius: 20px;
     z-index: 2;
-    display: inline-flex;
-    // flex-direction: column;
-    justify-content:space-around;
-}
-
-.rgtbut{
-    background: linear-gradient(-45deg, rgba(33,33,33,1) 0%, rgba(46,46,46,1) 36%, rgba(68,68,68,1) 100%);
-}
-
-.container{
-    max-width: 80%;
-}
-
-.big {
-    z-index: 0;
-}
-
-.small {
-    z-index: 1;
+    box-shadow: 0 10px 100px rgba(0, 255, 98, 0.15);
+    transform: perspective(1px);
+    max-width: 400px;
 }

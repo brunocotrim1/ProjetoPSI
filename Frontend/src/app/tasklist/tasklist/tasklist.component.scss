@@ -5,67 +5,91 @@
     width: 100%;
     height:100%;
    justify-content: space-between;
-   margin-top: 100px;
-  }
+}
   
-  .listContainer {
-    display: flex;
-    padding: 0;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(
-      -45deg,
-      rgba(33, 33, 33, 1) 0%,
-      rgba(46, 46, 46, 1) 36%,
-      rgba(68, 68, 68, 1) 100%
-    );
-    margin-bottom: 50px;
-    margin-top: 100px;
+ul {
+  height:281px; 
+}
+
+ul{
+  overflow:hidden; 
+  overflow-y:scroll;
+}
+
+.lftbut {
+    background: rgb(33,33,33);
+    color: white;
+    border: 2px solid black;
+    border-color: #04AA6D;
     border-radius: 20px;
-    padding: 20px;
-    z-index: 1;
-    box-shadow: 0 0.5px 100px rgba(0, 255, 98, 0.15);
-    border: 2px solid;
-    border-color: #04aa6d;
-    border-radius: 20px;
-  }
-  form{
-    max-width: 30rem;
-  }
-  .calendar-header{
-    display: flex;
-    flex-direction: row;
-    padding: 0;
-    margin: 0;
-    margin-top: 20px;
-  }
+    z-index: 2;
+    box-shadow: 0 10px 100px rgba(0, 255, 98, 0.15);
+    transform: perspective(1px);
+    padding: 30px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #04AA6D;
+  border-radius: 10px;
+}
+
+form{
+  max-width: 30rem;
+}
+
+.calendar-header{
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 0;
+  margin-top: 20px;
+}
+
 .tittle{
   width: 70vw;
   padding: 30px;
 }
+
 .saveBut{
   background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);
   border-radius: 10px;
   color: rgba(255, 255, 255, 0.818);
 }
+
 .search-component{
   margin-top: 20px;
 }
+
 .search-component > *{
   margin-top: 10px;
 }
+
 .tittle > * {
   margin-top: 30px;
 }
+
 .user-search-box{
  width: 10%;
  border-radius: 15px;
 }
+
 .sugestion {
   width:20%;
   background-color: white;
 }
+
 h1 {
   text-align:center;
 }
