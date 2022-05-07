@@ -50,7 +50,7 @@ export class CreateTeamsComponent implements OnInit {
   teamForm = new FormGroup(
     {
       name: new FormControl('', [Validators.required, Validators.minLength(4), Validators.pattern(/^[a-z0-9]+$/i)]),
-      dropdown: new FormControl('', [this.DropdownValidator])
+      dropdown: new FormControl('', )
     }
   );
 

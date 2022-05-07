@@ -45,7 +45,7 @@ async function init() {
     await user.save().catch(function (err) { });
   }
   const testUser = await User.findOne({ username: "bruno" });
-
+  Task.deleteMany({}).catch(function (err) { });
   const tasks = [
       {
           name: "Task 1",
@@ -63,7 +63,7 @@ async function init() {
           priority: "CRITICAL",
           beginDate: new Date().setDate(new Date().getDate()+3),
           
-          endDate: new Date().setDate(new Date().getDate()+2),
+          endDate: new Date().setDate(new Date().getDate()+5),
       },
       {
           name: "Task 3",
@@ -77,8 +77,8 @@ async function init() {
       {
         name: "Task 4",
         usersAssigned: [testUser._id],
-        progress: 66,
-        priority: "MEDIUM",
+        progress: 99,
+        priority: "CRITICAL",
         beginDate: new Date().setDate(new Date().getDate()+10),
         
         endDate: new Date().setDate(new Date().getDate()+11),

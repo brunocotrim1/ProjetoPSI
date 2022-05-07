@@ -166,11 +166,13 @@ export class TaskDetailComponent implements OnInit {
 
     this.taskDetailService.saveTask(this.task).subscribe({
       next: (msg) => {
+        this.error='';
         this.message = msg.msg;
         setTimeout(() => {this.message = ''
         }, 2*1000);
       },
       error: error => {
+        this.message = '';
         this.error = error;
       }
     });
