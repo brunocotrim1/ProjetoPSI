@@ -97,21 +97,21 @@ async function init() {
       const task = new Task(tasks[i]);
       await task.save().catch(function (err) { });
   }
-
+   await Team.deleteMany({}).catch(function (err) { });
   const testUser2 = await User.findOne({ username: "miguel" });
 
   const testTeams = [
       {
           name: "Team 1",
-          users: [testUser.id,testUser2.id]
+          members: [testUser.id,testUser2.id]
       },
       {
           name: "Team 2",
-          users: [testUser2.id]
+          members: [testUser2.id]
       },
       {
           name: "Team 3",
-          users: [testUser2.id]
+          members: [testUser2.id]
       }
   ];
   for (let i = 0; i < testTeams.length; i++) {

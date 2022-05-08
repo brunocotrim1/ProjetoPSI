@@ -2,9 +2,10 @@ a, h5 {
     letter-spacing: 1px;
 }
 
-.white-text{
-    margin: auto;
-    width: 20%;
+.userrole {
+    background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);
+    color: white;
+    border-radius: 20px;
 }
 
 .lftbut, .rgtbut {
@@ -16,6 +17,16 @@ a, h5 {
     z-index: 2;
     box-shadow: 0 10px 100px rgba(0, 255, 98, 0.15);
     transform: perspective(1px)
+}
+
+.showProject {
+    background: rgb(33,33,33);
+    color: white;
+    border: 1px solid black;
+    border-color: #04AA6D;
+    border-radius: 10px;
+    z-index: 2;
+    padding:50px;
 }
 
 .lftbut{
@@ -37,8 +48,24 @@ a, h5 {
 .small {
     z-index: 1;
 }
-
-.mainContainer .bodycontainer{
+.bodycontainer {
+    background: linear-gradient(
+      -45deg,
+      rgba(33, 33, 33, 1) 0%,
+      rgba(46, 46, 46, 1) 36%,
+      rgba(68, 68, 68, 1) 100%
+    );
+    z-index: 1;
+    box-shadow: 0 0.5px 100px rgba(0, 255, 98, 0.15);
+    border: 2px solid;
+    border-color: #04aa6d;
+    border-radius: 20px;
+    max-width: 50%;
+    display: flex;
+    width: 50%;
+  }
+  
+.mainContainer {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
@@ -47,16 +74,8 @@ a, h5 {
     justify-content: space-between;
 }
 
-.bodyContainer{
-    padding-top: 50px;
-      width:100%;
-    height:100%;
-}
-
-.addUserButton {
-    font-size: small;
-}
-
-app-footer{
-    margin-bottom: 0cm !important; 
-}
+.saveBut{
+    background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.818);
+  }
