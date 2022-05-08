@@ -64,6 +64,7 @@ export class TaskDetailComponent implements OnInit {
   currentProject = {} as Project;
   returnmessage = '';
   isTaskRelated = false;
+  isMultiDropdownOpen = false;
 
   ngOnInit(): void {
     this.user = this.taskDetailService.getUser();
@@ -137,6 +138,25 @@ export class TaskDetailComponent implements OnInit {
     this.f['project'].reset();
     this.task.linkedProject = {} as Project;
     this.isTaskRelated = false;
+  }
+
+
+  onTabShowSelect(){
+    if (!this.isMultiDropdownOpen){
+      this.isMultiDropdownOpen = true;
+    } else {
+      this.isMultiDropdownOpen = false;
+    }
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'Unselect All',
+      itemsShowLimit: 6,
+      allowSearchFilter: true,
+      defaultOpen: this.isMultiDropdownOpen
+    };
   }
 
   get f() { return this.form.controls; }

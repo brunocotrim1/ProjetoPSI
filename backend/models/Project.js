@@ -8,7 +8,7 @@ const ProjectSchema = mongoose.Schema({
     acronym: {
         type: String,
         required: true,
-        required: true
+        unique: true
     },
     linkedTeam: {
         type: mongoose.Schema.Types.ObjectId,

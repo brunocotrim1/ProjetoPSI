@@ -15,8 +15,8 @@ export class CreateUserComponent implements OnInit {
 
   userForm = new FormGroup(
     {
-    username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-z0-9]+$/i)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/(.*[a-z].*)(.*[A-Z].*)(.*\d.*)/i)]),
+    username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-zA-Z0-9]+$/)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/)]),
     role: new FormControl('', Validators.required),
     confirm_password: new FormControl('', Validators.required)
     }, {
@@ -32,6 +32,10 @@ export class CreateUserComponent implements OnInit {
   returnmessage = '';
 
   user = {} as User;
+  requiredPass: any;
+  minLengthPass: any;
+  patternPass: any;
+  invalidPass: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -49,6 +53,10 @@ export class CreateUserComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.userForm.invalid) {
+      this.invalidPass = this.submitted && this.f['password'].errors
+      this.requiredPass = this.f['password'].errors!['required']
+      this.minLengthPass = this.f['password'].errors!['minlength']
+      this.patternPass = this.f['password'].errors!['pattern']
       return;
     }
     this.loading = true;
@@ -59,10 +67,14 @@ export class CreateUserComponent implements OnInit {
       .subscribe({
         next: () => {
           this.returnmessage = "New user created!";
+          setTimeout(() => {this.returnmessage = ''
+          }, 2*1000);
           this.loading = false;
         },
         error: error => {
           this.error = error;
+          setTimeout(() => {this.error = ''
+          }, 2*1000);
           this.loading = false;
         }
       });

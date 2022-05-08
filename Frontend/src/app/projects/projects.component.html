@@ -4,13 +4,13 @@
   <div style="margin-top:6%; margin-bottom:5%;">
     <div class="enjoyapp text-center">
       <div class="white-text">
-        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">Our projects</h2>
+        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">Edit existing projects</h2>
         <hr class="hr-light wow" data-wow-delay="0.3s">
       </div>
     </div>
     <button class="lftbut d-flex align-items-center flex-row" mdbBtn type="button" rounded="true">
       <form class="d-flex flex-column text-center" [formGroup]="projectForm" style="margin:50px;">
-        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Check project</h4>
+        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Choose a project</h4>
         <div class="form-group">
           <select class="form-select form-control browser-default custom-select" formControlName="project"
             [ngClass]="{ 'is-invalid': submitted && f['project'].errors }" (ngModelChange)="onChangeObj()" required>
@@ -55,34 +55,42 @@
             Assign a team to this project
           </button>
           <ng-template #elseBlockTeamSubmit>
-            <form class="d-flex flex-column text-center" [formGroup]="selectedTeamForm" style="margin:50px;"
-              (ngSubmit)="onSubmitTeam()">
-              <div class="form-group">
-                <select class="form-select form-control browser-default custom-select" formControlName="selteam"
-                  [ngClass]="{ 'is-invalid': submitted && f1['selteam'].errors }" required>
-                  <option selected disabled value="">Choose available team...</option>
-                  <option [ngValue]="team" *ngFor="let team of listOfAvailableTeams">
-                    {{team.name}}
-                  </option>
-                </select>
-                <div class="invalid-feedback">
-                  Please select a team
+            <div *ngIf="checkIfNoTeams(); else assignTeamBlock">
+              NO TEAMS AVAILABLE
+            </div>
+            <ng-template #assignTeamBlock>
+              <form class="d-flex flex-column text-center" [formGroup]="selectedTeamForm" style="margin:50px;"
+                (ngSubmit)="onSubmitTeam()">
+                <div class="form-group">
+                  <select class="form-select form-control browser-default custom-select" formControlName="selteam"
+                    [ngClass]="{ 'is-invalid': submitted && f1['selteam'].errors }" required>
+                    <option selected disabled value="">Choose available team...</option>
+                    <option [ngValue]="team" *ngFor="let team of listOfAvailableTeams">
+                      {{team.name}}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Please select a team
+                  </div>
                 </div>
-              </div>
-              <div *ngIf="checkIfNoTeams()">
-                NO TEAMS AVAILABLE
-              </div>
-              <button mdbBtn color="info" type="submit" mdbWavesEffect
-                style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                Assign this team!
-              </button>
-            </form>
+                <button mdbBtn color="info" type="submit" mdbWavesEffect
+                  style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
+                  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                  Assign this team!
+                </button>
+              </form>
+            </ng-template>
           </ng-template>
         </ng-template>
-        <div style="margin-top: 5%;">
-          <mdb-icon far icon="clock"></mdb-icon>Start date:
-          <mdb-icon fas icon="clock"></mdb-icon>Due date:
+        <div style="margin-top: 15px;">
+          <mdb-icon far icon="clock"></mdb-icon>Start date: {{currentProject.beginDate}}
+          <br>
+          <div *ngIf="currentProject.endDate; else noEndDateBlock">
+            <mdb-icon fas icon="clock"></mdb-icon>Due date: {{currentProject.endDate}}
+          </div>
+          <ng-template #noEndDateBlock>
+            <mdb-icon fas icon="clock"></mdb-icon>Due date: No date defined yet...
+          </ng-template>
         </div>
       </button>
     </button>

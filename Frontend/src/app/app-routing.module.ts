@@ -23,15 +23,15 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent,canActivate: [AuthenticationGuard] },
   { path: 'login', component: LoginComponent},
   { path: 'mainmenu', component: MainMenuComponent,canActivate: [AuthenticationGuard]  },
-  { path: 'createteam', component: CreateTeamsComponent,canActivate: [AuthenticationGuard]  },
+  { path: 'createteam', component: CreateTeamsComponent,canActivate: [AuthenticationGuard, AdminGuard]  },
   { path: 'profile', component: ProfileComponent,canActivate: [AuthenticationGuard]},
   { path: 'createuser', component: CreateUserComponent, canActivate: [AuthenticationGuard, AdminGuard]  },
-  { path: 'projects', component: ProjectsComponent, canActivate: [AuthenticationGuard]  },
-  { path: 'createproject', component: CreateProjectComponent, canActivate: [AuthenticationGuard]  },
+  { path: 'projects', component: ProjectsComponent, canActivate: [AuthenticationGuard, AdminGuard]  },
+  { path: 'createproject', component: CreateProjectComponent, canActivate: [AuthenticationGuard, AdminGuard]  },
   { path: 'taskDetail/:id', component: TaskDetailComponent, canActivate: [AuthenticationGuard]  },
   { path: 'createtask', component: CreateTaskComponent, canActivate: [AuthenticationGuard]  },
   { path: 'tasklist', component: TasklistComponent, canActivate: [AuthenticationGuard]  },
-  { path: 'manageteams', component: ManageteamsComponent, canActivate: [AuthenticationGuard]  }
+  { path: 'manageteams', component: ManageteamsComponent, canActivate: [AuthenticationGuard, AdminGuard]  }
 ];
 
 @NgModule({

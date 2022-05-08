@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 export class ManageteamsComponent implements OnInit {
 
   user = {} as User;
+  isMultiDropdownOpen = false;
   findUser: boolean = false;
   error = ""
   message = ""
@@ -34,7 +35,6 @@ export class ManageteamsComponent implements OnInit {
       usersSelected: new FormControl('',),
     }
   );
-
 
   //nameFirstTeam : number = 5;
 
@@ -79,7 +79,7 @@ export class ManageteamsComponent implements OnInit {
       textField: 'item_text',
       selectAllText: 'Select All',
       unSelectAllText: 'Unselect All',
-      itemsShowLimit: 6,
+      itemsShowLimit: 5,
       allowSearchFilter: true
     };
   }
@@ -90,6 +90,25 @@ export class ManageteamsComponent implements OnInit {
   }
   teamSelected() {
     return this.f["team"].value
+  }
+
+
+  onTabShowSelect(){
+    if (!this.isMultiDropdownOpen){
+      this.isMultiDropdownOpen = true;
+    } else {
+      this.isMultiDropdownOpen = false;
+    }
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'Unselect All',
+      itemsShowLimit: 6,
+      allowSearchFilter: true,
+      defaultOpen: this.isMultiDropdownOpen
+    };
   }
 
   onChange() {
