@@ -8,8 +8,19 @@
       </div>
     </div>
     <button class="lftbut" mdbBtn type="button" rounded="true">
+      <button class="lftbut" mdbBtn type="button" rounded="true" style="padding: 3%; font-size:10px; width: 25%; position: absolute; right: 0;">
+        Add 
+        checklist
+      </button>
       <form [formGroup]="form">
-        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Name: {{ task.name }}</h4>
+        <div style="display: flex;
+        justify-content: center;
+        position: relative;
+        width: 100%">
+          <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Name: {{ task.name }}</h4>
+          
+        </div>
+        
         <div class="beginDate">
           Begin Date:
           <mat-form-field>
