@@ -8,13 +8,13 @@
               <hr class="hr-light wow" data-wow-delay="0.3s">
             </div>
         </div>
-        <form class="d-flex flex-column text-center" [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+        <form class="d-flex flex-column text-center" [formGroup]="scheduleForm" (ngSubmit)="onSubmitSchedule()">
             <div id="members" class="form-group">
                 <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="dropdownList" (keyup.enter)="onTabShowSelect()"
                   classes-btn="'btn-primary btn-block'" formControlName="members" placeholder="Select reunion members"
-                   [ngClass]="{ 'is-invalid': submitted && f['members'].errors }">
+                   [ngClass]="{ 'is-invalid': submittedSchedule && f['members'].errors }">
                 </ng-multiselect-dropdown>
-                <div *ngIf="submitted && f['members'].errors" class="invalid-feedback">
+                <div *ngIf="submittedSchedule && f['members'].errors" class="invalid-feedback">
                   <div *ngIf="f['members'].errors['dropdown-error']">Team must have at least one member</div>
                 </div>
             </div>
@@ -27,8 +27,8 @@
                   </div>
                 </div>
                 <input type="text" formControlName="reunionTime" placeholder="Reunion time" class="form-control" style="border-top-right-radius: 2px; border-bottom-right-radius: 2px;"
-                  [ngClass]="{ 'is-invalid': submitted && f['reunionTime'].errors }"/> 
-                <div *ngIf="submitted && f['reunionTime'].errors" class="invalid-feedback">
+                  [ngClass]="{ 'is-invalid': submittedSchedule && f['reunionTime'].errors }"/> 
+                <div *ngIf="submittedSchedule && f['reunionTime'].errors" class="invalid-feedback">
                   <div *ngIf="f['reunionTime'].errors['required']">Duration of reunion is required</div>
                   <div *ngIf="f['reunionTime'].errors['pattern']">Duration is in the wrong format</div>
                 </div>
@@ -37,9 +37,9 @@
             <div id="inicialTime" class="form-group">
               <div class="input-group">
                 <input class="form-control" placeholder="Start date" formControlName="inicialDate"
-                        name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && f['inicialDate'].errors }">
-                <button (click)="d.toggle()" type="button"></button>
-                <div *ngIf="submitted && f['inicialDate'].errors" class="invalid-feedback">
+                        name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" [ngClass]="{ 'is-invalid': submittedSchedule && f['inicialDate'].errors }">
+                <button (click)="d.toggle()" type="button"><mdb-icon fas icon="calendar-alt"></mdb-icon></button>
+                <div *ngIf="submittedSchedule && f['inicialDate'].errors" class="invalid-feedback">
                   <div *ngIf="f['inicialDate'].errors['required']">Start date is required</div>
                 </div>
               </div>
@@ -47,16 +47,23 @@
             <div id="finalTime" class="form-group">
               <div class="input-group">
                 <input class="form-control" placeholder="End date" formControlName="finalDate"
-                        name="dp" [(ngModel)]="model1" ngbDatepicker #d1="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && f['finalDate'].errors }">
-                <button (click)="d1.toggle()" type="button"></button>
-                <div *ngIf="submitted && f['finalDate'].errors" class="invalid-feedback">
+                        name="dp" [(ngModel)]="model1" ngbDatepicker #d1="ngbDatepicker" [ngClass]="{ 'is-invalid': submittedSchedule && f['finalDate'].errors }">
+                <button (click)="d1.toggle()" type="button"><mdb-icon fas icon="calendar-alt"></mdb-icon></button>
+                <div *ngIf="submittedSchedule && f['finalDate'].errors" class="invalid-feedback">
                   <div *ngIf="f['finalDate'].errors['required']">End date is required</div>
                 </div>
               </div>
             </div>
+            <button mdbBtn color="info" type="submit" mdbWavesEffect
+            style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
+            <span *ngIf="loadingSchedule" class="spinner-border spinner-border-sm mr-1"></span>
+              Show options
+            </button>
+        </form>
+        <form class="d-flex flex-column text-center" [formGroup]="availabilityForm" (ngSubmit)="onSubmitReunion()">
             <div id="availableDates" class="form-group">
               <select class="form-select form-control browser-default custom-select" formControlName="availableDates"
-                [ngClass]="{ 'is-invalid': submitted && f['availableDates'].errors }" id="validationCustom04" required>
+                [ngClass]="{ 'is-invalid': submittedReunion && f1['availableDates'].errors }" id="validationCustom04" required>
                 <option selected disabled value="">Choose one of the available dates...</option>
                   <option [ngValue]="date" *ngFor="let date of listOfAvailableDates">
                     {{date.name}}
@@ -68,7 +75,7 @@
             </div>  
             <div id="dayToChoose" class="form-group">
               <select class="form-select form-control browser-default custom-select" formControlName="availableDay"
-              [ngClass]="{ 'is-invalid': submitted && f['availableDay'].errors }" id="validationCustom04" required>
+              [ngClass]="{ 'is-invalid': submittedReunion && f1['availableDay'].errors }" id="validationCustom04" required>
               <option selected disabled value="">Choose one of the available days...</option>
                 <option [ngValue]="day" *ngFor="let day of listOfAvailableDays">
                   {{day.name}}
@@ -80,7 +87,7 @@
             </div>
             <div id="hourToChoose" class="form-group">
               <select class="form-select form-control browser-default custom-select" formControlName="availableHour"
-              [ngClass]="{ 'is-invalid': submitted && f['availableHour'].errors }" id="validationCustom04" required>
+              [ngClass]="{ 'is-invalid': submittedReunion && f1['availableHour'].errors }" id="validationCustom04" required>
               <option selected disabled value="">Choose one of the available hours...</option>
                 <option [ngValue]="hour" *ngFor="let hour of listOfavailableHours">
                   {{hour.name}}
@@ -92,16 +99,16 @@
             </div>
             <button mdbBtn color="info" type="submit" mdbWavesEffect
               style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
-              <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+              <span *ngIf="loadingReunion" class="spinner-border spinner-border-sm mr-1"></span>
                 Submit
             </button>
-            <div *ngIf="error" class="alert alert-danger">
-                {{ error }}
+            <div *ngIf="errorReunion" class="alert alert-danger">
+                {{ errorReunion }}
             </div>
-            <div *ngIf="returnmessage" class="alert alert-success">
-            {{ returnmessage }}
+            <div *ngIf="returnmessageReunion" class="alert alert-success">
+            {{ returnmessageReunion }}
             </div>
-          </form>
+        </form>
     </div>
     <app-footer style="width: 100%"></app-footer>
 </div>

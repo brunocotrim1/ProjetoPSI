@@ -15,25 +15,27 @@ export class SchedulereunionComponent implements OnInit {
 
   user = {} as User;
 
-  loading = false;
-  submitted = false;
-  error = '';
-  returnmessage = '';
+  loadingSchedule = false;
+  submittedSchedule = false;
+  errorSchedule = '';
+  returnmessageSchedule = '';
 
-  dropdownList: any[] = [];
-  dropdownUsers: any[] = [];
-  listOfAvailableDates: any[] = [];
-  listOfAvailableDays: any[] = [];
-  listOfavailableHours: any[] = [];
-  dropdownSettings: any = {};
-  isMultiDropdownOpen = false;
+  loadingReunion = false;
+  submittedReunion = false;
+  errorReunion = '';
+  returnmessageReunion = '';
 
   scheduleForm = new FormGroup(
     {
     members: new FormControl('', ),
     reunionTime: new FormControl('', [Validators.required, Validators.pattern(new RegExp("^([0-1]?[0-9]|2[0-3]):(30|00)$"))]),
     inicialDate: new FormControl('', [Validators.required]),
-    finalDate: new FormControl('', [Validators.required]),
+    finalDate: new FormControl('', [Validators.required])
+    }
+  );
+
+  availabilityForm = new FormGroup(
+    {
     availableDates: new FormControl('', [Validators.required]),
     availableDay: new FormControl('', [Validators.required]),
     availableHour: new FormControl('', [Validators.required])
@@ -42,6 +44,14 @@ export class SchedulereunionComponent implements OnInit {
 
   model: NgbDateStruct | undefined;
   model1: NgbDateStruct | undefined;
+
+  dropdownList: any[] = [];
+  dropdownUsers: any[] = [];
+  listOfAvailableDates: any[] = [];
+  listOfAvailableDays: any[] = [];
+  listOfavailableHours: any[] = [];
+  dropdownSettings: any = {};
+  isMultiDropdownOpen = false;
 
   constructor(    
     private schedulereunionservice: ScheduleReunionService,
@@ -65,6 +75,10 @@ export class SchedulereunionComponent implements OnInit {
 
   get f() { 
     return this.scheduleForm.controls; 
+  }
+
+  get f1() { 
+    return this.availabilityForm.controls; 
   }
 
   fillInDropdown(typeobject: string) {
@@ -99,10 +113,20 @@ export class SchedulereunionComponent implements OnInit {
     };
   }
 
-  onSubmit() {
-    this.submitted = true;
+  onSubmitSchedule() {
+    this.submittedSchedule = true;
 
     if (this.scheduleForm.invalid) {
+      return;
+    }
+
+    this.loadingReunion = false;
+  }
+
+  onSubmitReunion() {
+    this.submittedReunion = true;
+
+    if (this.availabilityForm.invalid) {
       return;
     }
 
@@ -113,14 +137,14 @@ export class SchedulereunionComponent implements OnInit {
     this.schedulereunionservice.scheduleReunion({ members: fetchUsers()})
     .subscribe({
       next: () => {
-        this.returnmessage = 'Reunion was scheduled!';
-        setTimeout(() => {this.returnmessage = ''}, 2*1000);
-        this.loading = false;
+        this.returnmessageReunion = 'Reunion was scheduled!';
+        setTimeout(() => {this.returnmessageReunion = ''}, 2*1000);
+        this.loadingReunion = false;
       },
       error: () => {
-        this.returnmessage = 'Error scheduling';
-        setTimeout(() => {this.returnmessage = ''}, 2*1000);
-        this.loading = false;
+        this.returnmessageReunion = 'Error scheduling';
+        setTimeout(() => {this.returnmessageReunion = ''}, 2*1000);
+        this.loadingReunion = false;
       }
     })
   }
