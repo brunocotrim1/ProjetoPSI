@@ -36,6 +36,7 @@ export class TaskDetailComponent implements OnInit {
   limitSelection = false;
   message = ''
   error = ''
+  checklist: any = {'A': false, 'B': false, 'C': false};
 
   public minDate!: Date;
   public maxDate!: Date;
@@ -51,6 +52,7 @@ export class TaskDetailComponent implements OnInit {
   public color: ThemePalette = 'warn';
   public disableMinute = false;
   public hideTime = false;
+  public showCheck = false;
   constructor(private taskDetailService: TaskDetailService, private route: ActivatedRoute, private http: HttpClient, private fb: FormBuilder) { }
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -70,6 +72,7 @@ export class TaskDetailComponent implements OnInit {
     this.user = this.taskDetailService.getUser();
     const id = this.route.snapshot.paramMap.get('id')!;
     this.data = [];
+    this.showCheck = this.hasChecklist();
     this.taskDetailService.getUsers().subscribe({
       next: (users) => {
         this.users = users
@@ -82,7 +85,7 @@ export class TaskDetailComponent implements OnInit {
         } this.taskDetailService.getTaskDetail(id).subscribe({
           next: (task) => {
             this.task = task;
-            console.log(this.data)
+            //console.log(this.data)
             for (let i = 0; i < this.data.length; i++) {
               for (let j = 0; j < this.task.usersAssigned.length; j++) {
                 if (this.task.usersAssigned[j].username == this.data[i].item_text) {
@@ -134,12 +137,34 @@ export class TaskDetailComponent implements OnInit {
 
   }
 
+  invertValue(key : any) {
+    this.checklist[key] = !this.checklist[key]
+  }
+
+  addKey(key : any) {
+    this.checklist[key] = false;
+  }
+
+  deleteKey(key : any) {
+    delete this.checklist[key];
+  }
   removeLinkedProjectOfTask(){
     this.f['project'].reset();
     this.task.linkedProject = {} as Project;
     this.isTaskRelated = false;
   }
 
+  startShowingCheck() {
+    
+    this.showCheck = true;
+    
+  }
+
+  stopShowingCheck() {
+
+    this.showCheck = false;
+
+  }
 
   onTabShowSelect(){
     if (!this.isMultiDropdownOpen){
@@ -158,7 +183,11 @@ export class TaskDetailComponent implements OnInit {
       defaultOpen: this.isMultiDropdownOpen
     };
   }
-
+  
+  hasChecklist() {
+    
+    return (Object.keys(this.checklist).length !== 0);
+  }
   get f() { return this.form.controls; }
 
   saveChanges() {

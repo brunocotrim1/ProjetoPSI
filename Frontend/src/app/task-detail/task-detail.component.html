@@ -7,9 +7,23 @@
         <hr class="hr-light wow" data-wow-delay="0.3s">
       </div>
     </div>
+    
     <button class="lftbut" mdbBtn type="button" rounded="true">
+      <button class="lftbut" (click)="startShowingCheck()" mdbBtn type="button" rounded="true" style="padding: 3%; font-size:10px; width: 25%; position: absolute; right: 0;">
+        Add 
+        checklist
+      </button>
+      
+      
       <form [formGroup]="form">
-        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Name: {{ task.name }}</h4>
+        <div style="display: flex;
+        justify-content: center;
+        position: relative;
+        width: 100%">
+          <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Name: {{ task.name }}</h4>
+          
+        </div>
+        
         <div class="beginDate">
           Begin Date:
           <mat-form-field>
@@ -75,6 +89,30 @@
           {{ message }}
         </div>
       </form>
+    </button>
+    <button *ngIf="showCheck" class="checkboxContainer" mdbBtn type="button" rounded="true" style="max-height:50%; overflow: auto">
+      <div class="white-text">
+        <h2 class="h1 h1-responsive font-bold wow">
+          checklist</h2>
+        <hr class="hr-light wow">
+        <li style="font-size: 1.5em; font-weight: bold; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;" 
+        class="list-group-item" *ngFor="let elem of checklist | keyvalue; let i = index">
+          <div class="namePriorityProgress">
+            <div class="el">
+              {{ elem.key }} -> {{elem.value}}
+              <button (click)="invertValue(elem.key)">DO/UNDO</button>
+              <button (click)="deleteKey(elem.key)">X</button>
+            </div>
+           
+          </div>
+          <!-- <button mdbBtn class="deletetask" mdbWavesEffect (click)="onDeleteTask(task)" -->
+          
+          <!-- </button> -->
+        </li>
+        <input #newItemName (blur)="addKey(newItemName.value);" (keyup.enter)="addKey(newItemName.value);" placeholder="Add a subtask"> 
+      </div>
+      
+      
     </button>
   </div>
   <app-footer style="width: 100%"></app-footer>
