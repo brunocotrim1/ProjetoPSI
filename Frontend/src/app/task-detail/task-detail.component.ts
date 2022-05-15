@@ -206,6 +206,8 @@ export class TaskDetailComponent implements OnInit {
         }
       }
     }
+    this.task.checklist = this.checklist;
+    
     
     if(!this.f['project'].invalid && !this.isTaskRelated){
       this.task.linkedProject = this.f['project'].value
