@@ -32,10 +32,9 @@ export class CreateUserComponent implements OnInit {
   returnmessage = '';
 
   user = {} as User;
-  requiredPass: any;
-  minLengthPass: any;
-  patternPass: any;
-  invalidPass: any;
+  needsUpperCase = true
+  needsLowerCase = true
+  needsDigit = true
 
   constructor(
     private formBuilder: FormBuilder,
@@ -50,19 +49,25 @@ export class CreateUserComponent implements OnInit {
     return this.userForm.controls; 
   }
 
+  onChangeCheckPass(){
+    if(this.f["password"].errors){
+      console.log("checkstuff")
+      this.needsUpperCase = !(/^(?=.*[A-Z]).*$/.test(this.f["password"].value))
+      this.needsLowerCase = !(/^(?=.*[a-z]).*$/.test(this.f["password"].value))
+      this.needsDigit = !(/^(?=.*\d).*$/.test(this.f["password"].value))
+    } else {
+      this.needsUpperCase = false
+      this.needsLowerCase = false
+      this.needsDigit = false
+    }
+  }
+
   onSubmit() {
     this.submitted = true;
     if (this.userForm.invalid) {
-      this.invalidPass = this.submitted && this.f['password'].errors
-      this.requiredPass = this.f['password'].errors!['required']
-      this.minLengthPass = this.f['password'].errors!['minlength']
-      this.patternPass = this.f['password'].errors!['pattern']
       return;
-    }
+    } 
     this.loading = true;
-    console.log(this.f["username"].value)
-    console.log(this.f["password"].value)
-    console.log(this.f["role"].value)
     this.createuserservice.createUser(this.f["username"].value, this.f["password"].value, this.f["role"].value)
       .subscribe({
         next: () => {

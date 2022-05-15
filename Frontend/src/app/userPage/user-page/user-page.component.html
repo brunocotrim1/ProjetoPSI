@@ -1,9 +1,9 @@
-<app-navigbar currentComponent="profile" username="{{ user.username }}" userrole="{{ user.role }}"></app-navigbar>
+<app-navigbar currentComponent="profileforeignuser" username="{{ userLogged.username }}" userrole="{{ userLogged.role }}"></app-navigbar>
 <div class="mainContainer">
   <div style="margin-top:6%; margin-bottom:5%;">
     <div class="enjoyapp text-center">
       <div class="white-text">
-        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">My profile</h2>
+        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">{{user.username}}'s profile</h2>
         <hr class="hr-light wow" data-wow-delay="0.3s">
       </div>
     </div>
@@ -30,7 +30,7 @@
                 class="myNavbar">
                 <mdb-navbar-brand>
                   <a class="navbar-brand">
-                    <h1 class="h1 mb-0" style="color: white">My Tasks</h1>
+                    <h1 class="h1 mb-0" style="color: white">User Tasks</h1>
                   </a>
                 </mdb-navbar-brand>
                 <links>
@@ -47,9 +47,9 @@
                       <span *ngIf="tasks[i].priority == 'LOW'" style="color: #04aa6d">{{ task.priority }}</span>
                       <span *ngIf="tasks[i].priority == 'MEDIUM'" style="color: #ffea00">{{ task.priority }}</span>
                       <span *ngIf="tasks[i].priority == 'HIGH'" style="color: #fc8507">{{ task.priority }}</span>
-                      <span *ngIf="tasks[i].priority == 'URGENT'" style="color: #a40404e3">{{ task.priority }}</span>
-                      <div class="progress">
-                        <div class="progress-bar" style="background-color: #04aa6d" role="progressbar"
+                      <span *ngIf="tasks[i].priority == 'CRITICAL'" style="color: #a40404e3">{{ task.priority }}</span>
+                      <div  class="progress">
+                        <div *ngIf="task.progress != 0"  class="progress-bar" style="background-color: #04aa6d" role="progressbar"
                           style.width.%="{{ task.progress }}" attr.aria-valuenow="{{ task.progress }}" aria-valuemin="0"
                           aria-valuemax="100">
                           {{ task.progress }}%

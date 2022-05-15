@@ -61,6 +61,42 @@ module.exports = function (dbI) {
         res.json({ err: "Deleted task" });
     });
 
+    router.get("/tasks/fromuser/:id", authenticateToken, async (req, res) => {
+        console.log(req.params.id)
+        const user = await User.findById(req.params.id).catch(function (err) {
+            res.status(404);
+            res.json({ err: "Error" });
+            return;
+        });;
+        if (!user) {
+            res.status(404);
+            res.json({ err: "User not found" });
+            return;
+        }
+        const tasks = await Task.find({ usersAssigned: user._id }).catch(function (err) {
+            res.status(404);
+            res.json({ err: "Error" });
+            return;
+        });;
+        if (!tasks || tasks.length == 0) {
+            res.status(404);
+            res.json({ err: "No tasks found" });
+            return;
+        }
+        res.json(tasks);
+    });
+
+    router.get("/allTasks", authenticateToken, async (req, res) => {
+        const tasks = await Task.find({}).then(
+            function (tasks) {
+                res.json(tasks);
+            }
+        ).catch(function (err) {
+        });;
+
+
+    });
+
     router.get("/getusers", authenticateToken, async (req, res) => {
         const users = await User.find({}).catch(function (err) {
             res.status(404);
@@ -262,7 +298,7 @@ module.exports = function (dbI) {
         if (req.body.beginDate && req.body.endDate) {
             Task.updateOne(
                 { _id: req.body._id },
-                { $set: { usersAssigned: req.body.usersAssigned, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate), linkedProject: req.body.linkedProject._id } }
+                { $set: { usersAssigned: req.body.usersAssigned, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate), linkedProject: req.body.linkedProject._id ,progress:req.body.progress} }
             ).then(function (response) {
                 if (response.matchedCount == 0) {
                     res.status(404);

@@ -51,9 +51,7 @@ export class CreateTaskComponent implements OnInit {
       return;
     }
     this.loading = true;
-    console.log(this.f["taskname"].value)
     
-    console.log(this.f["priority"].value)
     this.createtaskservice.createTask(this.f["taskname"].value, this.f["priority"].value, 0, this.user)
       .subscribe({
         next: () => {

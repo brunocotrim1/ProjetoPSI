@@ -39,11 +39,13 @@
               </div>
             </div>
             <input type="password" formControlName="password" placeholder="Password" class="form-control" style="border-top-right-radius: 2px; border-bottom-right-radius: 2px;"
-              [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"/> 
+              [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" (input)="onChangeCheckPass()"/> 
             <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
               <div *ngIf="f['password'].errors['required']">Password is required</div>
               <div *ngIf="f['password'].errors['minlength']">Password must be at least 8 characters long</div>
-              <div *ngIf="f['password'].errors['pattern']">Required at least one uppercase and downcase letter and digit</div>
+              <div *ngIf="needsUpperCase">Password needs a Uppercase letter</div>
+              <div *ngIf="needsLowerCase">Password needs a Lowercase letter</div>
+              <div *ngIf="needsDigit">Password needs a digit</div>
             </div>
           </div>  
         </div>

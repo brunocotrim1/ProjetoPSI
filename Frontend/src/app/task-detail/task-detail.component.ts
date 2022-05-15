@@ -21,6 +21,7 @@ export class TaskDetailComponent implements OnInit {
     beginDate: new FormControl('', []),
     endDate: new FormControl('', []),
     project: new FormControl('', Validators.required),
+    progress: new FormControl('', Validators.required),
   });
 
   @ViewChild('picker') picker: any;
@@ -85,7 +86,8 @@ export class TaskDetailComponent implements OnInit {
         } this.taskDetailService.getTaskDetail(id).subscribe({
           next: (task) => {
             this.task = task;
-            //console.log(this.data)
+            this.f['progress'].setValue(task.progress)
+            console.log( this.f['progress'].value)
             for (let i = 0; i < this.data.length; i++) {
               for (let j = 0; j < this.task.usersAssigned.length; j++) {
                 if (this.task.usersAssigned[j].username == this.data[i].item_text) {
@@ -191,7 +193,7 @@ export class TaskDetailComponent implements OnInit {
   get f() { return this.form.controls; }
 
   saveChanges() {
-
+   
     if (this.f['beginDate'].value._d) {
       this.task.beginDate = new Date(this.f['beginDate'].value._d);
     }
@@ -206,15 +208,19 @@ export class TaskDetailComponent implements OnInit {
         }
       }
     }
+<<<<<<< HEAD
     this.task.checklist = this.checklist;
     
     
+=======
+    this.task.progress = this.f['progress'].value
+>>>>>>> c7d037b562acc788efa2c893d8736c877cc26a5f
     if(!this.f['project'].invalid && !this.isTaskRelated){
       this.task.linkedProject = this.f['project'].value
       this.isTaskRelated = true;
     }
 
-
+    console.log(this.task)
     this.taskDetailService.saveTask(this.task).subscribe({
       next: (msg) => {
         this.error='';
