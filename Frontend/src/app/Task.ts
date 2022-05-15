@@ -10,4 +10,5 @@ export interface Task {
     linkedProject: Project;
     beginDate: Date;
     endDate: Date;
+    state: string;
 }

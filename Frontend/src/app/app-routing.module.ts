@@ -18,6 +18,8 @@ import { CreateTaskComponent } from './create-task/create-task.component';
 
 import { TasklistComponent } from './tasklist/tasklist/tasklist.component';
 import { ManageteamsComponent } from './manageteams/manageteams.component';
+import { UsersListComponent } from './users-list/users-list/users-list.component';
+import { UserPageComponent } from './userPage/user-page/user-page.component';
 const routes: Routes = [
   { path: '', redirectTo: '/mainmenu', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent,canActivate: [AuthenticationGuard] },
@@ -31,7 +33,9 @@ const routes: Routes = [
   { path: 'taskDetail/:id', component: TaskDetailComponent, canActivate: [AuthenticationGuard]  },
   { path: 'createtask', component: CreateTaskComponent, canActivate: [AuthenticationGuard]  },
   { path: 'tasklist', component: TasklistComponent, canActivate: [AuthenticationGuard]  },
-  { path: 'manageteams', component: ManageteamsComponent, canActivate: [AuthenticationGuard]  }
+  { path: 'manageteams', component: ManageteamsComponent, canActivate: [AuthenticationGuard]  },
+  { path: 'userslist', component: UsersListComponent, canActivate: [AuthenticationGuard]  },
+  { path: 'profile/:id', component: UserPageComponent, canActivate: [AuthenticationGuard]  }
 ];
 
 @NgModule({

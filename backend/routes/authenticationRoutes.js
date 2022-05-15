@@ -55,6 +55,7 @@ async function init() {
           beginDate: new Date().setDate(new Date().getDate()+4),
           
           endDate: new Date().setDate(new Date().getDate()+6),
+          
       },
       {
           name: "Task 2",

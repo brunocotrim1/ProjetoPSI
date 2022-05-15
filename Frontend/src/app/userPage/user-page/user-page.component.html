@@ -1,9 +1,9 @@
-<app-navigbar currentComponent="profile" username="{{ user.username }}" userrole="{{ user.role }}"></app-navigbar>
+<app-navigbar currentComponent="profileforeignuser" username="{{ userLogged.username }}" userrole="{{ userLogged.role }}"></app-navigbar>
 <div class="mainContainer">
   <div style="margin-top:6%; margin-bottom:5%;">
     <div class="enjoyapp text-center">
       <div class="white-text">
-        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">My profile</h2>
+        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">{{user.username}}'s profile</h2>
         <hr class="hr-light wow" data-wow-delay="0.3s">
       </div>
     </div>
@@ -30,7 +30,7 @@
                 class="myNavbar">
                 <mdb-navbar-brand>
                   <a class="navbar-brand">
-                    <h1 class="h1 mb-0" style="color: white">My Tasks</h1>
+                    <h1 class="h1 mb-0" style="color: white">User Tasks</h1>
                   </a>
                 </mdb-navbar-brand>
                 <links>
