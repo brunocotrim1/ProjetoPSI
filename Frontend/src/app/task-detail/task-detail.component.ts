@@ -37,6 +37,7 @@ export class TaskDetailComponent implements OnInit {
   limitSelection = false;
   message = ''
   error = ''
+  checklist: any = {'A': false, 'B': false, 'C': false};
 
   public minDate!: Date;
   public maxDate!: Date;
@@ -52,6 +53,7 @@ export class TaskDetailComponent implements OnInit {
   public color: ThemePalette = 'warn';
   public disableMinute = false;
   public hideTime = false;
+  public showCheck = false;
   constructor(private taskDetailService: TaskDetailService, private route: ActivatedRoute, private http: HttpClient, private fb: FormBuilder) { }
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -65,11 +67,13 @@ export class TaskDetailComponent implements OnInit {
   currentProject = {} as Project;
   returnmessage = '';
   isTaskRelated = false;
+  isMultiDropdownOpen = false;
 
   ngOnInit(): void {
     this.user = this.taskDetailService.getUser();
     const id = this.route.snapshot.paramMap.get('id')!;
     this.data = [];
+    this.showCheck = this.hasChecklist();
     this.taskDetailService.getUsers().subscribe({
       next: (users) => {
         this.users = users
@@ -135,12 +139,57 @@ export class TaskDetailComponent implements OnInit {
 
   }
 
+  invertValue(key : any) {
+    this.checklist[key] = !this.checklist[key]
+  }
+
+  addKey(key : any) {
+    this.checklist[key] = false;
+  }
+
+  deleteKey(key : any) {
+    delete this.checklist[key];
+  }
   removeLinkedProjectOfTask(){
     this.f['project'].reset();
     this.task.linkedProject = {} as Project;
     this.isTaskRelated = false;
   }
 
+  startShowingCheck() {
+    
+    this.showCheck = true;
+    
+  }
+
+  stopShowingCheck() {
+
+    this.showCheck = false;
+
+  }
+
+  onTabShowSelect(){
+    if (!this.isMultiDropdownOpen){
+      this.isMultiDropdownOpen = true;
+    } else {
+      this.isMultiDropdownOpen = false;
+    }
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'Unselect All',
+      itemsShowLimit: 6,
+      allowSearchFilter: true,
+      defaultOpen: this.isMultiDropdownOpen
+    };
+  }
+  
+  hasChecklist() {
+    
+    return (Object.keys(this.checklist).length !== 0);
+  }
   get f() { return this.form.controls; }
 
   saveChanges() {

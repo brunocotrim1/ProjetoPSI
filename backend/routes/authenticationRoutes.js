@@ -9,6 +9,8 @@ const User = require("../models/User");
 const Project = require("../models/Project");
 const Task = require("../models/Task");
 const Team = require("../models/Team");
+
+
 const users = [
   {
     username: "bruno",
@@ -35,84 +37,97 @@ const users = [
     password: SHA_256("miguelS"),
     role: "ADMIN",
   },
+  {
+    username: "professor",
+    password: SHA_256("123Professor321"),
+    role: "ADMIN",
+  },
+  {
+    username: "aluno",
+    password: SHA_256("123Aluno321"),
+    role: "USER",
+  },
 ];
 
 
 async function init() {
 
+  User.deleteMany({}).catch(function (err) { });
+
   for (let i = 0; i < users.length; i++) {
     const user = new User(users[i]);
     await user.save().catch(function (err) { });
   }
-  const testUser = await User.findOne({ username: "bruno" });
+
+  const bruno = await User.findOne({ username: "bruno" });
+  const miguel = await User.findOne({ username: "miguel" });
+  const lucas = await User.findOne({ username: "joao" });
+  const miguelS = await User.findOne({ username: "miguelS" });
+  const diogo = await User.findOne({ username: "diogo" });
+  const prof = await User.findOne({ username: "professor" });
+  const aluno = await User.findOne({ username: "aluno" });
+
   Task.deleteMany({}).catch(function (err) { });
   const tasks = [
       {
           name: "Task 1",
-          usersAssigned: [testUser._id],
+          usersAssigned: [bruno._id],
           progress: 33,
           priority: "LOW",
           beginDate: new Date().setDate(new Date().getDate()+4),
-          
           endDate: new Date().setDate(new Date().getDate()+6),
           
       },
       {
           name: "Task 2",
-          usersAssigned: [testUser._id],
+          usersAssigned: [bruno._id, miguel._id, lucas._id],
           progress: 15,
-          priority: "CRITICAL",
+          priority: "MEDIUM",
           beginDate: new Date().setDate(new Date().getDate()+3),
-          
           endDate: new Date().setDate(new Date().getDate()+5),
       },
       {
           name: "Task 3",
-          usersAssigned: [testUser._id],
+          usersAssigned: [bruno._id, miguel._id, lucas._id, miguelS._id, diogo._id],
           progress: 66,
-          priority: "MEDIUM",
+          priority: "URGENT",
           beginDate: new Date().setDate(new Date().getDate()+10),
-          
           endDate: new Date().setDate(new Date().getDate()+11),
-      },
-      {
+      },{
         name: "Task 4",
-        usersAssigned: [testUser._id],
-        progress: 99,
-        priority: "CRITICAL",
-        beginDate: new Date().setDate(new Date().getDate()+10),
-        
-        endDate: new Date().setDate(new Date().getDate()+11),
-    },
-    {
-      name: "Task 5",
-      usersAssigned: [testUser._id],
-      progress: 66,
-      priority: "MEDIUM",
-      beginDate: new Date().setDate(new Date().getDate()+10),
-      
-      endDate: new Date().setDate(new Date().getDate()+11),
-  },
+        usersAssigned: [prof._id, aluno._id],
+        progress: 66,
+        priority: "HIGH",
+        beginDate: new Date().setDate(new Date().getDate()),
+        endDate: new Date().setDate(new Date().getDate()+2),
+      },{
+        name: "Task 5",
+        usersAssigned: [prof._id, aluno._id],
+        progress: 66,
+        priority: "LOW",
+        beginDate: new Date().setDate(new Date().getDate()+2),
+        endDate: new Date().setDate(new Date().getDate()+6),
+      }
   ];
+
   for (let i = 0; i < tasks.length; i++) {
       const task = new Task(tasks[i]);
       await task.save().catch(function (err) { });
   }
-   await Team.deleteMany({}).catch(function (err) { });
-  const testUser2 = await User.findOne({ username: "miguel" });
 
+  await Team.deleteMany({}).catch(function (err) { });
   const testTeams = [
       {
           name: "Team 1",
-          members: [testUser.id,testUser2.id]
+          members: [bruno._id]
       },
       {
           name: "Team 2",
-          members: [testUser2.id]
+          members: [bruno._id, miguel._id, lucas._id]
       },
       {
           name: "Team 3",
-          members: [testUser2.id]
+          members: [bruno._id, miguel._id, lucas._id, miguelS._id, diogo._id]
       }
   ];
   for (let i = 0; i < testTeams.length; i++) {
@@ -122,20 +137,24 @@ async function init() {
 
   const checkteams = await Team.find({});
 
+  await Project.deleteMany({}).catch(function (err) { });
   const testProject = [
       {
           name: "Project 1",
           acronym: "PT1",
           linkedTeam: checkteams[0].id,
+          beginDate: new Date().setDate(new Date().getDate()+10),
+          endDate: new Date().setDate(new Date().getDate()+11)
       },
       {
           name: "Project 2",
           acronym: "PT2",
-          linkedTeam: checkteams[1].id,
+          beginDate: new Date().setDate(new Date().getDate()+10),
       },
       {
           name: "Project 3",
           acronym: "PT3",
+          beginDate: new Date().setDate(new Date().getDate()+10),
       },
   ];
   for (let i = 0; i < testProject.length; i++) {
@@ -251,7 +270,7 @@ module.exports = function (dbI) {
         });
     } else {
       res.status(404);
-      res.json({ err: "User with the selected name already exists." })
+      res.json({ err: "User with the selected name already exists" })
     }
     //res.sendStatus(200)
   });

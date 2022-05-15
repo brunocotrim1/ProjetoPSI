@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.returnUrl = "/mainmenu";
+    this.returnUrl = "/profile";
     if(this.authenticationService.loadUser()){
       this.router.navigate([ this.returnUrl]);
     }

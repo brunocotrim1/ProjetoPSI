@@ -9,23 +9,35 @@
     </div>
     <button class="lftbut" mdbBtn type="button" rounded="true">
       <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Task List</h4>
-      <ul class="list-group">
-        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">No Tasks</div>
-        <li style="font-size: 1.5em; font-weight: bold; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;" class="list-group-item" *ngFor="let task of tasks; let i = index" routerLink="/taskDetail/{{task._id}}">{{ task.name }}
-          <span *ngIf="tasks[i].priority == 'LOW'" style="color: #04aa6d">{{ task.priority }}</span>
-          <span *ngIf="tasks[i].priority == 'MEDIUM'" style="color: #ffea00">{{ task.priority }}</span>
-          <span *ngIf="tasks[i].priority == 'HIGH'" style="color: #fc8507">{{ task.priority }}</span>
-          <span *ngIf="tasks[i].priority == 'CRITICAL'" style="color: #a40404e3">{{ task.priority }}</span>
-          <div class="progress">
-            <div *ngIf="task.progress != 0" class="progress-bar" style="background-color: #04aa6d" role="progressbar"
-              style.width.%="{{ task.progress }}" attr.aria-valuenow="{{ task.progress }}" aria-valuemin="0"
-              aria-valuemax="100">
-              {{ task.progress }}%
+      <ul *ngIf="!checkIfNoTasks(); else noTasksBlock" class="list-group">
+        <li style="font-size: 1.5em; font-weight: bold; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;" 
+        class="list-group-item" *ngFor="let task of tasks; let i = index">
+          <div class="namePriorityProgress" routerLink="/taskDetail/{{task._id}}" (keyup.enter)="navigateToDetails(task._id)">
+            <div class="namePriority">
+              {{ task.name }}
+              <span *ngIf="tasks[i].priority == 'LOW'" style="color: #04aa6d">{{ task.priority }}</span>
+              <span *ngIf="tasks[i].priority == 'MEDIUM'" style="color: #ffea00">{{ task.priority }}</span>
+              <span *ngIf="tasks[i].priority == 'HIGH'" style="color: #fc8507">{{ task.priority }}</span>
+              <span *ngIf="tasks[i].priority == 'URGENT'" style="color: #a40404e3">{{ task.priority }}</span>
+            </div>
+            <div class="progress">
+              <div class="progress-bar" style="background-color: #04aa6d" role="progressbar"
+                style.width.%="{{ task.progress }}" attr.aria-valuenow="{{ task.progress }}" aria-valuemin="0"
+                aria-valuemax="100">
+                {{ task.progress }}%
+              </div>
             </div>
             <div style="margin-top: 1%;" *ngIf="task.progress == 0" > {{ task.progress }}%</div>
           </div>
+          <button mdbBtn class="deletetask" mdbWavesEffect (click)="onDeleteTask(task)"
+          style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">
+            <mdb-icon fas icon="times"></mdb-icon>
+          </button>
         </li>
       </ul>
+      <ng-template #noTasksBlock>
+        <div class="noTasksClass alert alert-danger">No Tasks</div>
+      </ng-template>
     </button>
   </div>
   <app-footer style="width: 100%"></app-footer>

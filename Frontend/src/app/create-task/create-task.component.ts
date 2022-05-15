@@ -16,7 +16,7 @@ export class CreateTaskComponent implements OnInit {
 
   taskForm = new FormGroup(
     {
-      taskname: new FormControl('', [Validators.required, Validators.minLength(4), Validators.pattern(/^[a-z0-9]+$/i)]),
+      taskname: new FormControl('', [Validators.required, Validators.minLength(4), Validators.pattern(/^[a-zA-Z0-9]+$/i)]),
     
       priority: new FormControl('', Validators.required),
       
@@ -56,11 +56,14 @@ export class CreateTaskComponent implements OnInit {
       .subscribe({
         next: () => {
           this.returnmessage = "New task created!";
+          setTimeout(() => {this.returnmessage = ''
+        }, 2*1000);
           this.loading = false;
         },
         error: error => {
-          this.returnmessage = ""
-          this.error = "Task Already Exists!";
+          this.error = error;
+          setTimeout(() => {this.error = ''
+          }, 2*1000);
           this.loading = false;
         }
       });

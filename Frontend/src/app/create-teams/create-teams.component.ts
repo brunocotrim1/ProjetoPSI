@@ -23,6 +23,7 @@ export class CreateTeamsComponent implements OnInit {
   dropdownUsers: any[] = [];
   returnmessage = '';
   success = false;
+  isMultiDropdownOpen = false;
 
   fillInDropdown(typeobject: string) {
     if (typeobject === "Project") {
@@ -49,7 +50,7 @@ export class CreateTeamsComponent implements OnInit {
 
   teamForm = new FormGroup(
     {
-      name: new FormControl('', [Validators.required, Validators.minLength(4), Validators.pattern(/^[a-z0-9]+$/i)]),
+      name: new FormControl('', [Validators.required, Validators.minLength(4), Validators.pattern(/^[a-zA-Z0-9]+$/i)]),
       dropdown: new FormControl('', )
     }
   );
@@ -74,6 +75,24 @@ export class CreateTeamsComponent implements OnInit {
 
   }
 
+  onTabShowSelect(){
+    if (!this.isMultiDropdownOpen){
+      this.isMultiDropdownOpen = true;
+    } else {
+      this.isMultiDropdownOpen = false;
+    }
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'Unselect All',
+      itemsShowLimit: 6,
+      allowSearchFilter: true,
+      defaultOpen: this.isMultiDropdownOpen
+    };
+  }
+
   get f() {
     return this.teamForm.controls;
   }
@@ -93,15 +112,17 @@ export class CreateTeamsComponent implements OnInit {
 
     this.createteamservice.saveTeam({ name: this.f["name"].value, members: fetchUsers() }).subscribe({
       next: () => {
-
         this.success = true
         this.returnmessage = 'Team created!';
+        setTimeout(() => {this.returnmessage = ''
+        }, 2*1000);
         this.loading = false;
       },
       error: (error) => {
-
         this.success = false
         this.returnmessage = error;
+        setTimeout(() => {this.returnmessage = ''
+        }, 2*1000);
         this.loading = false;
       }
     })

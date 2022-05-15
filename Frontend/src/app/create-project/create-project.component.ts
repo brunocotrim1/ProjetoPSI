@@ -16,7 +16,7 @@ export class CreateProjectComponent implements OnInit {
 
   projectForm = new FormGroup(
     {
-    name: new FormControl('', [Validators.required, Validators.minLength(4), Validators.pattern(/^[a-z0-9]+$/i)]),
+    name: new FormControl('', [Validators.required, Validators.minLength(4), Validators.pattern(/^[a-zA-Z0-9]+$/i)]),
     acronym: new FormControl('', [Validators.required, Validators.pattern(/^[a-z0-9]{3}$/i)]),
     beginDate: new FormControl('',[Validators.required]),
     endDate: new FormControl('',[]),
@@ -91,10 +91,14 @@ export class CreateProjectComponent implements OnInit {
       .subscribe({
         next: () => {
           this.returnmessage = "New project created!";
+          setTimeout(() => {this.returnmessage = ''
+          }, 2*1000);
           this.loading = false;
         },
         error: error => {
           this.error = error;
+          setTimeout(() => {this.error = ''
+          }, 2*1000);
           this.loading = false;
         }
       });

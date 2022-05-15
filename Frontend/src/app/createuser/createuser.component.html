@@ -1,5 +1,4 @@
 <app-navigbar currentComponent="createuser" username={{user.username}} userrole={{user.role}}></app-navigbar>
-
 <div class="mainContainer">
   <div style="margin-top:6%; margin-bottom:5%;">
     <div class="enjoyapp text-center">
@@ -10,7 +9,7 @@
     </div>
     <button class="lftbut" mdbBtn type="button" rounded="true">
       <form class="d-flex flex-column text-center" [formGroup]="userForm" (ngSubmit)="onSubmit()" style="margin:50px;">
-        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Create user</h4>
+        <h4 class="mb-4" style="color: #ffffff; opacity: 87%">CREATE USER</h4>
         <div class="form-group">
           <input type="text" formControlName="username" placeholder="Username" class="form-control"
             [ngClass]="{ 'is-invalid': submitted && f['username'].errors }" />
@@ -32,13 +31,23 @@
           </div>
         </div>
         <div class="form-group">
-          <input type="password" formControlName="password" placeholder="Password" class="form-control"
-            [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"/>
-          <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-            <div *ngIf="f['password'].errors['required']">Password is required</div>
-            <div *ngIf="f['password'].errors['minlength']">Password must be at least length of 8</div>
-            <div *ngIf="f['password'].errors['pattern']">Required at least one uppercase and downcase letter and digit</div>
-          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupPrepend" data-toggle="dropdown"><mdb-icon fas icon="info"></mdb-icon></span>
+              <div class="dropdown-menu">
+                <span class="dropdown-item-text" style="font-size: small !important">Password must be at least 8 characters long and have at least one uppercase and downcase letter and digit</span>
+              </div>
+            </div>
+            <input type="password" formControlName="password" placeholder="Password" class="form-control" style="border-top-right-radius: 2px; border-bottom-right-radius: 2px;"
+              [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" (input)="onChangeCheckPass()"/> 
+            <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+              <div *ngIf="f['password'].errors['required']">Password is required</div>
+              <div *ngIf="f['password'].errors['minlength']">Password must be at least 8 characters long</div>
+              <div *ngIf="needsUpperCase">Password needs a Uppercase letter</div>
+              <div *ngIf="needsLowerCase">Password needs a Lowercase letter</div>
+              <div *ngIf="needsDigit">Password needs a digit</div>
+            </div>
+          </div>  
         </div>
         <div class="form-group">
           <input type="password" formControlName="confirm_password" placeholder="Confirm Password" class="form-control"

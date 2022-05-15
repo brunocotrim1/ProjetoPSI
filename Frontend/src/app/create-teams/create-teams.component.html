@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="form-group">
-          <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="dropdownList"
+          <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="dropdownList" (keyup.enter)="onTabShowSelect()"
             classes-btn="'btn-primary btn-block'" formControlName="dropdown" placeholder="Select team members"
             classes-btn="'btn-primary btn-block'" [ngClass]="{ 'is-invalid': submitted && f['dropdown'].errors }">
           </ng-multiselect-dropdown>

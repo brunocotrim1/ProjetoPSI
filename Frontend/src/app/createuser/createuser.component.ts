@@ -15,8 +15,8 @@ export class CreateUserComponent implements OnInit {
 
   userForm = new FormGroup(
     {
-    username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-z0-9]+$/i)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/(.*[a-z].*)(.*[A-Z].*)(.*\d.*)/i)]),
+    username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-zA-Z0-9]+$/)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).*$/)]),
     role: new FormControl('', Validators.required),
     confirm_password: new FormControl('', Validators.required)
     }, {
@@ -32,6 +32,9 @@ export class CreateUserComponent implements OnInit {
   returnmessage = '';
 
   user = {} as User;
+  needsUpperCase = true
+  needsLowerCase = true
+  needsDigit = true
 
   constructor(
     private formBuilder: FormBuilder,
@@ -46,23 +49,37 @@ export class CreateUserComponent implements OnInit {
     return this.userForm.controls; 
   }
 
+  onChangeCheckPass(){
+    if(this.f["password"].errors){
+      console.log("checkstuff")
+      this.needsUpperCase = !(/^(?=.*[A-Z]).*$/.test(this.f["password"].value))
+      this.needsLowerCase = !(/^(?=.*[a-z]).*$/.test(this.f["password"].value))
+      this.needsDigit = !(/^(?=.*\d).*$/.test(this.f["password"].value))
+    } else {
+      this.needsUpperCase = false
+      this.needsLowerCase = false
+      this.needsDigit = false
+    }
+  }
+
   onSubmit() {
     this.submitted = true;
     if (this.userForm.invalid) {
       return;
-    }
+    } 
     this.loading = true;
-    console.log(this.f["username"].value)
-    console.log(this.f["password"].value)
-    console.log(this.f["role"].value)
     this.createuserservice.createUser(this.f["username"].value, this.f["password"].value, this.f["role"].value)
       .subscribe({
         next: () => {
           this.returnmessage = "New user created!";
+          setTimeout(() => {this.returnmessage = ''
+          }, 2*1000);
           this.loading = false;
         },
         error: error => {
           this.error = error;
+          setTimeout(() => {this.error = ''
+          }, 2*1000);
           this.loading = false;
         }
       });

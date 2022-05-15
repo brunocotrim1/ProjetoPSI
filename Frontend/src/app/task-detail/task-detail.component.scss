@@ -26,20 +26,39 @@
   border-radius: 20px;
 }
 
+.checkboxContainer {
+  width: 50%;
+}
+
 form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
-  margin-bottom: 50px;
-  margin-left: 100px;
-  margin-right: 100px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 40px;
+  margin-right: 40px;
 }
 
 ng-multiselect-dropdown {
   margin-left: 5px;
   width: 200px;
+}
+
+.lftbut, .rgtbut {
+  background: rgb(33,33,33);
+  color: white;
+  border: 2px solid black;
+  border-color: #04AA6D;
+  border-radius: 20px;
+  z-index: 2;
+  box-shadow: 0 10px 100px rgba(0, 255, 98, 0.15);
+  transform: perspective(1px)
+}
+
+.lftbut{
+  background: linear-gradient(45deg, rgba(33,33,33,1) 0%, rgba(46,46,46,1) 36%, rgba(68,68,68,1) 100%);
 }
 
 .taskProjectButton {

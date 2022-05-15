@@ -37,6 +37,7 @@ import { TasklistComponent } from './tasklist/tasklist/tasklist.component';
 import { ManageteamsComponent } from './manageteams/manageteams.component';
 import { UsersListComponent } from './users-list/users-list/users-list.component';
 import { UserPageComponent } from './userPage/user-page/user-page.component';
+import { SchedulereunionComponent } from './schedulereunion/schedulereunion.component';
 
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
@@ -90,6 +91,7 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     ManageteamsComponent,
     UsersListComponent,
     UserPageComponent,
+    SchedulereunionComponent,
 
   ],
   imports: [

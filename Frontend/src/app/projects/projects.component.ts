@@ -117,6 +117,10 @@ export class ProjectsComponent implements OnInit {
 
   onChangeObj() {
     this.currentProject = this.f["project"].value
+    this.currentProject.beginDate = new Date(this.currentProject.beginDate)
+    if (this.currentProject.endDate){
+      this.currentProject.endDate = new Date(this.currentProject.endDate)
+    } 
     if(this.f["project"].value.linkedTeam != undefined){
       console.log("This project has a linked team")
       this.projectsService.getTeam(this.f["project"].value.linkedTeam)
@@ -192,10 +196,14 @@ export class ProjectsComponent implements OnInit {
           // console.log("Current Project updateandremove =>",this.currentProject)
           // console.log("Current Project Team updateandremove =>",this.currentProjectTeam)
           this.returnmessage = "Team has been removed!";
+          setTimeout(() => {this.returnmessage = ''
+          }, 2*1000);
           this.loading = false;
         },
         error: error => {
           this.error = error;
+          setTimeout(() => {this.error = ''
+          }, 2*1000);
           this.loading = false;
         }
       });

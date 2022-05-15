@@ -20,36 +20,22 @@ export class MultiselectDropdownComponent implements OnInit {
   fillInDropdown(typeobject : string) {
     if(typeobject === "Project") {
       //ir fazer getallprojects do service do project
-      
-
     } else if(typeobject === "Team") {
       this.dropdownList = [];
-    
       this.create_team_service.getAllUsers().subscribe(
           userList => {
-              
             this.dropdownList = [...userList].map(x => x.username);
-              
           }
         );
-
     }
-    
   } 
-
-
 
   dropdownSettings: IDropdownSettings={};
   ngOnInit() {
-    
-    
     this.fillInDropdown("Team") 
-    
     this.dropdownSettings = {
       idField: 'item_id' ,
       textField: 'item_text',
     };
   }
-
-  
 }

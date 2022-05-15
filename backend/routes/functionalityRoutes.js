@@ -49,8 +49,16 @@ module.exports = function (dbI) {
             }
         ).catch(function (err) {
         });;
+    });
 
-
+    router.delete("/deleteTask/:id", authenticateToken, async (req, res) => {
+        console.log(req.params.id)
+        await Task.deleteOne({_id: req.params.id}).catch(function (err) {
+            res.status(404);
+            res.json({ err: "Not Found" });
+        });;
+        res.status(200);
+        res.json({ err: "Deleted task" });
     });
 
     router.get("/tasks/fromuser/:id", authenticateToken, async (req, res) => {
@@ -259,17 +267,17 @@ module.exports = function (dbI) {
 
             if (dateInicio.getTime() >= dateFin.getTime()) {
                 res.status(404);
-                console.log("Data inicio tem de ser anterior a data de fim")
-                res.json({ err: "Data inicio tem de ser anterior a data de fim" });
+                console.log("Begin date has to be before End date")
+                res.json({ err: "Begin date has to be before End date" });
                 return;
             }
-            if (req.body.priority == "CRITICAL") {
+            if (req.body.priority == "URGENT") {
                 const tasks = await Task.find({})
                     .then(function (response) {
                         return response;
                     })
                 for (let i = 0; i < tasks.length; i++) {
-                    if (tasks[i].beginDate && tasks[i].endDate && tasks[i].progress != 100 && tasks[i].priority == "CRITICAL" && tasks[i].usersAssigned.includes(req.user.id) && tasks[i]._id != req.body._id) {
+                    if (tasks[i].beginDate && tasks[i].endDate && tasks[i].progress != 100 && tasks[i].priority == "URGENT" && tasks[i].usersAssigned.includes(req.user.id) && tasks[i]._id != req.body._id) {
                         const dateInicioCompare = new Date(tasks[i].beginDate);
                         const dateFinCompare = new Date(tasks[i].endDate);
                         //(StartDate1 <= EndDate2) and (StartDate2 <= EndDate1)
@@ -277,7 +285,7 @@ module.exports = function (dbI) {
                         if (dateInicioCompare.getTime() <= dateFin.getTime() && dateFinCompare.getTime() >= dateInicio.getTime()) {
                             console.log("Intercecao")
                             res.status(404);
-                            res.json({ err: "Existe outra tarefa de prioridade urgente a qual esta se sobrepõe" });
+                            res.json({ err: "There already exists an overlapping task with URGENTE priority." });
                             return;
                         }
                     }
@@ -297,7 +305,7 @@ module.exports = function (dbI) {
                     res.json({ err: "Task not found" });
                     return;
                 } else
-                    res.json({ msg: "Task Saved Suceffully" });
+                    res.json({ msg: "Task saved successfully" });
             })
                 .catch(function (err) {
                     res.status(404);
@@ -314,7 +322,7 @@ module.exports = function (dbI) {
                     res.json({ err: "Task not found" });
                     return;
                 } else
-                    res.json({ msg: "Task Saved Suceffully" });
+                    res.json({ msg: "Task saved successfully" });
             })
                 .catch(function (err) {
                     res.status(404);
@@ -323,15 +331,21 @@ module.exports = function (dbI) {
                 });
         } else {
             res.status(404);
-            res.json({ err: "Tem de existir duas datas" });
+            res.json({ err: "Begin and end date are required" });
             return;
         }
     });
     router.post("/createtask/add", authenticateToken, async (req, res) => {
+        const taskExists = await Task.exists({ name: req.body.taskname }).catch(function (err) {
+            res.status(404);
+            res.json({ err: "Internal error." })
+            return;
+        });
+        if (!taskExists) {
         await Task.create({ name: req.body.taskname, priority: req.body.priority, percentage: req.body.percentage, progress: 0, usersAssigned: req.body.userID.id })
             .then(function (response) {
                 console.log(response)
-                res.json({ msg: "Task Saved Suceffully" });
+                res.json({ msg: "Task saved successfully" });
                 return
             })
             .catch(function (err) {
@@ -340,45 +354,90 @@ module.exports = function (dbI) {
                 res.json({ err: "Internal error." })
                 return;
             });
+        } else {
+            res.status(404);
+            res.json({ err: "Task with the selected name already exists" })
+        }
     });
 
 
     router.post("/teams/add", authenticateToken, async (req, res) => {
+        const teamExists = await Team.exists({ name: req.body.team.name })
+        .catch(function (err) {
+          res.status(404);
+          res.json({ err: "Internal error." })
+          return;
+        });
+        if (!teamExists) {
         await Team.create({ name: req.body.team.name, members: req.body.team.members })
             .then(function (response) {
                 console.log(response)
-                res.json({ msg: "Team Saved Suceffully" });
+                res.json({ msg: "Team saved successfully" });
                 return
-            })
-            .catch(function (err) {
-
-                console.log(err);
-                res.json({ err: "Internal error." })
-                return;
-            });
-    });
-
-
-    router.post("/addproject", authenticateToken, async (req, res) => {
-        console.log(req.body);
-        await Project.create({ name: req.body.username, acronym: req.body.acronym, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate) })
-            .then(function (response) {
-                res.json({ msg: "Projeto criado com sucesso" });
-                return;
             })
             .catch(function (err) {
                 console.log(err);
                 res.status(404);
-                res.json({ err: "Projeto ja existe" })
+                res.json({ err: "Internal error." })
                 return;
-            })
+            });
+        } else {
+            res.status(404);
+            res.json({ err: "Team with the selected name already exists" })
+        }
+    });
+
+
+    router.post("/addproject", authenticateToken, async (req, res) => {
+        const projectExists = await Project.exists({ name: req.body.username })
+        .catch(function (err) {
+            res.status(404);
+            res.json({ err: "Internal error." })
+            return;
+        });
+        const projectAcronymExists = await Project.exists({ acronym: req.body.acronym })
+        .catch(function (err) {
+            res.status(404);
+            res.json({ err: "Internal error." })
+            return;
+        });
+        if(!projectExists && !projectAcronymExists){
+            if (req.body.beginDate && req.body.endDate){
+                await Project.create({ name: req.body.username, acronym: req.body.acronym, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate) })
+                    .then(function (response) {
+                        res.json({ msg: "Project created successfully" });
+                        return;
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                        res.status(404);
+                        res.json({ err: "Project already exists" })
+                        return;
+                    })
+            } else if (req.body.beginDate && !req.body.endDate) {
+                await Project.create({ name: req.body.username, acronym: req.body.acronym, beginDate: new Date(req.body.beginDate)})
+                .then(function (response) {
+                    res.json({ msg: "Project created successfully" });
+                    return;
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    res.status(404);
+                    res.json({ err: "Project already exists" })
+                    return;
+                })
+            }
+        } else {
+            res.status(404);
+            res.json({ err: "Project with name/acronym chosen already exists" })
+        }
     });
 
     router.put("/updateteam", authenticateToken, async (req, res) => {
         console.log(req.body)
         await Team.updateOne({ _id: req.body._id }, { $set: { members: req.body.members } }).then(
             function (response) {
-                res.json({ msg: "Team updated Suceffully" });
+                res.json({ msg: "Team updated successfully" });
                 return;
             }
         ).catch(function (err) {

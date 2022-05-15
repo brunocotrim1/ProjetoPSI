@@ -1,0 +1,95 @@
+a, h5 {
+    letter-spacing: 1px;
+}
+
+.mainContainer {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width:100%;
+    height:100%;
+}
+
+@media screen and (max-width: 500px) {
+    .infoContainer { 
+        padding-top: 50%;
+        padding-bottom: 40%;
+    }
+    form {
+        margin:10px; 
+        width:30%
+    }
+}
+
+@media screen and (min-width: 500px) and (max-width: 1000px) {
+    .infoContainer { 
+        padding-top: 40%;
+        padding-bottom: 30%;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+}
+
+.infoContainer {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(45deg, rgb(27, 27, 27) 0%, rgb(37, 37, 37) 36%, rgb(63, 63, 63) 100%);
+    color: white;
+
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    border-color: #04AA6D;
+
+    box-shadow: 10px 0 8px -8px rgba(0, 255, 98, 0.15), -10px 0 8px -8px rgba(0, 255, 98, 0.15); 
+    -moz-box-shadow: 10px 0 8px -8px rgba(0, 255, 98, 0.15), -10px 0 8px -8px rgba(0, 255, 98, 0.15); 
+    -webkit-box-shadow: 10px 0 8px -8px rgba(0, 255, 98, 0.15), -10px 0 8px -8px rgba(0, 255, 98, 0.15);
+    transition: all 0.5s;
+
+    width: 70%;
+    height: 100%;
+}
+
+
+.infoContainer:hover {
+    box-shadow: none;
+    transition: all 0.5s;
+}
+
+form {
+    margin:50px; 
+    width:30%
+}
+
+/////////////////////////////////////////////////////////////
+
+.dp-hidden {
+width: 0;
+margin: 0;
+border: none;
+padding: 0;
+}
+.custom-day {
+text-align: center;
+padding: 0.185rem 0.25rem;
+display: inline-block;
+height: 2rem;
+width: 2rem;
+}
+.custom-day.focused {
+background-color: #e6e6e6;
+}
+.custom-day.range, .custom-day:hover {
+background-color: rgb(2, 117, 216);
+color: white;
+}
+.custom-day.faded {
+background-color: rgba(2, 117, 216, 0.5);
+}
+
+ngb-datepicker {
+    position:relative !important;
+    color:#04AA6D !important;
+}
