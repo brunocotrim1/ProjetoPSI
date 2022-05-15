@@ -208,13 +208,8 @@ export class TaskDetailComponent implements OnInit {
         }
       }
     }
-<<<<<<< HEAD
     this.task.checklist = this.checklist;
-    
-    
-=======
     this.task.progress = this.f['progress'].value
->>>>>>> c7d037b562acc788efa2c893d8736c877cc26a5f
     if(!this.f['project'].invalid && !this.isTaskRelated){
       this.task.linkedProject = this.f['project'].value
       this.isTaskRelated = true;

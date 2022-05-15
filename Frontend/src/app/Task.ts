@@ -10,9 +10,5 @@ export interface Task {
     linkedProject: Project;
     beginDate: Date;
     endDate: Date;
-<<<<<<< HEAD
     checklist: Map<string,boolean>;
-=======
-    state: string;
->>>>>>> c7d037b562acc788efa2c893d8736c877cc26a5f
 }
