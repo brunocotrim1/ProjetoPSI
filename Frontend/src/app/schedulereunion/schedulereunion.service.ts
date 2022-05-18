@@ -19,14 +19,18 @@ export class ScheduleReunionService {
     //  this.removeUser()
   }
 
-  // GET /api/getallusers
   getAllUsers() {
     const url = `/api/getusers`;
     return this.http.get<any>(url, this.httpOptions);
   }
 
-  scheduleReunion(reunion: any): Observable<any> {
-    const url = `/api/getusers`;
-    return this.http.post<any>(url, this.httpOptions);
+  getAllReunions(): Observable<any> {
+    const url = `/api/getreunions`;
+    return this.http.get<any>(url, this.httpOptions);
+  }
+
+  createReunion(reunion: any): Observable<any> {
+    const url = `/api/createreunion`;
+    return this.http.post<any>(url, reunion, this.httpOptions);
   }
 }
