@@ -170,26 +170,26 @@
           <hr class="hr-light wow">
           
         </div>
-        <div class="checklistContainer">
+        
           <ul class="checklist">
             <li class="list-group-item" *ngFor="let elem of checklist | keyvalue; let i = index">
-              <div class="namePriorityProgress">
-                <div class="el">
-                  {{ elem.key }} -> {{elem.value}}
-                  <button (click)="invertValue(elem.key)">DO/UNDO</button>
-                  <button (click)="deleteKey(elem.key)">X</button>
-                </div>
-                
+              <div class="taskName">
+                {{ elem.key }}
               </div>
-              <!-- <button mdbBtn class="deletetask" mdbWavesEffect (click)="onDeleteTask(task)" -->
-              
-              <!-- </button> -->
-            
+              <div class="buttonsContainer">
+                <!-- <i *ngIf="elem.value;" (click)="invertValue(elem.key)" class="checkIcon fas fa-check-square"></i>
+                <i *ngIf="!elem.value;" (click)="invertValue(elem.key)" class="checkIcon far fa-square"></i> -->
+                <mdb-icon fas *ngIf="elem.value;" class="checkIcon fa-lg" (click)="invertValue(elem.key)" icon="check-square"></mdb-icon>
+                <mdb-icon far *ngIf="!elem.value;" class="checkIcon fa-lg" (click)="invertValue(elem.key)" icon="square"></mdb-icon>
+                <mdb-icon fas class="deleteItemButton" (click)="deleteKey(elem.key)" icon="trash"></mdb-icon>
+                <!-- <mdb-icon fas class="deleteItem"  -->
+                <!-- <button class="deleteItem" (click)="deleteKey(elem.key)"><i class="fas fa-trash"></i></button> -->
+              </div>
+                
   
             </li>
           </ul>
         
-        </div>
         <div class="checkListFooter">
           <input #newItemName (keyup.enter)="addKey(newItemName.value);" placeholder="Add a subtask"> 
           <input type="submit" class="addItemButton" (click)="addKey(newItemName.value)">
