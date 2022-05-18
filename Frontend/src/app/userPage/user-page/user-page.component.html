@@ -47,7 +47,7 @@
                       <span *ngIf="tasks[i].priority == 'LOW'" style="color: #04aa6d">{{ task.priority }}</span>
                       <span *ngIf="tasks[i].priority == 'MEDIUM'" style="color: #ffea00">{{ task.priority }}</span>
                       <span *ngIf="tasks[i].priority == 'HIGH'" style="color: #fc8507">{{ task.priority }}</span>
-                      <span *ngIf="tasks[i].priority == 'CRITICAL'" style="color: #a40404e3">{{ task.priority }}</span>
+                      <span *ngIf="tasks[i].priority == 'URGENT'" style="color: #a40404e3">{{ task.priority }}</span>
                       <div  class="progress">
                         <div *ngIf="task.progress != 0"  class="progress-bar" style="background-color: #04aa6d" role="progressbar"
                           style.width.%="{{ task.progress }}" attr.aria-valuenow="{{ task.progress }}" aria-valuemin="0"

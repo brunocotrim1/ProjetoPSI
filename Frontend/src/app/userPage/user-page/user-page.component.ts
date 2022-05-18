@@ -96,6 +96,35 @@ export class UserPageComponent implements OnInit {
         this.router.navigate(["/"]);
       }
     });
+    
+    this.userPage.getReunions().subscribe({
+      next: (reunions) => {
+        console.log(reunions);
+        for (let i = 0; i < reunions.length; i++) {
+          if (reunions[i].members.includes(this.user.id)) {
+            let title = "Reunião";
+            if (reunions[i].possibleTeam)
+              title = "Reunião de Equipa";
+            this.events.push({
+              start: new Date(reunions[i].beginDate),
+              end: new Date(reunions[i].endDate),
+              title: title,
+              color: colors[Math.floor(Math.random() * colors.length)],
+              resizable: {
+                beforeStart: true,
+                afterEnd: true,
+              },
+              draggable: false,
+            });
+          }
+        }
+        this.refresh.next();
+
+      },
+      error: error => {
+        this.error = error;
+      }
+    });
   }
 
 

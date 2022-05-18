@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Reunion } from '../Reunion';
 import { AuthenticationService } from '../services/authentication.service';
 import { User } from '../User';
 
@@ -20,6 +21,12 @@ export class ProfileService {
   getTaskList(): Observable<any> {
     return this.http.get<any>(`${this.apiURL}/tasks`, this.httpOptions);
   }
+
+  getReunions(): Observable<Reunion[]> {
+    return this.http.get<Reunion[]>(`${this.apiURL}/getreunions`, this.httpOptions);
+  }
+
+
   getUser(): User {
     const user = this.authenticationService.loadUser();
     if (user)

@@ -163,10 +163,11 @@ async function init() {
       const proj = new Project(testProject[i]);
       await proj.save().catch(function (err) { });
   }
-
+  const equipa = await Team.findOne({ name: "Team 1" });
   await Reunion.deleteMany({}).catch(function (err) { });
   const testReunion = [
       {
+          possibleTeam: equipa._id,
           members: [bruno._id, lucas._id],
           beginDate: new Date().setHours(10,0,0,0),
           endDate: new Date().setHours(13,0,0,0)

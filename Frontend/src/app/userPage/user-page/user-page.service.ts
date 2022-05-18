@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Reunion } from 'src/app/Reunion';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import {Task} from '../../Task';
 import { User } from '../../User';
@@ -26,5 +27,9 @@ export class UserPageService {
     else
       return {} as User
   }
+  getReunions(): Observable<Reunion[]> {
+    return this.http.get<Reunion[]>(`${this.apiURL}/getreunions`, this.httpOptions);
+  }
+
 
 }
