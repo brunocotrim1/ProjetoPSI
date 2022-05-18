@@ -10,20 +10,21 @@
         </div>
         <form class="d-flex flex-column text-center" [formGroup]="scheduleForm" (ngSubmit)="onSubmitSchedule()">
             <div id="members" class="form-group">
-                <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="dropdownList" (keyup.enter)="onTabShowSelect()"
+                <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="dropdownList" (keyup.enter)="onTabShowSelect()" (click)="showInformationOff()"
                   classes-btn="'btn-primary btn-block'" formControlName="members" placeholder="Select reunion members"
                    [ngClass]="{ 'is-invalid': submittedSchedule && f['members'].errors }">
                 </ng-multiselect-dropdown>
                 <div *ngIf="submittedSchedule && f['members'].errors" class="invalid-feedback">
-                  <div *ngIf="f['members'].errors['dropdown-error']">Team must have at least one member</div>
+                  <div *ngIf="f['members'].errors['dropdown-error']">Reunion must have at least one member</div>
                 </div>
             </div>
-            <div id="reunionTime" class="form-group">
+            <div id="reunionTime" class="form-group" (click)="showInformationOff()" (input)="onChangeDurationReunion()">
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend" data-toggle="dropdown"><mdb-icon fas icon="info"></mdb-icon></span>
                   <div class="dropdown-menu">
-                    <span class="dropdown-item-text" style="font-size: small !important">Format of the input: HH:MM, where H is hours and M minutes. Minutes have to be a number multiple of 30</span>
+                    <span class="dropdown-item-text" style="font-size: small !important">Format of the input: HH:MM, where H is hours and M minutes. 
+                      The time of the reunion has to be greater than 0, less than 8 hours and a time multiple of 30 minutes. </span>
                   </div>
                 </div>
                 <input type="text" formControlName="reunionTime" placeholder="Reunion time" class="form-control" style="border-top-right-radius: 2px; border-bottom-right-radius: 2px;"
@@ -31,26 +32,31 @@
                 <div *ngIf="submittedSchedule && f['reunionTime'].errors" class="invalid-feedback">
                   <div *ngIf="f['reunionTime'].errors['required']">Duration of reunion is required</div>
                   <div *ngIf="f['reunionTime'].errors['pattern']">Duration is in the wrong format</div>
+                  <div *ngIf="isZero">Duration needs to be bigger than zero</div>
+                  <div *ngIf="isBiggerThanEight">Duration has to be less or equal to eight hours</div>
+                  <div *ngIf="isNotMultiple30">Duration has to be multiple of 30 minutes</div>
                 </div>
               </div>
             </div>
-            <div id="inicialTime" class="form-group">
+            <div id="inicialTime" class="form-group" (click)="showInformationOff()">
               <div class="input-group">
                 <input class="form-control" placeholder="Start date" formControlName="inicialDate"
                         name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" [ngClass]="{ 'is-invalid': submittedSchedule && f['inicialDate'].errors }">
-                <button (click)="d.toggle()" type="button"><mdb-icon fas icon="calendar-alt"></mdb-icon></button>
+                <button class="btn calendarIcon" (click)="d.toggle()" type="button"><mdb-icon fas icon="calendar-alt"></mdb-icon></button>
                 <div *ngIf="submittedSchedule && f['inicialDate'].errors" class="invalid-feedback">
                   <div *ngIf="f['inicialDate'].errors['required']">Start date is required</div>
+                  <div *ngIf="f['inicialDate'].errors['beforeCurrentDate']">Initial date needs to be after the current date</div>
                 </div>
               </div>
             </div>
-            <div id="finalTime" class="form-group">
+            <div id="finalTime" class="form-group" (click)="showInformationOff()">
               <div class="input-group">
                 <input class="form-control" placeholder="End date" formControlName="finalDate"
                         name="dp" [(ngModel)]="model1" ngbDatepicker #d1="ngbDatepicker" [ngClass]="{ 'is-invalid': submittedSchedule && f['finalDate'].errors }">
-                <button (click)="d1.toggle()" type="button"><mdb-icon fas icon="calendar-alt"></mdb-icon></button>
+                <button class="btn calendarIcon" (click)="d1.toggle()" type="button"><mdb-icon fas icon="calendar-alt"></mdb-icon></button>
                 <div *ngIf="submittedSchedule && f['finalDate'].errors" class="invalid-feedback">
                   <div *ngIf="f['finalDate'].errors['required']">End date is required</div>
+                  <div *ngIf="f['finalDate'].errors['afterFinalDate']">Final date before initial date</div>
                 </div>
               </div>
             </div>
@@ -60,37 +66,29 @@
               Show options
             </button>
         </form>
-        <form class="d-flex flex-column text-center" [formGroup]="availabilityForm" (ngSubmit)="onSubmitReunion()">
-            <div id="availableDates" class="form-group">
-              <select class="form-select form-control browser-default custom-select" formControlName="availableDates"
-                [ngClass]="{ 'is-invalid': submittedReunion && f1['availableDates'].errors }" id="validationCustom04" required>
-                <option selected disabled value="">Choose one of the available dates...</option>
-                  <option [ngValue]="date" *ngFor="let date of listOfAvailableDates">
-                    {{date.name}}
-                  </option>
-              </select>
-              <div class="invalid-feedback">
-                Please select a date
-              </div>
-            </div>  
-            <div id="dayToChoose" class="form-group">
-              <select class="form-select form-control browser-default custom-select" formControlName="availableDay"
+        <form *ngIf="showInformation" style="margin-top: 50px;" class="d-flex flex-column text-center" [formGroup]="availabilityForm" (ngSubmit)="onSubmitReunion()">
+            <div class="white-text">
+              <h2 class="h3 h3-responsive font-bold wow" data-wow-delay="0.3s">Choose one of the available times</h2>
+              <hr class="hr-light wow" data-wow-delay="0.3s">
+            </div>
+            <div id="dayToChoose" class="form-group" (change)="generateHours()">
+              <select class="form-select form-control browser-default custom-select" formControlName="availableDay" 
               [ngClass]="{ 'is-invalid': submittedReunion && f1['availableDay'].errors }" id="validationCustom04" required>
               <option selected disabled value="">Choose one of the available days...</option>
                 <option [ngValue]="day" *ngFor="let day of listOfAvailableDays">
-                  {{day.name}}
+                  {{day}}
                 </option>
               </select>
               <div class="invalid-feedback">
                 Please select a day
               </div>
             </div>
-            <div id="hourToChoose" class="form-group">
+            <div *ngIf="showHours" id="hourToChoose" class="form-group">
               <select class="form-select form-control browser-default custom-select" formControlName="availableHour"
               [ngClass]="{ 'is-invalid': submittedReunion && f1['availableHour'].errors }" id="validationCustom04" required>
               <option selected disabled value="">Choose one of the available hours...</option>
                 <option [ngValue]="hour" *ngFor="let hour of listOfavailableHours">
-                  {{hour.name}}
+                  {{hour}}
                 </option>
               </select>
               <div class="invalid-feedback">
@@ -110,5 +108,5 @@
             </div>
         </form>
     </div>
-    <app-footer style="width: 100%"></app-footer>
+    <app-footer style="width: 100%;"></app-footer>
 </div>

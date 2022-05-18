@@ -9,6 +9,8 @@ const User = require("../models/User");
 const Project = require("../models/Project");
 const Task = require("../models/Task");
 const Team = require("../models/Team");
+const Reunion = require("../models/Reunion");
+const Unavailability = require("../models/Unavailability");
 
 
 const users = [
@@ -52,7 +54,7 @@ const users = [
 
 async function init() {
 
-  User.deleteMany({}).catch(function (err) { });
+  //User.deleteMany({}).catch(function (err) { });
 
   for (let i = 0; i < users.length; i++) {
     const user = new User(users[i]);
@@ -160,6 +162,30 @@ async function init() {
   for (let i = 0; i < testProject.length; i++) {
       const proj = new Project(testProject[i]);
       await proj.save().catch(function (err) { });
+  }
+
+  await Reunion.deleteMany({}).catch(function (err) { });
+  const testReunion = [
+      {
+          members: [bruno._id, lucas._id],
+          beginDate: new Date().setHours(10,0,0,0),
+          endDate: new Date().setHours(13,0,0,0)
+      },
+      {
+          members: [miguel._id],
+          beginDate: new Date().setHours(12,0,0,0),
+          endDate: new Date().setHours(15,0,0,0)
+      },
+      {
+          members: [bruno._id],
+          beginDate: new Date().setHours(16,0,0,0),
+          endDate: new Date().setHours(17,0,0,0)
+      }
+      
+  ];
+  for (let i = 0; i < testReunion.length; i++) {
+      const reun = new Reunion(testReunion[i]);
+      await reun.save().catch(function (err) { console.log(err)});
   }
 }
 

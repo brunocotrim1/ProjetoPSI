@@ -9,6 +9,8 @@ const User = require("../models/User");
 const Task = require("../models/Task");
 const Project = require("../models/Project");
 const Team = require("../models/Team");
+const Reunion = require("../models/Reunion");
+const Unavailability = require("../models/Unavailability");
 const { translateAliases } = require("../models/User");
 const { Console } = require("console");
 
@@ -452,6 +454,33 @@ module.exports = function (dbI) {
         console.log(req.body.task)
         console.log(req.body.project)
         res.json({ msg: "eqwopmosfdipsa." })
+    });
+
+    router.get("/getreunions", authenticateToken, async (req, res) => {
+        await Reunion.find({})
+            .then(function (response) {
+                console.log(response)
+                res.json(response);
+            })
+            .catch(function (err) {
+                res.status(404);
+                res.json({ err: "Not Found" });
+            });;
+    });
+
+    router.post("/createreunion", authenticateToken, async (req, res) => {
+        if (req.body.reunion.beginDate && req.body.reunion.endDate){
+            await Reunion.create({ members: req.body.reunion.members, beginDate: new Date(req.body.reunion.beginDate), endDate: new Date(req.body.reunion.endDate), possibleTeam: req.body.reunion.team })
+                .then(function (response) {
+                    res.json({ msg: "Reunion was created successfully" });
+                    return;
+                })
+                .catch(function (err) {
+                    res.status(404);
+                    res.json({ err: "Error scheduling reunion" })
+                    return;
+                })
+        } 
     });
 
     return router;
