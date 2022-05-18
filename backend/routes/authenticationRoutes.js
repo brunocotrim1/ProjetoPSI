@@ -52,7 +52,7 @@ const users = [
 
 async function init() {
 
-  User.deleteMany({}).catch(function (err) { });
+  //User.deleteMany({}).catch(function (err) { });
 
   for (let i = 0; i < users.length; i++) {
     const user = new User(users[i]);

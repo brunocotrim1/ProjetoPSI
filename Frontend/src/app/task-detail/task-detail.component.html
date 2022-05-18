@@ -13,186 +13,192 @@
         <hr class="hr-light wow" data-wow-delay="0.3s" />
       </div>
     </div>
-    
-    <button class="lftbut" mdbBtn type="button" rounded="true">
-      <button class="lftbut" (click)="startShowingCheck()" mdbBtn type="button" rounded="true" style="padding: 3%; font-size:10px; width: 25%; position: absolute; right: 0;">
-        Add 
-        checklist
-      </button>
-      
-      
-      <form [formGroup]="form">
-        <div style="display: flex;
-        justify-content: center;
-        position: relative;
-        width: 100%">
-          <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Name: {{ task.name }}</h4>
-          
-        </div>
-        
-        <div class="beginDate">
-          Begin Date:
-          <mat-form-field>
-            <input
-              matInput
-              [ngxMatDatetimePicker]="picker"
-              formControlName="beginDate"
-              [min]="minDate"
-              [max]="maxDate"
-              [disabled]="disabled"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="$any(picker)"
-            ></mat-datepicker-toggle>
-            <ngx-mat-datetime-picker
-              #picker
-              [showSpinners]="showSpinners"
-              [showSeconds]="showSeconds"
-              [stepHour]="stepHour"
-              [stepMinute]="stepMinute"
-              [stepSecond]="stepSecond"
-              [touchUi]="touchUi"
-              [color]="color"
-              [enableMeridian]="enableMeridian"
-              [disableMinute]="disableMinute"
-              [hideTime]="hideTime"
-            >
-            </ngx-mat-datetime-picker>
-          </mat-form-field>
-        </div>
-        <div class="endDate">
-          End Date:
-          <mat-form-field>
-            <input
-              matInput
-              [ngxMatDatetimePicker]="picker2"
-              formControlName="endDate"
-              [min]="minDate"
-              [max]="maxDate"
-              [disabled]="disabled"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="$any(picker2)"
-            ></mat-datepicker-toggle>
-            <ngx-mat-datetime-picker
-              #picker2
-              [showSpinners]="showSpinners"
-              [showSeconds]="showSeconds"
-              [stepHour]="stepHour"
-              [stepMinute]="stepMinute"
-              [stepSecond]="stepSecond"
-              [touchUi]="touchUi"
-              [color]="color"
-              [enableMeridian]="enableMeridian"
-              [disableMinute]="disableMinute"
-              [hideTime]="hideTime"
-            >
-            </ngx-mat-datetime-picker>
-          </mat-form-field>
-        </div>
-        <div class="taskMembers">
-          Members:
-          <ng-multiselect-dropdown name="Utilizadores" [placeholder]="'Selected Users'" [data]="data"
-            formControlName="usersform" [disabled]="disabled" [settings]="dropdownSettings" (keyup.enter)="onTabShowSelect()">
-          </ng-multiselect-dropdown>
-        </div>
-        <div class="taskProject">
-          <div *ngIf="!isTaskRelated; else elseBlock">
-            Link a project to this task (Optional):
-            <div class="form-group">
-              <select
-                class="form-select form-control browser-default custom-select"
-                formControlName="project"
-                [ngClass]="{ 'is-invalid': submitted && f['project'].errors }"
-                required
-              >
-                <option selected disabled value="">Choose project...</option>
-                <option [ngValue]="proj" *ngFor="let proj of listOfProjects">
-                  {{ proj.name }}
-                </option>
-              </select>
-              <div class="invalid-feedback">Please select a project</div>
-            </div>
-            <div class="progressRange">
-              Choose a progress range:
-              <input
-              formControlName="progress"
-                type="range"
-                name="rangeInput"
-                min="0"
-                max="100"
-                style="width: 100%;"              />
-              <br>
-              <div style="width: 100%;text-align: center;">{{this.f['progress'].value}}</div>
-            </div>
-          </div>
-          <ng-template #elseBlock>
-            Linked project:
-            <button
-              class="taskProjectButton"
-              mdbBtn
-              type="button"
-              gradient="blue"
-              rounded="true"
-              mdbWavesEffect
-              (click)="removeLinkedProjectOfTask()"
-            >
-              {{ task.linkedProject.name }}
-              <mdb-icon style="margin-left: 10px" fas icon="times"></mdb-icon>
-            </button>
-          </ng-template>
-        </div>
-        <button
-          mdbBtn
-          class="saveBut"
-          type="submit"
-          style="margin-left: 0"
-          (click)="saveChanges()"
-          rounded="true"
-          mdbWavesEffect
-        >
-          Save Changes
+    <div class="lowerContainer">
+      <button class="lftbut" mdbBtn type="button" rounded="true">
+        <button class="lftbut" (click)="startShowingCheck()" mdbBtn type="button" rounded="true" style="padding: 3%; font-size:10px; width: 25%; position: absolute; right: 0;">
+          Add 
+          checklist
         </button>
-        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">
-          {{ error }}
-        </div>
-        <div *ngIf="message" class="alert success-color mt-3 mb-0">
-          {{ message }}
-        </div>
-      </form>
-    </button>
-    <button *ngIf="showCheck" class="checkboxContainer" mdbBtn type="button" rounded="true" style="position:relative">
-      <div class="white-text">
-        <h2 class="h1 h1-responsive font-bold wow">
-          checklist</h2>
-        <hr class="hr-light wow">
         
-      </div>
-      <div style="position:relative;
-      min-height: 50%;
-      max-height: 50%;
-      overflow-y: scroll;">
-      <li style="font-size: 1.5em; font-weight: bold; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;" 
-        class="list-group-item" *ngFor="let elem of checklist | keyvalue; let i = index">
-          <div class="namePriorityProgress">
-            <div class="el">
-              {{ elem.key }} -> {{elem.value}}
-              <button (click)="invertValue(elem.key)">DO/UNDO</button>
-              <button (click)="deleteKey(elem.key)">X</button>
-            </div>
-           
+        
+        <form [formGroup]="form">
+          <div style="display: flex;
+          justify-content: center;
+          position: relative;
+          width: 100%">
+            <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Name: {{ task.name }}</h4>
+            
           </div>
-          <!-- <button mdbBtn class="deletetask" mdbWavesEffect (click)="onDeleteTask(task)" -->
           
-          <!-- </button> -->
-        </li>
-      </div>
-        <input #newItemName (blur)="addKey(newItemName.value);" (keyup.enter)="addKey(newItemName.value);" placeholder="Add a subtask"> 
-      
-      
-    </button>
+          <div class="beginDate">
+            Begin Date:
+            <mat-form-field>
+              <input
+                matInput
+                [ngxMatDatetimePicker]="picker"
+                formControlName="beginDate"
+                [min]="minDate"
+                [max]="maxDate"
+                [disabled]="disabled"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="$any(picker)"
+              ></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker
+                #picker
+                [showSpinners]="showSpinners"
+                [showSeconds]="showSeconds"
+                [stepHour]="stepHour"
+                [stepMinute]="stepMinute"
+                [stepSecond]="stepSecond"
+                [touchUi]="touchUi"
+                [color]="color"
+                [enableMeridian]="enableMeridian"
+                [disableMinute]="disableMinute"
+                [hideTime]="hideTime"
+              >
+              </ngx-mat-datetime-picker>
+            </mat-form-field>
+          </div>
+          <div class="endDate">
+            End Date:
+            <mat-form-field>
+              <input
+                matInput
+                [ngxMatDatetimePicker]="picker2"
+                formControlName="endDate"
+                [min]="minDate"
+                [max]="maxDate"
+                [disabled]="disabled"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="$any(picker2)"
+              ></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker
+                #picker2
+                [showSpinners]="showSpinners"
+                [showSeconds]="showSeconds"
+                [stepHour]="stepHour"
+                [stepMinute]="stepMinute"
+                [stepSecond]="stepSecond"
+                [touchUi]="touchUi"
+                [color]="color"
+                [enableMeridian]="enableMeridian"
+                [disableMinute]="disableMinute"
+                [hideTime]="hideTime"
+              >
+              </ngx-mat-datetime-picker>
+            </mat-form-field>
+          </div>
+          <div class="taskMembers">
+            Members:
+            <ng-multiselect-dropdown name="Utilizadores" [placeholder]="'Selected Users'" [data]="data"
+              formControlName="usersform" [disabled]="disabled" [settings]="dropdownSettings" (keyup.enter)="onTabShowSelect()">
+            </ng-multiselect-dropdown>
+          </div>
+          <div class="taskProject">
+            <div *ngIf="!isTaskRelated; else elseBlock">
+              Link a project to this task (Optional):
+              <div class="form-group">
+                <select
+                  class="form-select form-control browser-default custom-select"
+                  formControlName="project"
+                  [ngClass]="{ 'is-invalid': submitted && f['project'].errors }"
+                  required
+                >
+                  <option selected disabled value="">Choose project...</option>
+                  <option [ngValue]="proj" *ngFor="let proj of listOfProjects">
+                    {{ proj.name }}
+                  </option>
+                </select>
+                <div class="invalid-feedback">Please select a project</div>
+              </div>
+              <div class="progressRange">
+                Choose a progress range:
+                <input
+                formControlName="progress"
+                  type="range"
+                  name="rangeInput"
+                  min="0"
+                  max="100"
+                  style="width: 100%;"              />
+                <br>
+                <div style="width: 100%;text-align: center;">{{this.f['progress'].value}}</div>
+              </div>
+            </div>
+            <ng-template #elseBlock>
+              Linked project:
+              <button
+                class="taskProjectButton"
+                mdbBtn
+                type="button"
+                gradient="blue"
+                rounded="true"
+                mdbWavesEffect
+                (click)="removeLinkedProjectOfTask()"
+              >
+                {{ task.linkedProject.name }}
+                <mdb-icon style="margin-left: 10px" fas icon="times"></mdb-icon>
+              </button>
+            </ng-template>
+          </div>
+          <button
+            mdbBtn
+            class="saveBut"
+            type="submit"
+            style="margin-left: 0"
+            (click)="saveChanges()"
+            rounded="true"
+            mdbWavesEffect
+          >
+            Save Changes
+          </button>
+          <div *ngIf="error" class="alert alert-danger mt-3 mb-0">
+            {{ error }}
+          </div>
+          <div *ngIf="message" class="alert success-color mt-3 mb-0">
+            {{ message }}
+          </div>
+        </form>
+      </button>
+      <button *ngIf="showCheck" class="checkboxContainer" mdbBtn type="button" rounded="true" style="position:relative">
+        <div class="white-text">
+          <h2 class="h1 h1-responsive font-bold wow">
+            checklist</h2>
+          <hr class="hr-light wow">
+          
+        </div>
+        <div class="checklistContainer">
+          <ul class="checklist">
+            <li class="list-group-item" *ngFor="let elem of checklist | keyvalue; let i = index">
+              <div class="namePriorityProgress">
+                <div class="el">
+                  {{ elem.key }} -> {{elem.value}}
+                  <button (click)="invertValue(elem.key)">DO/UNDO</button>
+                  <button (click)="deleteKey(elem.key)">X</button>
+                </div>
+                
+              </div>
+              <!-- <button mdbBtn class="deletetask" mdbWavesEffect (click)="onDeleteTask(task)" -->
+              
+              <!-- </button> -->
+            
+  
+            </li>
+          </ul>
+        
+        </div>
+        <div class="checkListFooter">
+          <input #newItemName (keyup.enter)="addKey(newItemName.value);" placeholder="Add a subtask"> 
+          <input type="submit" class="addItemButton" (click)="addKey(newItemName.value)">
+        </div>
+          
+        
+      </button>
+    </div>
+    
   </div>
   <app-footer style="width: 100%"></app-footer>
 </div>

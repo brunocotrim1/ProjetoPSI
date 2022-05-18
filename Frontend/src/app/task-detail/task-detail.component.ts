@@ -37,7 +37,7 @@ export class TaskDetailComponent implements OnInit {
   limitSelection = false;
   message = ''
   error = ''
-  checklist: any = {'A': false, 'B': false, 'C': false};
+  checklist: any = {}; //{'A': false, 'B': false, 'C': false};
 
   public minDate!: Date;
   public maxDate!: Date;
