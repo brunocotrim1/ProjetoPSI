@@ -2,17 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../services/authentication.service';
 import { User } from '../User';
-import { ScheduleReunionService } from './schedulereunion.service';
+import { ScheduleReunionteamService } from './schedulereunionteam.service';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import { Reunion } from '../Reunion';
+import { Team } from '../Team';
 
 @Component({
-  selector: 'app-schedulereunion',
-  templateUrl: './schedulereunion.component.html',
-  styleUrls: ['./schedulereunion.component.scss']
+  selector: 'app-schedulereunionteam',
+  templateUrl: './schedulereunionteam.component.html',
+  styleUrls: ['./schedulereunionteam.component.scss']
 })
 
-export class SchedulereunionComponent implements OnInit {
+export class SchedulereunionteamComponent implements OnInit {
 
   user = {} as User;
 
@@ -42,19 +43,12 @@ export class SchedulereunionComponent implements OnInit {
 
   scheduleForm = new FormGroup(
     {
-    members: new FormControl('', this.DropdownValidator),
+    team: new FormControl('', Validators.required),
     reunionTime: new FormControl('', [Validators.required, Validators.pattern(new RegExp("^(0?[1-7]):(30|00)|(0?8):00|(0?0):30$"))]),
     inicialDate: new FormControl('', [Validators.required]),
     finalDate: new FormControl('', [Validators.required])
     }
   );
-
-  DropdownValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    if (control.value.length == 0) {
-      return { 'dropdown-error': true };
-    }
-    return null;
-  }
 
   availabilityForm = new FormGroup(
     {
@@ -66,34 +60,29 @@ export class SchedulereunionComponent implements OnInit {
   model: NgbDateStruct | undefined;
   model1: NgbDateStruct | undefined;
 
-  dropdownList: any[] = [];
-  dropdownUsers: any[] = [];
   listOfReunions: Reunion[] = [];
   listOfAllUnavailables: any[] = [];
   listOfAvailableBlocks: any[] = [];
   listOfAvailableDays: any[] = [];
   listOfavailableHours: any[] = [];
-  dropdownSettings: any = {};
-  isMultiDropdownOpen = false;
+  listOfTeams: Team[] = [];
 
   constructor(    
-    private schedulereunionservice: ScheduleReunionService,
+    private schedulereunionservice: ScheduleReunionteamService,
     private authenticationService: AuthenticationService,) {
   }
 
 
   ngOnInit(): void {
     this.user = this.authenticationService.loadUser()!;
-    this.fillInDropdown("Team")
-    this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'Unselect All',
-      itemsShowLimit: 6,
-      allowSearchFilter: true
-    };
+    this.schedulereunionservice.getTeams().subscribe({
+      next: (teams) => {
+        this.listOfTeams = teams;
+      },
+      error: error => {
+        this.listOfTeams = {} as Team[];
+      }
+    });
   }
 
   get f() { 
@@ -102,38 +91,6 @@ export class SchedulereunionComponent implements OnInit {
 
   get f1() { 
     return this.availabilityForm.controls; 
-  }
-
-  fillInDropdown(typeobject: string) {
-    if (typeobject === "Project") {
-      //ir fazer getallprojects do service do project
-    } else if (typeobject === "Team") {
-      this.dropdownList = [];
-      this.schedulereunionservice.getAllUsers().subscribe(
-        userList => {
-          this.dropdownList = [...userList].map(x => x.username);
-          this.dropdownUsers = userList as any[];
-        }
-      );
-    }
-  }
-
-  onTabShowSelect(){
-    if (!this.isMultiDropdownOpen){
-      this.isMultiDropdownOpen = true;
-    } else {
-      this.isMultiDropdownOpen = false;
-    }
-    this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'Unselect All',
-      itemsShowLimit: 6,
-      allowSearchFilter: true,
-      defaultOpen: this.isMultiDropdownOpen
-    };
   }
 
   onChangeDurationReunion(){
@@ -200,8 +157,9 @@ export class SchedulereunionComponent implements OnInit {
           this.listOfavailableHours = [];
           this.listOfAllUnavailables = [];
           this.listOfReunions = [];
+          //------------
           this.listOfReunions = reunions
-          var currentUsers = this.fetchUsers()
+          var currentUsers = this.f["team"].value.members.map((x: any) => x._id)
           console.log(currentUsers)
           for(let i = 0; i < this.listOfReunions.length; i++){
             var oneTimeReunion = true;
@@ -296,10 +254,6 @@ export class SchedulereunionComponent implements OnInit {
     this.showInformation = true;
   }
 
-  fetchUsers() {
-    return this.dropdownUsers.filter(x => this.f["members"].value.includes(x.username)).map((x: any) => x.id)
-  }
-
   showInformationOff(){
     this.availabilityForm.reset({'availableDay': '', 'availableHour': ''})
     this.showInformation = false;
@@ -333,14 +287,16 @@ export class SchedulereunionComponent implements OnInit {
     var startDateReunion = new Date(new Date(2022,this.monthNames.indexOf(this.f1["availableDay"].value.split(" ")[3]), this.f1["availableDay"].value.split(" ")[1])
     .getTime()+(this.f1["availableHour"].value.split(":")[0]*60*60*1000)+(this.f1["availableHour"].value.split(":")[1]*60*1000))
     var reunion = {
-      members: this.fetchUsers(), 
+      possibleTeam: this.f["team"].value._id,
+      members: this.f["team"].value.members, 
       beginDate: startDateReunion,
       endDate: new Date(startDateReunion.getTime()+(this.f["reunionTime"].value.split(":")[0]*60*60*1000)+(this.f["reunionTime"].value.split(":")[1]*60*1000))
     }
+    console.log(reunion)
     this.schedulereunionservice.createReunion({reunion})
     .subscribe({
       next: () => {
-        this.returnmessageReunion = 'Reunion was scheduled!';
+        this.returnmessageReunion = 'Team reunion was scheduled!';
         setTimeout(() => {this.returnmessageReunion = ''}, 2*1000);
         this.loadingReunion = false;
       },

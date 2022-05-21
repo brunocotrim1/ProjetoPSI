@@ -15,12 +15,13 @@ import { ProjectsComponent } from './projects/projects.component';
 import { AdminGuard } from './guards/admin.guard';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { CreateTaskComponent } from './create-task/create-task.component';
-
 import { TasklistComponent } from './tasklist/tasklist/tasklist.component';
 import { ManageteamsComponent } from './manageteams/manageteams.component';
 import { UsersListComponent } from './users-list/users-list/users-list.component';
 import { UserPageComponent } from './userPage/user-page/user-page.component';
 import { SchedulereunionComponent } from './schedulereunion/schedulereunion.component';
+import { SchedulereunionteamComponent } from './schedulereunionteams/schedulereunionteam.component';
+
 const routes: Routes = [
   { path: '', redirectTo: '/mainmenu', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent,canActivate: [AuthenticationGuard] },
@@ -38,7 +39,8 @@ const routes: Routes = [
   { path: 'userslist', component: UsersListComponent, canActivate: [AuthenticationGuard]  },
   { path: 'profile/:id', component: UserPageComponent, canActivate: [AuthenticationGuard]  },
   { path: 'manageteams', component: ManageteamsComponent, canActivate: [AuthenticationGuard, AdminGuard]  },
-  { path: 'schedulereunions', component: SchedulereunionComponent, canActivate: [AuthenticationGuard]  }
+  { path: 'schedulereunions', component: SchedulereunionComponent, canActivate: [AuthenticationGuard]  },
+  { path: 'schedulereunionsteam', component: SchedulereunionteamComponent, canActivate: [AuthenticationGuard]  }
 ];
 
 @NgModule({
