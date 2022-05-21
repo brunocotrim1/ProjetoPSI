@@ -200,6 +200,7 @@ module.exports = function (dbI) {
                                 delete usr.password;
                                 delete usr.refreshToken;
                                 delete usr.accessToken;
+                                usr.id = usr._id
                                 return usr;
                             }).catch(function (err) {
                                 res.status(404);
@@ -245,6 +246,18 @@ module.exports = function (dbI) {
         user.id = user._id;
         delete user._id;
         res.json(user);
+    });
+
+    
+    router.get("/unavailables", authenticateToken, async (req, res) => {
+        await Unavailability.find({})
+        .then(function (response) {
+            res.json(response);
+        })
+        .catch(function (err) {
+            res.status(404);
+            res.json({ err: "Not Found" });
+        });;
     });
 
     router.post("/saveTask", authenticateToken, async (req, res) => {

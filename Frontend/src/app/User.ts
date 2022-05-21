@@ -6,5 +6,4 @@ export interface User {
   accessToken: string;
   refresh_token: string;
   role: string;
-  unavailability: Unavailability[] | null;
 }

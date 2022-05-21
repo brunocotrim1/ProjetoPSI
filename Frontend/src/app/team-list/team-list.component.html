@@ -8,7 +8,7 @@
     <div class="enjoyapp text-center">
       <div class="white-text">
         <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">
-          List of Users
+          List of Teams
         </h2>
         <hr class="hr-light wow" data-wow-delay="0.3s" />
       </div>
@@ -24,10 +24,10 @@
               sans-serif;
           "
           class="list-group-item"
-          *ngFor="let user of users; let i = index"
-          routerLink="/profile/{{ user.id }}"
+          *ngFor="let team of teams; let i = index"
+          routerLink="/team/{{ team._id }}"
         >
-            {{ user.username }}
+            {{ team.name }}
         </li>
       </ul>
     </button>

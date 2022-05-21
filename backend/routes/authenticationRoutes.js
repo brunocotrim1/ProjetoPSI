@@ -82,7 +82,7 @@ async function init() {
       },
       {
           name: "Task 2",
-          usersAssigned: [bruno._id, miguel._id, lucas._id],
+          usersAssigned: [ miguel._id, lucas._id],
           progress: 15,
           priority: "MEDIUM",
           beginDate: new Date().setDate(new Date().getDate()+3),
@@ -163,10 +163,11 @@ async function init() {
       const proj = new Project(testProject[i]);
       await proj.save().catch(function (err) { });
   }
-
+  const equipa = await Team.findOne({ name: "Team 1" });
   await Reunion.deleteMany({}).catch(function (err) { });
   const testReunion = [
       {
+          possibleTeam: equipa._id,
           members: [bruno._id, lucas._id],
           beginDate: new Date().setHours(10,0,0,0),
           endDate: new Date().setHours(13,0,0,0)
@@ -187,6 +188,40 @@ async function init() {
       const reun = new Reunion(testReunion[i]);
       await reun.save().catch(function (err) { console.log(err)});
   }
+  Unavailability.deleteMany({}).catch(function (err) { });
+  const unavailables = [
+    {
+       user: bruno._id,
+       beginDate: new Date(2022,5,22,12,0,0),
+       endDate: new Date(2022,5,22,16,0,0),
+    },
+    {
+      user: bruno._id,
+      beginDate: new Date(2022,7,22,9,30,0),
+      endDate: new Date(2022,7,22,11,0,0),
+    },
+    {
+      user: bruno._id,
+      beginDate: new Date(2022,6,5,14,0,0),
+      endDate: new Date(2022,6,5,17,30,0),
+    },
+    {
+      user: miguel._id,
+      beginDate: new Date(2022,5,5,14,0,0),
+      endDate: new Date(2022,5,5,17,30,0),
+    },
+    {
+      user: miguel._id,
+      beginDate: new Date(2022,5,23,14,0,0),
+      endDate: new Date(2022,5,23,17,30,0),
+    }
+    
+    
+];
+for (let i = 0; i < unavailables.length; i++) {
+  const unavailableR = new Unavailability(unavailables[i]);
+  await unavailableR.save().catch(function (err) { console.log(err)});
+}
 }
 
 init()
