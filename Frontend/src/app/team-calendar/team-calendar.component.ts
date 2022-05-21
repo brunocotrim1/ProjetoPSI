@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { User } from '../../User';
-import { Task } from '../../Task';
+import { User } from '../User';
+import { Task } from '../Task';
 import { CalendarView } from 'angular-calendar';
 import { CalendarEvent } from 'calendar-utils';
 import {
@@ -26,7 +26,8 @@ import {
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
 } from 'angular-calendar';
-import { UserPageService } from './user-page.service';
+import { TeamCalendarService } from './team-calendar.service';
+import { Team } from '../Team';
 const colors: any = [
   {
     primary: '#ad2121',
@@ -42,117 +43,77 @@ const colors: any = [
   },
 ];
 @Component({
-  selector: 'app-user-page',
-  templateUrl: './user-page.component.html',
-  styleUrls: ['./user-page.component.scss']
+  selector: 'app-team-calendar',
+  templateUrl: './team-calendar.component.html',
+  styleUrls: ['./team-calendar.component.scss']
 })
-
-
-
-
-export class UserPageComponent implements OnInit {
+export class TeamCalendarComponent implements OnInit {
 
   user = {} as User;
-  userLogged = {} as User;
   error: string | undefined;
-  tasks: Task[] = [];
+  teams: Team[] = [];
+  team: Team = {} as Team;
   events = [] as CalendarEvent[];
-  constructor(private userPage: UserPageService, private http: HttpClient, private router: Router, private modal: NgbModal, private route: ActivatedRoute) { }
+  constructor(private TeamCalendaService: TeamCalendarService, private http: HttpClient, private route: ActivatedRoute, private router: Router, private modal: NgbModal) { }
   ngOnInit(): void {
-    this.userLogged = this.userPage.getUserLogged();
+
+
+
 
     const id = this.route.snapshot.paramMap.get('id')!;
-    this.userPage.getUser(id).subscribe({
-      next: (user) => {
-        this.user = user
-        this.userPage.getTaskList(this.user.id).subscribe({
-          next: (tasks) => {
-            this.tasks = tasks;
-            for (let i = 0; i < this.tasks.length; i++) {
-              tasks[i].beginDate = new Date(tasks[i].beginDate);
-              tasks[i].endDate = new Date(tasks[i].endDate);
-              this.events.push({
-                start: tasks[i].beginDate,
-                end: tasks[i].endDate,
-                title: tasks[i].name,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                resizable: {
-                  beforeStart: true,
-                  afterEnd: true,
-                },
-                draggable: false,
-              });
-            }
-            this.userPage.getUnavailavles().subscribe({
-              next: (unavailable) => {
-                for (let i = 0; i < unavailable.length; i++) {
-        
-                 if(unavailable[i].user == this.user.id){
-                  console.log(unavailable[i])
-                  this.events.push({
-                    start: new Date(unavailable[i].beginDate),
-                    end: new Date(unavailable[i].endDate),
-                    title: "Periodo Indisponivel",
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    resizable: {
-                      beforeStart: true,
-                      afterEnd: true,
-                    },
-                    draggable: false,
-                  });
-                }
-              }
-        
-                this.refresh.next();
-        
-              },
-              error: error => {
-                this.error = error;
-              }
-            });
-            this.refresh.next();
-
-          },
-          error: error => {
-            this.error = error;
-          }
-        });
-      },
-      error: error => {
-        this.error = error;
-        this.router.navigate(["/"]);
-      }
-    });
-
-    this.userPage.getReunions().subscribe({
-      next: (reunions) => {
-        console.log(reunions);
-        for (let i = 0; i < reunions.length; i++) {
-          if (reunions[i].members.includes(this.user.id)) {
-            let title = "Reunião";
-            if (reunions[i].possibleTeam)
-              title = "Reunião de Equipa";
-            this.events.push({
-              start: new Date(reunions[i].beginDate),
-              end: new Date(reunions[i].endDate),
-              title: title,
-              color: colors[Math.floor(Math.random() * colors.length)],
-              resizable: {
-                beforeStart: true,
-                afterEnd: true,
-              },
-              draggable: false,
-            });
+    this.TeamCalendaService.getTeams().subscribe({
+      next: (teams) => {
+        for (let i = 0; i < teams.length; i++) {
+          this.teams.push(teams[i]);
+          if (teams[i]._id == id) {
+            this.team = teams[i];
           }
         }
-        
-        this.refresh.next();
 
       },
       error: error => {
         this.error = error;
       }
     });
+    this.TeamCalendaService.getTasks().subscribe({
+      next: (tasks) => {
+        for (let i = 0; i < tasks.length; i++) {
+      
+          for (let j = 0; j < tasks[i].usersAssigned.length; j++) {
+            
+            let match = false;
+            for (let k = 0; k < this.team.members.length; k++) {
+              console.log(tasks[i].usersAssigned[j] == this.team.members[k].id)
+              if (tasks[i].usersAssigned[j] == this.team.members[k].id) {
+                this.events.push({
+                  title: tasks[i].name,
+                  start: new Date(tasks[i].beginDate),
+                  end: new Date(tasks[i].endDate),
+                  color: colors[Math.floor(Math.random() * colors.length)],
+                  draggable: true,
+                  resizable: {
+                    beforeStart: true,
+                    afterEnd: true,
+                  },
+                });
+                match = true;
+                break;
+              }
+            }
+            if (match) {
+              break;
+            }
+          }
+        }
+        this.refresh.next();
+      },
+      error: error => {
+        this.error = error;
+      }
+    });
+    this.user = this.TeamCalendaService.getUser();
+    if (this.user == undefined)
+      this.router.navigate(["/"]);
   }
 
 
@@ -288,5 +249,6 @@ export class UserPageComponent implements OnInit {
   eventClicked({ event }: { event: CalendarEvent }): void {
     console.log('Event clicked', event);
   }
+
 
 }

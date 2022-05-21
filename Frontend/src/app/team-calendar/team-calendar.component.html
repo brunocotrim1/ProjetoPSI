@@ -1,0 +1,78 @@
+<app-navigbar currentComponent="mainmenu" username="{{ user.username }}" userrole="{{ user.role }}"></app-navigbar>
+<div class="mainContainer">
+  <div style="margin-top:6%; margin-bottom:5%;">
+    <div class="enjoyapp text-center">
+      <div class="white-text">
+        <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">{{team.name}} Calendar</h2>
+        <hr class="hr-light wow" data-wow-delay="0.3s">
+      </div>
+    </div>
+    <div class="profileContainer">
+      <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
+        integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ti-icons@0.1.2/css/themify-icons.css" /> -->
+      <div class="row justify-content-center">
+
+          <div class="">
+
+            <div class="text-start  wow fadeIn">
+              <h2 class="mb-0" style="color: white; font-weight: bold">
+                Agenda
+              </h2>
+              <div class="wow fadeIn">
+              </div>
+              <div class="calendar-header">
+                <div class="">
+                  <div class="btn-group">
+                    <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+                      (viewDateChange)="closeOpenMonthViewDay()">
+                      Previous
+                    </div>
+                    <div class="btn btn-primary" mwlCalendarToday [(viewDate)]="viewDate">
+                      Today
+                    </div>
+                    <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+                      (viewDateChange)="closeOpenMonthViewDay()">
+                      Next
+                    </div>
+                  </div>
+                </div>
+                <div class="">
+                  <h3 style="text-align: center;color: white;">{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
+                </div>
+                <div class="">
+                  <div class="btn-group">
+                    <div class="btn btn-primary" (click)="setView(CalendarView.Month)"
+                      [class.active]="view === CalendarView.Month">
+                      Month
+                    </div>
+                    <div class="btn btn-primary" (click)="setView(CalendarView.Week)"
+                      [class.active]="view === CalendarView.Week">
+                      Week
+                    </div>
+                    <div class="btn btn-primary" (click)="setView(CalendarView.Day)"
+                      [class.active]="view === CalendarView.Day">
+                      Day
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div [ngSwitch]="view" class="calendar">
+                <mwl-calendar-month-view [refresh]="refresh" *ngSwitchCase="'month'" [viewDate]="viewDate"
+                  [events]="events" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+                  (eventClicked)="eventClicked($event)">
+                </mwl-calendar-month-view>
+                <mwl-calendar-week-view [refresh]="refresh" *ngSwitchCase="'week'" [viewDate]="viewDate" [events]="events"
+                  (eventClicked)="eventClicked($event)">
+                </mwl-calendar-week-view>
+                <mwl-calendar-day-view [refresh]="refresh" *ngSwitchCase="'day'" [viewDate]="viewDate" [events]="events"
+                  (eventClicked)="eventClicked($event)">
+                </mwl-calendar-day-view>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer style="width: 100%;"></app-footer>
+</div>

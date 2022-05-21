@@ -1,42 +1,31 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Reunion } from '../Reunion';
 import { AuthenticationService } from '../services/authentication.service';
-import { Unavailability } from '../Unavailabilty';
+import { Team } from '../Team';
 import { User } from '../User';
-
+import { Task } from '../Task';
 @Injectable({
   providedIn: 'root'
 })
-export class ProfileService {
-
+export class TeamCalendarService {
 
   constructor(private http: HttpClient, private authenticationService: AuthenticationService) { }
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
   private apiURL: string = "/api";
-  ngOnInit(): void {
-  }
-  getTaskList(): Observable<any> {
-    return this.http.get<any>(`${this.apiURL}/tasks`, this.httpOptions);
-  }
-
-  getReunions(): Observable<Reunion[]> {
-    return this.http.get<Reunion[]>(`${this.apiURL}/getreunions`, this.httpOptions);
-  }
-  getUnavailavles(): Observable<Unavailability[]> {
-    return this.http.get<Unavailability[]>(`${this.apiURL}/unavailables`, this.httpOptions);
-  }
-
-
-
   getUser(): User {
     const user = this.authenticationService.loadUser();
     if (user)
       return user
     else
       return {} as User
+  }
+  getTeams(): Observable<Team[]> {
+    return this.http.get<Team[]>(`${this.apiURL}/getteams`, this.httpOptions);
+  }
+  getTasks(): Observable<Task[]> {
+    return this.http.get<Task[]>(`${this.apiURL}/allTasks`, this.httpOptions);
   }
 }

@@ -79,6 +79,35 @@ export class ProfileComponent implements OnInit {
       }
     });
 
+    this.profileService.getUnavailavles().subscribe({
+      next: (unavailable) => {
+        for (let i = 0; i < unavailable.length; i++) {
+
+         if(unavailable[i].user == this.user.id){
+          console.log(unavailable[i])
+          this.events.push({
+            start: new Date(unavailable[i].beginDate),
+            end: new Date(unavailable[i].endDate),
+            title: "Periodo Indisponivel",
+            color: colors[Math.floor(Math.random() * colors.length)],
+            resizable: {
+              beforeStart: true,
+              afterEnd: true,
+            },
+            draggable: false,
+          });
+        }
+      }
+
+        this.refresh.next();
+
+      },
+      error: error => {
+        this.error = error;
+      }
+    });
+
+
     this.profileService.getReunions().subscribe({
       next: (reunions) => {
         console.log(reunions);

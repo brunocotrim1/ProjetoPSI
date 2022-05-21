@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Reunion } from 'src/app/Reunion';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Unavailability } from 'src/app/Unavailabilty';
 import {Task} from '../../Task';
 import { User } from '../../User';
 @Injectable({
@@ -27,6 +28,10 @@ export class UserPageService {
     else
       return {} as User
   }
+  getUnavailavles(): Observable<Unavailability[]> {
+    return this.http.get<Unavailability[]>(`${this.apiURL}/unavailables`, this.httpOptions);
+  }
+
   getReunions(): Observable<Reunion[]> {
     return this.http.get<Reunion[]>(`${this.apiURL}/getreunions`, this.httpOptions);
   }
