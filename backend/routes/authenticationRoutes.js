@@ -78,7 +78,7 @@ async function init() {
           priority: "LOW",
           beginDate: new Date().setDate(new Date().getDate()+4),
           endDate: new Date().setDate(new Date().getDate()+6),
-          
+          checklist: {}
       },
       {
           name: "Task 2",
@@ -87,6 +87,7 @@ async function init() {
           priority: "MEDIUM",
           beginDate: new Date().setDate(new Date().getDate()+3),
           endDate: new Date().setDate(new Date().getDate()+5),
+          checklist: {}
       },
       {
           name: "Task 3",
@@ -95,6 +96,7 @@ async function init() {
           priority: "URGENT",
           beginDate: new Date().setDate(new Date().getDate()+10),
           endDate: new Date().setDate(new Date().getDate()+11),
+          checklist: {}
       },{
         name: "Task 4",
         usersAssigned: [prof._id, aluno._id],
@@ -102,6 +104,7 @@ async function init() {
         priority: "HIGH",
         beginDate: new Date().setDate(new Date().getDate()),
         endDate: new Date().setDate(new Date().getDate()+2),
+        checklist: {}
       },{
         name: "Task 5",
         usersAssigned: [prof._id, aluno._id],
@@ -109,6 +112,7 @@ async function init() {
         priority: "LOW",
         beginDate: new Date().setDate(new Date().getDate()+2),
         endDate: new Date().setDate(new Date().getDate()+6),
+        checklist: {}
       }
   ];
 

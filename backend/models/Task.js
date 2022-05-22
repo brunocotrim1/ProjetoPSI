@@ -28,6 +28,10 @@ const TaskSchema = mongoose.Schema({
     linkedProject: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project',
+    },
+    checklist: {
+        type: Map,
+        of: String
     }
 });
 const Task = module.exports = mongoose.model("Task", TaskSchema);

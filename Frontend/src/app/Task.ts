@@ -10,5 +10,5 @@ export interface Task {
     linkedProject: Project;
     beginDate: Date;
     endDate: Date;
-    checklist: Map<string,boolean>;
+    checklist: any;
 }
