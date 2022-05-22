@@ -144,6 +144,13 @@
               </button>
             </ng-template>
           </div>
+          <div class = "slider-div">
+          Please choose task's progress percentage :
+          <br>
+          <input type="range" min="0" max="100" value={{this.progressValue}} class="slider" id="myRange" (input) = "progressValueChanged($event)" >
+          <br>
+          {{this.progressValue}}%
+          </div>
           <button
             mdbBtn
             class="saveBut"
