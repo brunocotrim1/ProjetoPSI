@@ -5,6 +5,8 @@ import { AuthenticationService } from '../services/authentication.service';
 import { Team } from '../Team';
 import { User } from '../User';
 import { Task } from '../Task';
+import { Unavailability } from '../Unavailabilty';
+import { Reunion } from '../Reunion';
 @Injectable({
   providedIn: 'root'
 })
@@ -27,5 +29,11 @@ export class TeamCalendarService {
   }
   getTasks(): Observable<Task[]> {
     return this.http.get<Task[]>(`${this.apiURL}/allTasks`, this.httpOptions);
+  }
+  getUnavailables(): Observable<Unavailability[]> {
+    return this.http.get<Unavailability[]>(`${this.apiURL}/unavailables`, this.httpOptions);
+  }
+  getReunions(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiURL}/getreunions`, this.httpOptions);
   }
 }
