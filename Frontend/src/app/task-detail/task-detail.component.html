@@ -115,18 +115,6 @@
                 </select>
                 <div class="invalid-feedback">Please select a project</div>
               </div>
-              <div class="progressRange">
-                Choose a progress range:
-                <input
-                formControlName="progress"
-                  type="range"
-                  name="rangeInput"
-                  min="0"
-                  max="100"
-                  style="width: 100%;"              />
-                <br>
-                <div style="width: 100%;text-align: center;">{{this.f['progress'].value}}</div>
-              </div>
             </div>
             <ng-template #elseBlock>
               Linked project:
