@@ -1,22 +1,25 @@
-<app-navigbar currentComponent="schedulereunion" username={{user.username}} userrole={{user.role}}></app-navigbar>
+<app-navigbar currentComponent="schedulereunionteam" username={{user.username}} userrole={{user.role}}></app-navigbar>
 <div class="mainContainer">
     <!-- <div class="navbarSpace"></div> -->
     <div class="infoContainer">
         <div class="enjoyapp text-center">
             <div class="white-text">
-              <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">Schedule a reunion</h2>
+              <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">Schedule a reunion for a team</h2>
               <hr class="hr-light wow" data-wow-delay="0.3s">
             </div>
         </div>
         <form class="d-flex flex-column text-center" [formGroup]="scheduleForm" (ngSubmit)="onSubmitSchedule()">
-            <div id="members" class="form-group">
-                <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="dropdownList" (keyup.enter)="onTabShowSelect()" (click)="showInformationOff()"
-                  classes-btn="'btn-primary btn-block'" formControlName="members" placeholder="Select reunion members"
-                   [ngClass]="{ 'is-invalid': submittedSchedule && f['members'].errors }">
-                </ng-multiselect-dropdown>
-                <div *ngIf="submittedSchedule && f['members'].errors" class="invalid-feedback">
-                  <div *ngIf="f['members'].errors['dropdown-error']">Reunion must have at least one member</div>
-                </div>
+            <div id="team" class="form-group">
+              <select class="form-select form-control browser-default custom-select" formControlName="team" (click)="showInformationOff()"
+              [ngClass]="{ 'is-invalid': submittedSchedule && f['team'].errors }" id="validationCustom04" required>
+                <option selected disabled value="">Choose team...</option>
+                <option [ngValue]="team" *ngFor="let team of listOfTeams">
+                  {{team.name}}
+                </option>
+              </select>
+              <div *ngIf="submittedSchedule && f['team'].errors" class="invalid-feedback">
+                <div *ngIf="f['team'].errors['required']">Reunion must have at least one team associated</div>
+              </div>
             </div>
             <div id="reunionTime" class="form-group" (click)="showInformationOff()">
               <div class="input-group">

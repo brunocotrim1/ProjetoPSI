@@ -15,10 +15,6 @@ const { translateAliases } = require("../models/User");
 const { Console } = require("console");
 
 
-
-
-
-
 module.exports = function (dbI) {
     router.get("/tasks", authenticateToken, async (req, res) => {
         const user = await User.findById(req.user.id).catch(function (err) {
