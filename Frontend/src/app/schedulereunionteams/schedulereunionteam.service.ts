@@ -34,6 +34,11 @@ export class ScheduleReunionteamService {
     return this.http.post<any>(url, reunion, this.httpOptions);
   }
 
+  getAllUnavailables(): Observable<any> {
+    const url = `/api/unavailables`;
+    return this.http.get<any>(url, this.httpOptions);
+  }
+  
   getTeams(): Observable<any>{
     return this.http.get<any>(`/api/getteams`, this.httpOptions);
   }

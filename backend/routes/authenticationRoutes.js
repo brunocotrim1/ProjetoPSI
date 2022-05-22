@@ -198,18 +198,18 @@ async function init() {
   const unavailables = [
     {
        user: bruno._id,
-       beginDate: new Date(2022,5,22,12,0,0),
-       endDate: new Date(2022,5,22,16,0,0),
+       beginDate: new Date(2022,4,22,12,0,0),
+       endDate: new Date(2022,4,22,16,0,0),
     },
     {
       user: bruno._id,
-      beginDate: new Date(2022,7,22,9,30,0),
-      endDate: new Date(2022,7,22,11,0,0),
+      beginDate: new Date(2022,4,22,9,30,0),
+      endDate: new Date(2022,4,22,11,0,0),
     },
     {
       user: bruno._id,
-      beginDate: new Date(2022,6,5,14,0,0),
-      endDate: new Date(2022,6,5,17,30,0),
+      beginDate: new Date(2022,4,5,14,0,0),
+      endDate: new Date(2022,4,5,17,30,0),
     },
     {
       user: miguel._id,

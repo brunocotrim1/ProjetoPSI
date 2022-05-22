@@ -18,7 +18,7 @@
                   <div *ngIf="f['members'].errors['dropdown-error']">Reunion must have at least one member</div>
                 </div>
             </div>
-            <div id="reunionTime" class="form-group" (click)="showInformationOff()">
+            <div id="reunionTime" class="form-group">
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend" data-toggle="dropdown"><mdb-icon fas icon="info"></mdb-icon></span>
@@ -28,13 +28,13 @@
                   </div>
                 </div>
                 <input type="text" formControlName="reunionTime" placeholder="Reunion time" class="form-control" style="border-top-right-radius: 2px; border-bottom-right-radius: 2px;"
-                  [ngClass]="{ 'is-invalid': submittedSchedule && f['reunionTime'].errors }" (input)="onChangeDurationReunion()"/> 
+                  [ngClass]="{ 'is-invalid': submittedSchedule && f['reunionTime'].errors }" (click)="showInformationOff()"/> 
                 <div *ngIf="submittedSchedule && f['reunionTime'].errors" class="invalid-feedback">
                   <div *ngIf="f['reunionTime'].errors['required']">Duration of reunion is required</div>
-                  <div *ngIf="f['reunionTime'].errors['pattern']">Duration is in the wrong format</div>
-                  <div *ngIf="isZero">Duration needs to be bigger than zero</div>
-                  <div *ngIf="isBiggerThanEight">Duration has to be less or equal to eight hours</div>
-                  <div *ngIf="isNotMultiple30">Duration has to be multiple of 30 minutes</div>
+                  <div *ngIf="f['reunionTime'].errors['duration-error']">Duration is in the wrong format</div>
+                  <div *ngIf="f['reunionTime'].errors['duration-errorisZero']">Duration needs to be bigger than zero</div>
+                  <div *ngIf="f['reunionTime'].errors['duration-errorisBiggerThanEight']">Duration has to be less or equal to eight hours</div>
+                  <div *ngIf="f['reunionTime'].errors['duration-errorisNotMultiple30']">Duration has to be multiple of 30 minutes</div>
                 </div>
               </div>
             </div>

@@ -5,6 +5,7 @@ import { User } from '../User';
 import { ScheduleReunionService } from './schedulereunion.service';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import { Reunion } from '../Reunion';
+import { Unavailability } from '../Unavailabilty';
 
 @Component({
   selector: 'app-schedulereunion',
@@ -37,13 +38,12 @@ export class SchedulereunionComponent implements OnInit {
   "July", "August", "September", "October", "November", "December"
   ];
 
-  //"^([0-1]?[0-9]|2[0-3]):(30|00)$"
-  //^(0?[1-7]):(30|00)|(0?8):00|(0?0):30$
+  //Validators.pattern(new RegExp("^(0?[1-7]):(30|00)|(0?8):00|(0?0):30$"))
 
   scheduleForm = new FormGroup(
     {
     members: new FormControl('', this.DropdownValidator),
-    reunionTime: new FormControl('', [Validators.required, Validators.pattern(new RegExp("^(0?[1-7]):(30|00)|(0?8):00|(0?0):30$"))]),
+    reunionTime: new FormControl('', [Validators.required, this.DurationValidator]),
     inicialDate: new FormControl('', [Validators.required]),
     finalDate: new FormControl('', [Validators.required])
     }
@@ -54,6 +54,44 @@ export class SchedulereunionComponent implements OnInit {
       return { 'dropdown-error': true };
     }
     return null;
+  }
+
+  DurationValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    if (!control.value.includes(":") || control.value.length > 5 || control.value.length < 4) {
+      return { 'duration-error': true };
+    }
+    var reunionTime = control.value.split(":") 
+    if (reunionTime[0].length == 0 || reunionTime[0].length > 2 || reunionTime[1].length != 2 ) {
+      return { 'duration-error': true };
+    }
+    if (reunionTime[1] != undefined){
+        var errorList = {} as any
+        var blockHour: number = +reunionTime[0]
+        var blockMinute: number = +reunionTime[1]
+        var isZero = blockHour == 0 && blockMinute == 0
+        var isBiggerThanEight = (blockHour == 8 && blockMinute > 0) || (blockHour > 8)
+        var isNotMultiple30 = blockMinute != 0 && blockMinute != 30
+        if (isZero) {
+          errorList['duration-errorisZero'] = true;
+        }
+        if (isBiggerThanEight) {
+          errorList['duration-errorisBiggerThanEight'] = true;
+          //return { 'duration-errorisBiggerThanEight': true };
+        }
+        if (isNotMultiple30) {
+          errorList['duration-errorisNotMultiple30'] = true;
+          //return { 'duration-errorisNotMultiple30': true };
+        }
+        if (isNotMultiple30 || isBiggerThanEight || isZero){
+          return errorList
+        }
+    } else {
+      return { 'duration-error': true };
+    }
+
+    return null;
+
+    
   }
 
   availabilityForm = new FormGroup(
@@ -69,6 +107,7 @@ export class SchedulereunionComponent implements OnInit {
   dropdownList: any[] = [];
   dropdownUsers: any[] = [];
   listOfReunions: Reunion[] = [];
+  listOfUnavailableTimes: Unavailability[] = [];
   listOfAllUnavailables: any[] = [];
   listOfAvailableBlocks: any[] = [];
   listOfAvailableDays: any[] = [];
@@ -136,40 +175,6 @@ export class SchedulereunionComponent implements OnInit {
     };
   }
 
-  onChangeDurationReunion(){
-    var reunionTime = this.f["reunionTime"].value.split(":") 
-    if(this.f["reunionTime"].errors){
-      console.log("Entered1")
-      if (reunionTime[1] != undefined){
-        var blockHour: number = +reunionTime[0]
-        var blockMinute: number = +reunionTime[1]
-        this.isZero = blockHour == 0 && blockMinute == 0
-        //console.log("IsRegexZero?",this.isZero, reunionTime)
-        this.isBiggerThanEight = (blockHour == 8 && blockMinute > 0) || (blockHour > 8)
-        //console.log("IsRegexBigger8?",this.isBiggerThanEight, reunionTime)
-        this.isNotMultiple30 = blockMinute != 0 && blockMinute != 30 
-        //console.log("IsRegexNotMultiple?",this.isNotMultiple30, reunionTime)
-      }
-    } else {
-      this.isZero = false;
-      this.isBiggerThanEight = false;
-      this.isNotMultiple30 = false;
-    }
-
-
-      // if(this.isZero) {
-      //   this.f['reunionTime'].setErrors({"isZero": true});
-      // } 
-      // if(this.isBiggerThanEight) {
-      //   this.f['reunionTime'].setErrors({"isBiggerThanEight": true});
-      // } 
-      // if(this.isNotMultiple30) {
-      //   this.f['reunionTime'].setErrors({"isNotMultiple30": true});
-      // } 
-
-      //console.log(this.f['reunionTime'].errors[])
-  }
-
   onSubmitSchedule() {
     this.submittedSchedule = true;
     if (this.scheduleForm.invalid) {
@@ -191,18 +196,36 @@ export class SchedulereunionComponent implements OnInit {
     if (this.scheduleForm.invalid) {
       return;
     }
-
-    this.schedulereunionservice.getAllReunions()
-      .subscribe({
+    this.schedulereunionservice.getAllUnavailables()
+    .subscribe({
+      next: (unavailables) => {      
+        this.listOfAllUnavailables = [];  
+        this.listOfUnavailableTimes = [];
+        this.listOfUnavailableTimes = unavailables;
+        var currentUsers = this.fetchUsers()
+        for(let i = 0; i < this.listOfUnavailableTimes.length; i++){
+          var oneTimeUnavailability = true;
+          for(let j = 0; j < currentUsers.length; j++){
+              if(oneTimeUnavailability && this.listOfUnavailableTimes[i].user == currentUsers[j]){
+                this.listOfAllUnavailables.push({beginDate: new Date(this.listOfUnavailableTimes[i].beginDate), endDate: new Date(this.listOfUnavailableTimes[i].endDate)})
+                oneTimeUnavailability = false;
+              }
+          }
+        }
+        // var numbersCopy = this.listOfAllUnavailables.reduce((newArray, element) => {
+        //   newArray.push(element);
+        //   return newArray;
+        // }, []);
+        // console.log("INDISPONIBILIDADE:",numbersCopy)
+        this.schedulereunionservice.getAllReunions()
+        .subscribe({
         next: (reunions) => {
           this.listOfAvailableBlocks = [];
           this.listOfAvailableDays = [];
           this.listOfavailableHours = [];
-          this.listOfAllUnavailables = [];
           this.listOfReunions = [];
           this.listOfReunions = reunions
           var currentUsers = this.fetchUsers()
-          console.log(currentUsers)
           for(let i = 0; i < this.listOfReunions.length; i++){
             var oneTimeReunion = true;
             for(let j = 0; j < currentUsers.length; j++){
@@ -212,6 +235,7 @@ export class SchedulereunionComponent implements OnInit {
                 }
             }
           }
+          console.log(this.listOfAllUnavailables)
 
           var listOfBlocks = []
           var hasReachEnd = false
@@ -287,13 +311,17 @@ export class SchedulereunionComponent implements OnInit {
           this.listOfAvailableBlocks = [];
           this.listOfAvailableDays = [];
           this.listOfavailableHours = [];
-          this.listOfAllUnavailables = [];
           this.listOfReunions = [];
         }
       });
 
-    this.loadingReunion = false;
-    this.showInformation = true;
+      this.loadingReunion = false;
+      this.showInformation = true;
+      },
+      error: () => {
+        this.listOfUnavailableTimes = [];
+      }
+    });
   }
 
   fetchUsers() {
@@ -304,10 +332,17 @@ export class SchedulereunionComponent implements OnInit {
     this.availabilityForm.reset({'availableDay': '', 'availableHour': ''})
     this.showInformation = false;
     this.showHours = false;
+    this.listOfAvailableBlocks = [];
+    this.listOfAvailableDays = [];
+    this.listOfavailableHours = [];
+    this.listOfReunions = [];
+    this.listOfUnavailableTimes = [];
+    this.listOfAllUnavailables = [];
   }
 
   generateHours(){
     this.showHours = true;
+    this.listOfavailableHours = [];
     for(let i = 0; i < this.listOfAvailableBlocks.length; i++){
       var dayAndMonth = this.f1["availableDay"].value;
       var dayBlock = this.listOfAvailableBlocks[i].blockInit.getDate();
