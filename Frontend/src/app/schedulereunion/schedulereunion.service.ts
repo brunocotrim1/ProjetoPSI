@@ -29,6 +29,11 @@ export class ScheduleReunionService {
     return this.http.get<any>(url, this.httpOptions);
   }
 
+  getAllUnavailables(): Observable<any> {
+    const url = `/api/unavailables`;
+    return this.http.get<any>(url, this.httpOptions);
+  }
+
   createReunion(reunion: any): Observable<any> {
     const url = `/api/createreunion`;
     return this.http.post<any>(url, reunion, this.httpOptions);
