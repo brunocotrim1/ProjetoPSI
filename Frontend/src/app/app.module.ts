@@ -40,6 +40,7 @@ import { UserPageComponent } from './userPage/user-page/user-page.component';
 import { SchedulereunionComponent } from './schedulereunion/schedulereunion.component';
 import { TeamCalendarComponent } from './team-calendar/team-calendar.component';
 import { TeamListComponent } from './team-list/team-list.component';
+import { MarcarIndisponibilidadeComponent } from './marcar-indisponibilidade/marcar-indisponibilidade.component';
 
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
@@ -96,6 +97,7 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     SchedulereunionComponent,
     TeamCalendarComponent,
     TeamListComponent,
+    MarcarIndisponibilidadeComponent,
 
   ],
   imports: [

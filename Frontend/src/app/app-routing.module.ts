@@ -23,6 +23,7 @@ import { UserPageComponent } from './userPage/user-page/user-page.component';
 import { SchedulereunionComponent } from './schedulereunion/schedulereunion.component';
 import { TeamListComponent } from './team-list/team-list.component';
 import { TeamCalendarComponent } from './team-calendar/team-calendar.component';
+import { MarcarIndisponibilidadeComponent } from './marcar-indisponibilidade/marcar-indisponibilidade.component';
 const routes: Routes = [
   { path: '', redirectTo: '/mainmenu', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent,canActivate: [AuthenticationGuard] },
@@ -42,7 +43,8 @@ const routes: Routes = [
   { path: 'manageteams', component: ManageteamsComponent, canActivate: [AuthenticationGuard, AdminGuard]  },
   { path: 'schedulereunions', component: SchedulereunionComponent, canActivate: [AuthenticationGuard]  },
   { path: 'teamslist', component: TeamListComponent, canActivate: [AuthenticationGuard]  },
-  { path: 'team/:id', component: TeamCalendarComponent, canActivate: [AuthenticationGuard]  }
+  { path: 'team/:id', component: TeamCalendarComponent, canActivate: [AuthenticationGuard]  },
+  { path: 'marcarIndisponibilidade', component: MarcarIndisponibilidadeComponent, canActivate: [AuthenticationGuard]  },
 ];
 
 @NgModule({

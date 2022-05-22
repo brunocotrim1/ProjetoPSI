@@ -55,7 +55,7 @@ module.exports = function (dbI) {
 
     router.delete("/deleteTask/:id", authenticateToken, async (req, res) => {
         console.log(req.params.id)
-        await Task.deleteOne({_id: req.params.id}).catch(function (err) {
+        await Task.deleteOne({ _id: req.params.id }).catch(function (err) {
             res.status(404);
             res.json({ err: "Not Found" });
         });;
@@ -252,16 +252,16 @@ module.exports = function (dbI) {
         res.json(user);
     });
 
-    
+
     router.get("/unavailables", authenticateToken, async (req, res) => {
         await Unavailability.find({})
-        .then(function (response) {
-            res.json(response);
-        })
-        .catch(function (err) {
-            res.status(404);
-            res.json({ err: "Not Found" });
-        });;
+            .then(function (response) {
+                res.json(response);
+            })
+            .catch(function (err) {
+                res.status(404);
+                res.json({ err: "Not Found" });
+            });;
     });
 
     router.post("/saveTask", authenticateToken, async (req, res) => {
@@ -313,7 +313,7 @@ module.exports = function (dbI) {
         if (req.body.beginDate && req.body.endDate) {
             Task.updateOne(
                 { _id: req.body._id },
-                { $set: { usersAssigned: req.body.usersAssigned, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate), linkedProject: req.body.linkedProject._id ,progress:req.body.progress} }
+                { $set: { usersAssigned: req.body.usersAssigned, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate), linkedProject: req.body.linkedProject._id, progress: req.body.progress } }
             ).then(function (response) {
                 if (response.matchedCount == 0) {
                     res.status(404);
@@ -357,18 +357,18 @@ module.exports = function (dbI) {
             return;
         });
         if (!taskExists) {
-        await Task.create({ name: req.body.taskname, priority: req.body.priority, percentage: req.body.percentage, progress: 0, usersAssigned: req.body.userID.id })
-            .then(function (response) {
-                console.log(response)
-                res.json({ msg: "Task saved successfully" });
-                return
-            })
-            .catch(function (err) {
-                res.status(404);
-                console.log(err);
-                res.json({ err: "Internal error." })
-                return;
-            });
+            await Task.create({ name: req.body.taskname, priority: req.body.priority, percentage: req.body.percentage, progress: 0, usersAssigned: req.body.userID.id })
+                .then(function (response) {
+                    console.log(response)
+                    res.json({ msg: "Task saved successfully" });
+                    return
+                })
+                .catch(function (err) {
+                    res.status(404);
+                    console.log(err);
+                    res.json({ err: "Internal error." })
+                    return;
+                });
         } else {
             res.status(404);
             res.json({ err: "Task with the selected name already exists" })
@@ -376,26 +376,52 @@ module.exports = function (dbI) {
     });
 
 
+    router.post("/createunavailability", authenticateToken, async (req, res) => {
+
+        const unavailabilities = await Unavailability.find({user: req.body.user})
+        for(let i = 0; i < unavailabilities.length; i++){
+            dataInicio = new Date(req.body.beginDate)
+            dataFim =  new Date(req.body.endDate)
+            if(unavailabilities[i].beginDate.getTime() == dataInicio.getTime() && unavailabilities[i].endDate.getTime() == dataFim.getTime()){
+                res.status(404);
+                res.json({ err: "Ja existe indisponibilidade marcada para essa hora" })
+                return;
+            }
+        }
+    
+        await Unavailability.create({ beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate), user: req.body.user }).then(function (response) {
+            console.log(response)
+            res.json({ msg: "Unavailability saved successfully" });
+            return
+        }).catch(function (err) {
+            console.log(err);
+            res.status(404);
+            res.json({ err: "Error" })
+            return;
+        });
+    });
+
+
     router.post("/teams/add", authenticateToken, async (req, res) => {
         const teamExists = await Team.exists({ name: req.body.team.name })
-        .catch(function (err) {
-          res.status(404);
-          res.json({ err: "Internal error." })
-          return;
-        });
-        if (!teamExists) {
-        await Team.create({ name: req.body.team.name, members: req.body.team.members })
-            .then(function (response) {
-                console.log(response)
-                res.json({ msg: "Team saved successfully" });
-                return
-            })
             .catch(function (err) {
-                console.log(err);
                 res.status(404);
                 res.json({ err: "Internal error." })
                 return;
             });
+        if (!teamExists) {
+            await Team.create({ name: req.body.team.name, members: req.body.team.members })
+                .then(function (response) {
+                    console.log(response)
+                    res.json({ msg: "Team saved successfully" });
+                    return
+                })
+                .catch(function (err) {
+                    console.log(err);
+                    res.status(404);
+                    res.json({ err: "Internal error." })
+                    return;
+                });
         } else {
             res.status(404);
             res.json({ err: "Team with the selected name already exists" })
@@ -405,19 +431,19 @@ module.exports = function (dbI) {
 
     router.post("/addproject", authenticateToken, async (req, res) => {
         const projectExists = await Project.exists({ name: req.body.username })
-        .catch(function (err) {
-            res.status(404);
-            res.json({ err: "Internal error." })
-            return;
-        });
+            .catch(function (err) {
+                res.status(404);
+                res.json({ err: "Internal error." })
+                return;
+            });
         const projectAcronymExists = await Project.exists({ acronym: req.body.acronym })
-        .catch(function (err) {
-            res.status(404);
-            res.json({ err: "Internal error." })
-            return;
-        });
-        if(!projectExists && !projectAcronymExists){
-            if (req.body.beginDate && req.body.endDate){
+            .catch(function (err) {
+                res.status(404);
+                res.json({ err: "Internal error." })
+                return;
+            });
+        if (!projectExists && !projectAcronymExists) {
+            if (req.body.beginDate && req.body.endDate) {
                 await Project.create({ name: req.body.username, acronym: req.body.acronym, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate) })
                     .then(function (response) {
                         res.json({ msg: "Project created successfully" });
@@ -430,17 +456,17 @@ module.exports = function (dbI) {
                         return;
                     })
             } else if (req.body.beginDate && !req.body.endDate) {
-                await Project.create({ name: req.body.username, acronym: req.body.acronym, beginDate: new Date(req.body.beginDate)})
-                .then(function (response) {
-                    res.json({ msg: "Project created successfully" });
-                    return;
-                })
-                .catch(function (err) {
-                    console.log(err);
-                    res.status(404);
-                    res.json({ err: "Project already exists" })
-                    return;
-                })
+                await Project.create({ name: req.body.username, acronym: req.body.acronym, beginDate: new Date(req.body.beginDate) })
+                    .then(function (response) {
+                        res.json({ msg: "Project created successfully" });
+                        return;
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                        res.status(404);
+                        res.json({ err: "Project already exists" })
+                        return;
+                    })
             }
         } else {
             res.status(404);
@@ -482,7 +508,7 @@ module.exports = function (dbI) {
     });
 
     router.post("/createreunion", authenticateToken, async (req, res) => {
-        if (req.body.reunion.beginDate && req.body.reunion.endDate){
+        if (req.body.reunion.beginDate && req.body.reunion.endDate) {
             await Reunion.create({ members: req.body.reunion.members, beginDate: new Date(req.body.reunion.beginDate), endDate: new Date(req.body.reunion.endDate), possibleTeam: req.body.reunion.team })
                 .then(function (response) {
                     res.json({ msg: "Reunion was created successfully" });
@@ -493,7 +519,7 @@ module.exports = function (dbI) {
                     res.json({ err: "Error scheduling reunion" })
                     return;
                 })
-        } 
+        }
     });
 
     return router;

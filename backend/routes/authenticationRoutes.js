@@ -163,7 +163,8 @@ async function init() {
       const proj = new Project(testProject[i]);
       await proj.save().catch(function (err) { });
   }
-  const equipa = await Team.findOne({ name: "Team 1" });
+  const equipa = await Team.findOne({ name: "Team 2" });
+  const equipa2 = await Team.findOne({ name: "Team 1" });
   await Reunion.deleteMany({}).catch(function (err) { });
   const testReunion = [
       {
@@ -178,6 +179,7 @@ async function init() {
           endDate: new Date().setHours(15,0,0,0)
       },
       {
+        possibleTeam: equipa2._id,
           members: [bruno._id],
           beginDate: new Date().setHours(16,0,0,0),
           endDate: new Date().setHours(17,0,0,0)
@@ -212,8 +214,18 @@ async function init() {
     },
     {
       user: miguel._id,
-      beginDate: new Date(2022,5,15,14,0,0),
-      endDate: new Date(2022,5,15,17,30,0),
+      beginDate: new Date(2022,4,15,14,0,0),
+      endDate: new Date(2022,4,15,17,30,0),
+    },
+    {
+      user: lucas._id,
+      beginDate: new Date(2022,4,10,14,0,0),
+      endDate: new Date(2022,4,10,17,30,0),
+    },
+    {
+      user: lucas._id,
+      beginDate: new Date(2022,4,8,14,0,0),
+      endDate: new Date(2022,4,8,17,30,0),
     }
     
     

@@ -78,12 +78,12 @@ export class TeamCalendarComponent implements OnInit {
     this.TeamCalendaService.getTasks().subscribe({
       next: (tasks) => {
         for (let i = 0; i < tasks.length; i++) {
-      
+
           for (let j = 0; j < tasks[i].usersAssigned.length; j++) {
-            
+
             let match = false;
             for (let k = 0; k < this.team.members.length; k++) {
-              console.log(tasks[i].usersAssigned[j] == this.team.members[k].id)
+
               if (tasks[i].usersAssigned[j] == this.team.members[k].id) {
                 this.events.push({
                   title: tasks[i].name,
@@ -111,6 +111,85 @@ export class TeamCalendarComponent implements OnInit {
         this.error = error;
       }
     });
+    this.TeamCalendaService.getUnavailables().subscribe({
+      next: (unavailables) => {
+        for (let i = 0; i < this.team.members.length; i++) {
+          for (let j = 0; j < unavailables.length; j++) {
+            if (this.team.members[i].id == unavailables[j].user) {
+              this.events.push({
+                title: 'Indisponível',
+                start: new Date(unavailables[j].beginDate),
+                end: new Date(unavailables[j].endDate),
+                color: colors[Math.floor(Math.random() * colors.length)],
+                draggable: true,
+                resizable: {
+                  beforeStart: true,
+                  afterEnd: true,
+                },
+              });
+            }
+          }
+        }
+
+        this.refresh.next();
+
+      },
+      error: error => {
+        this.error = error;
+      }
+    });
+
+
+    this.TeamCalendaService.getReunions().subscribe({
+      next: (reunions) => {
+        for (let i = 0; i < reunions.length; i++) {
+          if (reunions[i].possibleTeam == id) {
+            this.events.push({
+              title: 'Reunião desta Equipa',
+              start: new Date(reunions[i].beginDate),
+              end: new Date(reunions[i].endDate),
+              color: colors[Math.floor(Math.random() * colors.length)],
+              draggable: true,
+              resizable: {
+                beforeStart: true,
+                afterEnd: true,
+              },
+            });
+          } else {
+            for (let j = 0; j < reunions[i].members.length; j++) {
+              for (let k = 0; k < this.team.members.length; k++) {
+                if (reunions[i].members[j] == this.team.members[k].id) {
+                  let nome = "Reuniao"
+                  if (reunions[i].possibleTeam)
+                    nome = "Reuniao de Equipa"
+                    this.events.push({
+                    title: nome,
+                    start: new Date(reunions[i].beginDate),
+                    end: new Date(reunions[i].endDate),
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    draggable: true,
+                    resizable: {
+                      beforeStart: true,
+                      afterEnd: true,
+                    },
+                  });
+                  break;
+                }
+              }
+            }
+
+          }
+        }
+
+
+        this.refresh.next();
+
+      },
+      error: error => {
+        this.error = error;
+      }
+    });
+
     this.user = this.TeamCalendaService.getUser();
     if (this.user == undefined)
       this.router.navigate(["/"]);
