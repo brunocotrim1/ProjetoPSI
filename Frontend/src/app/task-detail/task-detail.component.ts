@@ -30,6 +30,7 @@ export class TaskDetailComponent implements OnInit {
   task = {} as Task;
   users = [] as User[];
 
+  progressValue = 0;
   dropdownSettings: any = {};
   selectedItems: Array<any> = [];
   data: Array<any> = [];
@@ -102,6 +103,8 @@ export class TaskDetailComponent implements OnInit {
               this.f['beginDate'].setValue(this.task.beginDate);
               this.f['endDate'].setValue(this.task.endDate);
             }
+            
+            this.progressValue = this.task.progress;
 
             this.taskDetailService.getProjects()
               .subscribe({
@@ -149,6 +152,10 @@ export class TaskDetailComponent implements OnInit {
 
   deleteKey(key : any) {
     delete this.checklist[key];
+  }
+
+  progressValueChanged(p : any) {
+    this.progressValue = p.target.value;
   }
   removeLinkedProjectOfTask(){
     this.f['project'].reset();
