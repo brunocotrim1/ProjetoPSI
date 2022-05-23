@@ -26,8 +26,9 @@
                 aria-valuemax="100">
                 {{ task.progress }}%
               </div>
+              <div style="display:flex; align-items: center;" *ngIf="task.progress == 0" > {{ task.progress }}%</div>
             </div>
-            <div style="margin-top: 1%;" *ngIf="task.progress == 0" > {{ task.progress }}%</div>
+
           </div>
           <button mdbBtn class="deletetask" mdbWavesEffect (click)="onDeleteTask(task)"
           style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">

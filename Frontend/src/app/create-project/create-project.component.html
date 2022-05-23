@@ -32,34 +32,26 @@
           </div>
         </div>
         <div class="form-group">
-          <mat-form-field>
-            <input matInput [ngxMatDatetimePicker]="picker" placeholder="Begin Date" formControlName="beginDate"
-              [min]="minDate" [max]="maxDate" [disabled]="disabled" [ngClass]="{ 'is-invalid': submitted && f['beginDate'].errors }">
-            <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
-              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
-              [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
-            </ngx-mat-datetime-picker>
+          <div class="input-group">
+            <input class="form-control" placeholder="Start date" formControlName="beginDate"
+                    name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && f['beginDate'].errors }">
+            <button class="btn calendarIcon" (click)="d.toggle()" type="button"><mdb-icon fas icon="calendar-alt"></mdb-icon></button>
             <div *ngIf="submitted && f['beginDate'].errors" class="invalid-feedback">
-              <div *ngIf="f['beginDate'].errors['required']">Begin date is required</div>
-              <div *ngIf="f['beginDate'].errors['notValidWithCurrentDate']">Begin date needs to be after the current date</div>
+              <div *ngIf="f['beginDate'].errors['required']">Start date is required</div>
+              <div *ngIf="f['beginDate'].errors['beforeCurrentDate']">Initial date needs to be after the current date</div>
             </div>
-          </mat-form-field>
+          </div>
         </div>
         <div class="form-group">
-          <mat-form-field>
-            <input matInput [ngxMatDatetimePicker]="picker2" placeholder="End Date" formControlName ="endDate"
-               [min]="minDate" [max]="maxDate" [disabled]="disabled" [ngClass]="{ 'is-invalid': submitted && f['endDate'].errors }">
-            <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #picker2 [showSpinners]="showSpinners" [showSeconds]="showSeconds"
-               [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond"
-               [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian" 
-               [disableMinute]="disableMinute" [hideTime]="hideTime">
-            </ngx-mat-datetime-picker>
+          <div class="input-group">
+            <input class="form-control" placeholder="End date" formControlName="endDate"
+                    name="dp" [(ngModel)]="model1" ngbDatepicker #d1="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && f['endDate'].errors }">
+            <button class="btn calendarIcon" (click)="d1.toggle()" type="button"><mdb-icon fas icon="calendar-alt"></mdb-icon></button>
             <div *ngIf="submitted && f['endDate'].errors" class="invalid-feedback">
-              <div *ngIf="f['endDate'].errors['incorrect']">End date must be after begin date</div>
+              <div *ngIf="f['endDate'].errors['required']">End date is required</div>
+              <div *ngIf="f['endDate'].errors['afterFinalDate']">Final date before initial date</div>
             </div>
-         </mat-form-field>
+          </div>
         </div>
         <button mdbBtn color="info" type="submit" mdbWavesEffect
           style="background: linear-gradient(to top right, #cc0066 0%, #ff5050 100%);">

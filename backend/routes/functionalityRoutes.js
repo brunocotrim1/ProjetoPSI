@@ -326,7 +326,7 @@ module.exports = function (dbI) {
         } else if (!req.body.beginDate && !req.body.endDate) {
             Task.updateOne(
                 { _id: req.body._id },
-                { $set: { usersAssigned: req.body.usersAssigned, linkedProject: req.body.linkedProject._id } }
+                { $set: { usersAssigned: req.body.usersAssigned, linkedProject: req.body.linkedProject._id, progress: req.body.progress } }
             ).then(function (response) {
                 if (response.matchedCount == 0) {
                     res.status(404);

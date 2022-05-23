@@ -6,6 +6,7 @@ import { CreateProjectService } from './createproject.service';
 import Validation from './validation';
 import { NgxMatDateAdapter, NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 import { MAT_DATE_LOCALE, ThemePalette } from '@angular/material/core';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-create-project',
@@ -22,6 +23,9 @@ export class CreateProjectComponent implements OnInit {
     endDate: new FormControl('',[]),
     }
   );
+
+  model: NgbDateStruct | undefined;
+  model1: NgbDateStruct | undefined;
 
   defaultrole = "USER";
   loading = false;
@@ -46,8 +50,8 @@ export class CreateProjectComponent implements OnInit {
   public disableMinute = false;
   public hideTime = false;
 
-  beginDateRequired = false;
-  notValidBeginDate = false;
+  beforeCurrentDate = false;
+  afterFinalDate = false;
 
   user = {} as User;
 
@@ -66,19 +70,29 @@ export class CreateProjectComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.f["beginDate"].value._d);
 
     this.date = new Date();
     this.date.setMinutes(this.date.getMinutes() - 1);
     
-    if(this.f["beginDate"].value._d < this.date) {
-      this.f['beginDate'].setErrors({'notValidWithCurrentDate': true});
+    // if(this.f["beginDate"].value._d < this.date) {
+    //   this.f['beginDate'].setErrors({'notValidWithCurrentDate': true});
+    // }
+
+    // if(this.f["endDate"].value._d !== null) {
+    //   if(this.f["endDate"].value._d < this.f["beginDate"].value._d)  {
+    //     this.f['endDate'].setErrors({'incorrect': true});
+    //   }
+    // }
+
+    var InitialDate = new Date(this.f["beginDate"].value.year,this.f["beginDate"].value.month-1,this.f["beginDate"].value.day)
+    var FinalDate = new Date(this.f["endDate"].value.year,this.f["endDate"].value.month-1,this.f["endDate"].value.day)
+
+    if(InitialDate < new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate())) {
+      this.f['beginDate'].setErrors({'beforeCurrentDate': true});
     }
 
-    if(this.f["endDate"].value._d !== null) {
-      if(this.f["endDate"].value._d < this.f["beginDate"].value._d)  {
-        this.f['endDate'].setErrors({'incorrect': true});
-      }
+    if(FinalDate < InitialDate)  {
+      this.f['endDate'].setErrors({'afterFinalDate': true});
     }
 
     if (this.projectForm.invalid) {
@@ -87,7 +101,7 @@ export class CreateProjectComponent implements OnInit {
 
     this.loading = true;
 
-    this.createuprojectservice.createProject(this.f["name"].value, this.f["acronym"].value, this.f["beginDate"].value, this.f["endDate"].value)
+    this.createuprojectservice.createProject(this.f["name"].value, this.f["acronym"].value, InitialDate, FinalDate)
       .subscribe({
         next: () => {
           this.returnmessage = "New project created!";
