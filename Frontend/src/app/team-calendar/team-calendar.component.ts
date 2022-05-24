@@ -159,9 +159,9 @@ export class TeamCalendarComponent implements OnInit {
             for (let j = 0; j < reunions[i].members.length; j++) {
               for (let k = 0; k < this.team.members.length; k++) {
                 if (reunions[i].members[j] == this.team.members[k].id) {
-                  let nome = "Reuniao"
+                  let nome = "Reuniao de um membro desta Equipa"
                   if (reunions[i].possibleTeam)
-                    nome = "Reuniao de Equipa"
+                    nome = "Reuniao de outra Equipa"
                     this.events.push({
                     title: nome,
                     start: new Date(reunions[i].beginDate),

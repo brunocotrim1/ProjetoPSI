@@ -1,11 +1,7 @@
-<app-navigbar
-  currentComponent="mainmenu"
-  username="{{ user.username }}"
-  userrole="{{ user.role }}"
-></app-navigbar>
+<app-navigbar currentComponent="otherPages" username="{{ user.username }}" userrole="{{ user.role }}"></app-navigbar>
 
 <div class="mainContainer">
-  <div style="margin-top: 6%; margin-bottom: 5%">
+  <div style="margin-top:6%; margin-bottom:5%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
     <div class="enjoyapp text-center">
       <div class="white-text">
         <h2 class="h1 h1-responsive font-bold wow" data-wow-delay="0.3s">
@@ -14,54 +10,27 @@
         <hr class="hr-light wow" data-wow-delay="0.3s" />
       </div>
     </div>
-    <button class="lftbut" mdbBtn type="button" rounded="true" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-      <form
-        class="d-flex flex-column text-center"
-        [formGroup]="dates"
-        (ngSubmit)="onSubmit()"
-        style="margin: 50px"
-      >
+    <button class="lftbut" mdbBtn type="button" rounded="true"
+      style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <form class="d-flex flex-column text-center" [formGroup]="dates" (ngSubmit)="onSubmit()" style="margin-top: 30px">
         <div class="input-group">
-          <input
-            class="form-control"
-            placeholder="Start date"
-            formControlName="day"
-            name="dp"
-            [(ngModel)]="model"
-            ngbDatepicker
-            #d="ngbDatepicker"
-          />
+          <input class="form-control" placeholder="Start date" formControlName="day" name="dp" [(ngModel)]="model"
+            ngbDatepicker #d="ngbDatepicker" />
           <button class="btn calendarIcon" (click)="d.toggle()" type="button">
             <mdb-icon fas icon="calendar-alt"></mdb-icon>
           </button>
         </div>
       </form>
-      <br />
-      <div style="display: flex; align-items: center">
-        Hora de Inicio:
-        <ngb-timepicker
-          [(ngModel)]="time"
-          style="margin-left: 2% !important"
-        ></ngb-timepicker>
+      <div style="display: flex; align-items: center; justify-content: center; margin-right:10%">
+        Hora Inicio:
+        <ngb-timepicker [(ngModel)]="time" style="margin-left:1%"></ngb-timepicker>
       </div>
-
-      <br />
-      <div style="display: flex; align-items: center">
-        Hora de Fim:
-        <ngb-timepicker
-          [(ngModel)]="time2"
-          style="margin-left: 2%"
-        ></ngb-timepicker>
+      <div style="display: flex; align-items: center; justify-content: center; margin-right:10%">
+        Hora Final:
+        <ngb-timepicker [(ngModel)]="time2" style="margin-left:1%"></ngb-timepicker>
       </div>
-      <button
-        mdbBtn
-        class="saveBut"
-        style="margin-left: 0"
-        rounded="true"
-        mdbWavesEffect
-        (click)="onSubmit()"
-      >
-        Marcar Indisponibilidade    
+      <button mdbBtn class="saveBut" style="margin-left: 0" rounded="true" mdbWavesEffect (click)="onSubmit()">
+        Marcar Indisponibilidade
       </button>
       <div *ngIf="error" class="alert alert-danger mt-3 mb-0">
         {{ error }}

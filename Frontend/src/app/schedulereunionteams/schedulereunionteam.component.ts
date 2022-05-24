@@ -261,7 +261,7 @@ export class SchedulereunionteamComponent implements OnInit {
         for(let i = 0; i < this.listOfAvailableBlocks.length; i++){
           var dayOfBlock = this.listOfAvailableBlocks[i].blockInit.getDate();
           var monthOfBlock = this.listOfAvailableBlocks[i].blockInit.getMonth();
-          if(!this.listOfAvailableDays.includes("Day "+dayOfBlock+" of "+this.monthNames[monthOfBlock])){
+          if(!this.listOfAvailableDays.includes("Day "+dayOfBlock+" of "+this.monthNames[monthOfBlock]) && this.listOfAvailableBlocks[i].blockInit.getDay() != 0 && this.listOfAvailableBlocks[i].blockInit.getDay() != 6){
             this.listOfAvailableDays.push("Day "+dayOfBlock+" of "+this.monthNames[monthOfBlock])
           }
         }

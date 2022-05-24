@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/User';
 import { Task } from 'src/app/Task';
@@ -69,11 +69,17 @@ export class TaskDetailComponent implements OnInit {
   isTaskRelated = false;
   isMultiDropdownOpen = false;
 
+  isOnCheckList = false;
+
   ngOnInit(): void {
+    
+    console.log("HAS CHECKLIST", this.showCheck);
     this.user = this.taskDetailService.getUser();
     const id = this.route.snapshot.paramMap.get('id')!;
     this.data = [];
-    this.showCheck = this.hasChecklist();
+    
+    
+    console.log("HAS CHECKLIST 2", this.showCheck);
     this.taskDetailService.getUsers().subscribe({
       next: (users) => {
         this.users = users
@@ -86,6 +92,10 @@ export class TaskDetailComponent implements OnInit {
         } this.taskDetailService.getTaskDetail(id).subscribe({
           next: (task) => {
             this.task = task;
+            this.checklist = task.checklist;
+            this.showCheck = this.hasChecklist();
+            console.log(this.checklist);
+            console.log(typeof this.checklist["aaaa"])
             this.f['progress'].setValue(task.progress)
             console.log( this.f['progress'].value)
             for (let i = 0; i < this.data.length; i++) {
@@ -102,7 +112,7 @@ export class TaskDetailComponent implements OnInit {
               this.f['beginDate'].setValue(this.task.beginDate);
               this.f['endDate'].setValue(this.task.endDate);
             }
-
+            
             this.taskDetailService.getProjects()
               .subscribe({
                 next: (project) => {
@@ -140,16 +150,72 @@ export class TaskDetailComponent implements OnInit {
   }
 
   invertValue(key : any) {
-    this.checklist[key] = !this.checklist[key]
+    if (this.checklist[key] == 'false'){
+      this.checklist[key] = false
+    } else if(this.checklist[key] == 'true'){
+      this.checklist[key] = true
+    }
+    if((this.checklist[key] == false || this.checklist[key] == 'false') && !window.confirm("Are you sure that you want to complete the following task?")){
+      return;
+    }
+      var filteredList = Object.keys(this.checklist).filter((item) => {
+        return this.checklist[item] == false || this.checklist[item] == 'false'
+      });
+      if (filteredList.length >= 7 && (this.checklist[key] == true || this.checklist[key] == 'true')) {
+        this.error = "The max number of unchecked items is 7";
+        this.isOnCheckList = true;
+        setTimeout(() => {this.error = ''
+        }, 2*1000);
+        return;
+      }
+      this.checklist[key] = !this.checklist[key]
+      this.isOnCheckList = true;
+      this.saveChanges()
   }
 
   addKey(key : any) {
+    if (Object.keys(this.checklist).includes(key)) {
+      this.error = "Item to create already exists";
+      this.isOnCheckList = true;
+      setTimeout(() => {this.error = ''
+      }, 2*1000);
+      return;
+    } 
+    if (key.length < 4) {
+      this.error = "The item name must be at least 4 characters long";
+      this.isOnCheckList = true;
+      setTimeout(() => {this.error = ''
+      }, 2*1000);
+      return;
+    }
+    var filteredList = Object.keys(this.checklist).filter((item) => {
+      return this.checklist[item] == false || this.checklist[item] == 'false'
+    });
+    if (filteredList.length >= 7) {
+      this.error = "The max number of unchecked items is 7";
+      this.isOnCheckList = true;
+      setTimeout(() => {this.error = ''
+      }, 2*1000);
+      return;
+    }
+    if (this.checklist[key]) {
+      this.error = "There already exists an item with that name";
+      this.isOnCheckList = true;
+      setTimeout(() => {this.error = ''
+      }, 2*1000);
+      return;
+    }
     this.checklist[key] = false;
+    this.isOnCheckList = true;
+    this.saveChanges()
   }
 
   deleteKey(key : any) {
     delete this.checklist[key];
+    this.isOnCheckList = true;
+    this.saveChanges()
   }
+
   removeLinkedProjectOfTask(){
     this.f['project'].reset();
     this.task.linkedProject = {} as Project;
@@ -157,15 +223,11 @@ export class TaskDetailComponent implements OnInit {
   }
 
   startShowingCheck() {
-    
+    if(this.showCheck){
+      this.showCheck = false;
+      return;
+    } 
     this.showCheck = true;
-    
-  }
-
-  stopShowingCheck() {
-
-    this.showCheck = false;
-
   }
 
   onTabShowSelect(){
@@ -187,13 +249,30 @@ export class TaskDetailComponent implements OnInit {
   }
   
   hasChecklist() {
-    
+    // console.log("OBJECT HAS CHECKLIST")
+    console.log(this.checklist);//keys())
+    //console.log(Object.keys(this.checklist).length !== 0);
     return (Object.keys(this.checklist).length !== 0);
   }
+
+
   get f() { return this.form.controls; }
 
+
+
+  keyPressNumbers(event : any) {
+    var inp = String.fromCharCode(event.keyCode);
+
+    if (/[a-zA-Z0-9]/.test(inp)) {
+      return true;
+    } else {
+      event.preventDefault();
+      return false;
+    }
+  }
+
   saveChanges() {
-   
+    console.log(this.checklist)
     if (this.f['beginDate'].value._d) {
       this.task.beginDate = new Date(this.f['beginDate'].value._d);
     }
@@ -214,14 +293,16 @@ export class TaskDetailComponent implements OnInit {
       this.task.linkedProject = this.f['project'].value
       this.isTaskRelated = true;
     }
-
+    console.log("SAVING THIS")
     console.log(this.task)
     this.taskDetailService.saveTask(this.task).subscribe({
       next: (msg) => {
         this.error='';
         this.message = msg.msg;
-        setTimeout(() => {this.message = ''
-        }, 2*1000);
+        setTimeout(() => {        
+          this.isOnCheckList = false;
+          this.message = ''}, 2*1000);
+
       },
       error: error => {
         this.message = '';

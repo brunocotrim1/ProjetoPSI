@@ -92,7 +92,7 @@ export class UserPageComponent implements OnInit {
                   this.events.push({
                     start: new Date(unavailable[i].beginDate),
                     end: new Date(unavailable[i].endDate),
-                    title: "Periodo Indisponivel",
+                    title: "Indisponível",
                     color: colors[Math.floor(Math.random() * colors.length)],
                     resizable: {
                       beforeStart: true,

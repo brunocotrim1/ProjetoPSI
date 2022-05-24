@@ -16,12 +16,18 @@ a, h5 {
     height:100%;
     justify-content: space-between;
 }
-.calendarIcon{
-    background-color: #04AA6D;
-    border-radius: 5px !important;
-    margin-left: 2% !important;
 
-}  
+.calendarIcon{
+    border: 2px solid black;
+    border-color: #04AA6D;
+    margin: 0;
+    padding: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top:7px;
+    padding-bottom:7px;
+}
+
 ::ng-deep .chevron {
     color: white!important;
 }

@@ -83,16 +83,19 @@ export class CreateProjectComponent implements OnInit {
     //     this.f['endDate'].setErrors({'incorrect': true});
     //   }
     // }
-
     var InitialDate = new Date(this.f["beginDate"].value.year,this.f["beginDate"].value.month-1,this.f["beginDate"].value.day)
-    var FinalDate = new Date(this.f["endDate"].value.year,this.f["endDate"].value.month-1,this.f["endDate"].value.day)
-
-    if(InitialDate < new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate())) {
-      this.f['beginDate'].setErrors({'beforeCurrentDate': true});
-    }
-
-    if(FinalDate < InitialDate)  {
-      this.f['endDate'].setErrors({'afterFinalDate': true});
+    var FinalDate = undefined
+    if (this.f["endDate"].value != undefined) {
+      
+      FinalDate = new Date(this.f["endDate"].value.year,this.f["endDate"].value.month-1,this.f["endDate"].value.day)
+  
+      if(InitialDate < new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate())) {
+        this.f['beginDate'].setErrors({'beforeCurrentDate': true});
+      }
+  
+      if(FinalDate < InitialDate)  {
+        this.f['endDate'].setErrors({'afterFinalDate': true});
+      }
     }
 
     if (this.projectForm.invalid) {

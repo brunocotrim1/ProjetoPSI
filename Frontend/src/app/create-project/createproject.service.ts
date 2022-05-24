@@ -17,7 +17,7 @@ export class CreateProjectService {
     //  this.removeUser()
   }
 
-  createProject(username: string, acronym: string, beginDate: Date, endDate: Date): Observable<any>{
+  createProject(username: string, acronym: string, beginDate: Date, endDate: any): Observable<any>{
     return this.http.post<any>(`${this.createprojectURL}/addproject`, {username, acronym, beginDate, endDate}, this.httpOptions);
   }
 }

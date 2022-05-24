@@ -130,6 +130,13 @@ module.exports = function (dbI) {
                             throw err;
                         });
                 }
+                let testObject = {};
+                response.checklist.forEach((value, key) => {
+                    testObject[key] = value; 
+                  });
+                //console.log("TEST OBJECT AFTER FOREACH", testObject)
+                response.checklist = testObject;
+                // for (let i = 0; i < response.checklist.length)
                 if (response.linkedProject) {
                     response.linkedProject = await Project.findById(response.linkedProject)
                         .then(function (proj) {
@@ -139,6 +146,8 @@ module.exports = function (dbI) {
                             throw err;
                         });
                 }
+                console.log("THIS WAS RES")
+                console.log(response)
                 res.json(response);
             })
             .catch(function (err) {
@@ -261,6 +270,7 @@ module.exports = function (dbI) {
     });
 
     router.post("/saveTask", authenticateToken, async (req, res) => {
+        console.log(req.body)
         if (!req.body._id) {
 
             res.status(404);
@@ -271,6 +281,7 @@ module.exports = function (dbI) {
         if (req.body.linkedProject && !req.body.linkedProject._id) {
             req.body.linkedProject._id = null;
         }
+        
 
         if (req.body.beginDate && req.body.endDate) {
             const dateInicio = new Date(req.body.beginDate);
@@ -306,10 +317,16 @@ module.exports = function (dbI) {
         if (!req.body.linkedProject) {
             req.body.linkedProject = { _id: undefined };
         }
+        if (!req.body.checklist) {
+            req.body.checklist = {};
+        }
+
+
         if (req.body.beginDate && req.body.endDate) {
             Task.updateOne(
                 { _id: req.body._id },
-                { $set: { usersAssigned: req.body.usersAssigned, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate), linkedProject: req.body.linkedProject._id, progress: req.body.progress } }
+                { $set: { usersAssigned: req.body.usersAssigned, beginDate: new Date(req.body.beginDate), endDate: new Date(req.body.endDate), linkedProject: req.body.linkedProject._id, progress: req.body.progress,
+                checklist: req.body.checklist } }
             ).then(function (response) {
                 if (response.matchedCount == 0) {
                     res.status(404);
@@ -326,7 +343,7 @@ module.exports = function (dbI) {
         } else if (!req.body.beginDate && !req.body.endDate) {
             Task.updateOne(
                 { _id: req.body._id },
-                { $set: { usersAssigned: req.body.usersAssigned, linkedProject: req.body.linkedProject._id, progress: req.body.progress } }
+                { $set: { usersAssigned: req.body.usersAssigned, linkedProject: req.body.linkedProject._id, progress: req.body.progress, checklist: req.body.checklist  } }
             ).then(function (response) {
                 if (response.matchedCount == 0) {
                     res.status(404);
@@ -352,8 +369,11 @@ module.exports = function (dbI) {
             res.json({ err: "Internal error." })
             return;
         });
+        if (!req.body.checklist) {
+            req.body.checklist = {};
+        }
         if (!taskExists) {
-            await Task.create({ name: req.body.taskname, priority: req.body.priority, percentage: req.body.percentage, progress: 0, usersAssigned: req.body.userID.id })
+            await Task.create({ name: req.body.taskname, priority: req.body.priority, percentage: req.body.percentage, progress: 0, usersAssigned: req.body.userID.id, checklist: req.body.checklist })
                 .then(function (response) {
                     console.log(response)
                     res.json({ msg: "Task saved successfully" });

@@ -1,8 +1,4 @@
-<app-navigbar
-  currentComponent="taskDetail"
-  username="{{ user.username }}"
-  userrole="{{ user.role }}"
-></app-navigbar>
+<app-navigbar currentComponent="taskDetail" username="{{ user.username }}" userrole="{{ user.role }}"></app-navigbar>
 <div class="mainContainer">
   <div style="margin-top: 6%; margin-bottom: 5%">
     <div class="enjoyapp text-center">
@@ -15,99 +11,52 @@
     </div>
     <div class="lowerContainer">
       <button class="lftbut" mdbBtn type="button" rounded="true">
-        <button class="lftbut" (click)="startShowingCheck()" mdbBtn type="button" rounded="true" style="padding: 3%; font-size:10px; width: 25%; position: absolute; right: 0;">
-          Add 
-          checklist
-        </button>
-        
-        
         <form [formGroup]="form">
           <div style="display: flex;
-          justify-content: center;
-          position: relative;
+          justify-content: space-between;
+          align-items: center;
           width: 100%">
-            <h4 class="mb-4" style="color: #ffffff; opacity: 87%">Name: {{ task.name }}</h4>
-            
+            <h4 style="color: #ffffff; opacity: 87%" style="margin: 0px;">Name: {{ task.name }}</h4>
+            <button class="lftbut" (click)="startShowingCheck()" mdbBtn type="button" rounded="true">View my
+              checklist</button>
           </div>
-          
           <div class="beginDate">
             Begin Date:
             <mat-form-field>
-              <input
-                matInput
-                [ngxMatDatetimePicker]="picker"
-                formControlName="beginDate"
-                [min]="minDate"
-                [max]="maxDate"
-                [disabled]="disabled"
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="$any(picker)"
-              ></mat-datepicker-toggle>
-              <ngx-mat-datetime-picker
-                #picker
-                [showSpinners]="showSpinners"
-                [showSeconds]="showSeconds"
-                [stepHour]="stepHour"
-                [stepMinute]="stepMinute"
-                [stepSecond]="stepSecond"
-                [touchUi]="touchUi"
-                [color]="color"
-                [enableMeridian]="enableMeridian"
-                [disableMinute]="disableMinute"
-                [hideTime]="hideTime"
-              >
+              <input matInput [ngxMatDatetimePicker]="picker" formControlName="beginDate" [min]="minDate"
+                [max]="maxDate" [disabled]="disabled" />
+              <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+                [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
               </ngx-mat-datetime-picker>
             </mat-form-field>
           </div>
           <div class="endDate">
             End Date:
             <mat-form-field>
-              <input
-                matInput
-                [ngxMatDatetimePicker]="picker2"
-                formControlName="endDate"
-                [min]="minDate"
-                [max]="maxDate"
-                [disabled]="disabled"
-              />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="$any(picker2)"
-              ></mat-datepicker-toggle>
-              <ngx-mat-datetime-picker
-                #picker2
-                [showSpinners]="showSpinners"
-                [showSeconds]="showSeconds"
-                [stepHour]="stepHour"
-                [stepMinute]="stepMinute"
-                [stepSecond]="stepSecond"
-                [touchUi]="touchUi"
-                [color]="color"
-                [enableMeridian]="enableMeridian"
-                [disableMinute]="disableMinute"
-                [hideTime]="hideTime"
-              >
+              <input matInput [ngxMatDatetimePicker]="picker2" formControlName="endDate" [min]="minDate" [max]="maxDate"
+                [disabled]="disabled" />
+              <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker2 [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+                [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
               </ngx-mat-datetime-picker>
             </mat-form-field>
           </div>
           <div class="taskMembers">
             Members:
             <ng-multiselect-dropdown name="Utilizadores" [placeholder]="'Selected Users'" [data]="data"
-              formControlName="usersform" [disabled]="disabled" [settings]="dropdownSettings" (keyup.enter)="onTabShowSelect()">
+              formControlName="usersform" [disabled]="disabled" [settings]="dropdownSettings"
+              (keyup.enter)="onTabShowSelect()">
             </ng-multiselect-dropdown>
           </div>
           <div class="taskProject">
             <div *ngIf="!isTaskRelated; else elseBlock">
               Link a project to this task (Optional):
               <div class="form-group">
-                <select
-                  class="form-select form-control browser-default custom-select"
-                  formControlName="project"
-                  [ngClass]="{ 'is-invalid': submitted && f['project'].errors }"
-                  required
-                >
+                <select class="form-select form-control browser-default custom-select" formControlName="project"
+                  [ngClass]="{ 'is-invalid': submitted && f['project'].errors }" required>
                   <option selected disabled value="">Choose project...</option>
                   <option [ngValue]="proj" *ngFor="let proj of listOfProjects">
                     {{ proj.name }}
@@ -115,90 +64,68 @@
                 </select>
                 <div class="invalid-feedback">Please select a project</div>
               </div>
-              <div class="progressRange">
-                Choose a progress range:
-                <input
-                formControlName="progress"
-                  type="range"
-                  name="rangeInput"
-                  min="0"
-                  max="100"
-                  style="width: 100%;"              />
-                <br>
-                <div style="width: 100%;text-align: center;">{{this.f['progress'].value}}</div>
-              </div>
             </div>
             <ng-template #elseBlock>
               Linked project:
-              <button
-                class="taskProjectButton"
-                mdbBtn
-                type="button"
-                gradient="blue"
-                rounded="true"
-                mdbWavesEffect
-                (click)="removeLinkedProjectOfTask()"
-              >
+              <button class="taskProjectButton" mdbBtn type="button" gradient="blue" rounded="true" mdbWavesEffect
+                (click)="removeLinkedProjectOfTask()">
                 {{ task.linkedProject.name }}
                 <mdb-icon style="margin-left: 10px" fas icon="times"></mdb-icon>
               </button>
             </ng-template>
           </div>
-          <button
-            mdbBtn
-            class="saveBut"
-            type="submit"
-            style="margin-left: 0"
-            (click)="saveChanges()"
-            rounded="true"
-            mdbWavesEffect
-          >
+          <div class="progressRange">
+            Choose a progress range:
+            <input formControlName="progress" type="range" name="rangeInput" min="0" max="100"
+              style="width: 100%;" />
+            <br>
+            <div style="width: 100%;text-align: center;">{{this.f['progress'].value}}</div>
+          </div>
+          <button mdbBtn class="saveBut" type="submit" style="margin-left: 0" (click)="saveChanges()" rounded="true"
+            mdbWavesEffect>
             Save Changes
           </button>
-          <div *ngIf="error" class="alert alert-danger mt-3 mb-0">
+          <div *ngIf="error && !isOnCheckList" class="alert alert-danger mt-3 mb-0">
             {{ error }}
           </div>
-          <div *ngIf="message" class="alert success-color mt-3 mb-0">
+          <div *ngIf="message && !isOnCheckList" class="alert success-color mt-3 mb-0">
             {{ message }}
           </div>
         </form>
       </button>
-      <button *ngIf="showCheck" class="checkboxContainer" mdbBtn type="button" rounded="true" style="position:relative">
+      <button *ngIf="showCheck" class="checkboxContainer" (keyup.enter)="onTabShowSelect()" mdbBtn type="button"
+        rounded="true" style="display:flex; flex-direction: column; align-items: center; justify-content: center;">
         <div class="white-text">
-          <h2 class="h1 h1-responsive font-bold wow">
-            checklist</h2>
+          <h2 class="h1 h1-responsive font-bold wow">checklist</h2>
           <hr class="hr-light wow">
-          
         </div>
-        
-          <ul class="checklist">
-            <li class="list-group-item" *ngFor="let elem of checklist | keyvalue; let i = index">
-              <div class="taskName">
-                {{ elem.key }}
-              </div>
-              <div class="buttonsContainer">
-                <!-- <i *ngIf="elem.value;" (click)="invertValue(elem.key)" class="checkIcon fas fa-check-square"></i>
-                <i *ngIf="!elem.value;" (click)="invertValue(elem.key)" class="checkIcon far fa-square"></i> -->
-                <mdb-icon fas *ngIf="elem.value;" class="checkIcon fa-lg" (click)="invertValue(elem.key)" icon="check-square"></mdb-icon>
-                <mdb-icon far *ngIf="!elem.value;" class="checkIcon fa-lg" (click)="invertValue(elem.key)" icon="square"></mdb-icon>
-                <mdb-icon fas class="deleteItemButton" (click)="deleteKey(elem.key)" icon="trash"></mdb-icon>
-                <!-- <mdb-icon fas class="deleteItem"  -->
-                <!-- <button class="deleteItem" (click)="deleteKey(elem.key)"><i class="fas fa-trash"></i></button> -->
-              </div>
-                
-  
-            </li>
-          </ul>
-        
-        <div class="checkListFooter">
-          <input #newItemName (keyup.enter)="addKey(newItemName.value);" placeholder="Add a subtask"> 
-          <input type="submit" class="addItemButton" (click)="addKey(newItemName.value)">
+        <ul class="checklist" style="max-width: 21rem; width:100%">
+          <li class="listOfItems" *ngFor="let elem of checklist | keyvalue; let i = index">
+            <span style="max-width: 85%;">{{ elem.key }}</span>
+            <div class="buttonsContainer">
+              <!-- <div *ngIf="elem.value == 'true'|| elem.value === true" >Completado</div>
+              <div *ngIf="elem.value == 'false'|| elem.value === false" >Por completar</div> -->
+              <mdb-icon fas *ngIf="elem.value == 'true'|| elem.value === true" class="checkIcon fa-lg"
+                (click)="invertValue(elem.key)" icon="check-square"></mdb-icon>
+              <mdb-icon far *ngIf="elem.value == 'false' || elem.value === false" class="checkIcon fa-lg"
+                (click)="invertValue(elem.key)" icon="square"></mdb-icon>
+              <mdb-icon fas class="deleteItemButton" (click)="deleteKey(elem.key)" icon="trash"></mdb-icon>
+            </div>
+          </li>
+        </ul>
+        <form class="checkListFooter">
+          <input type="text" #newItemName (keyup.enter)="addKey(newItemName.value);" minlength="4"
+            (keypress)="keyPressNumbers($event)" placeholder="Add a description">
+          <button class="addItemButton" (click)="addKey(newItemName.value)">Create subtask</button>
+        </form>
+        <div *ngIf="error && isOnCheckList" class="alert alert-danger mt-3 mb-0">
+          {{ error }}
         </div>
-          
-        
+        <div *ngIf="message && isOnCheckList" class="alert success-color mt-3 mb-0" style="color:white">
+          Checklist has been updated!
+        </div>
       </button>
     </div>
-    
   </div>
   <app-footer style="width: 100%"></app-footer>
 </div>

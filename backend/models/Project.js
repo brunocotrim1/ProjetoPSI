@@ -16,6 +16,7 @@ const ProjectSchema = mongoose.Schema({
     },
     beginDate: {
         type: Date,
+        required: true
     },
     endDate: {
         type: Date,
